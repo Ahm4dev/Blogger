@@ -6,7 +6,7 @@
     <title>Accounting Definitions Typing Test</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
+        #accounting-typing-test-container {
             --primary: #3498db;
             --primary-dark: #2980b9;
             --secondary: #2ecc71;
@@ -28,13 +28,13 @@
             --radius-sm: 8px;
         }
 
-        * {
+        #accounting-typing-test-container * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        #accounting-typing-test-container {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--text);
@@ -43,7 +43,7 @@
             line-height: 1.6;
         }
 
-        #typing-test-container {
+        #accounting-typing-test-container #typing-test-container {
             max-width: 900px;
             width: 100%;
             margin: 0 auto;
@@ -54,13 +54,13 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        header {
+        #accounting-typing-test-container header {
             text-align: center;
             margin-bottom: 30px;
             position: relative;
         }
 
-        header::after {
+        #accounting-typing-test-container header::after {
             content: '';
             display: block;
             width: 80px;
@@ -70,7 +70,7 @@
             border-radius: 2px;
         }
 
-        h1 {
+        #accounting-typing-test-container h1 {
             color: var(--dark);
             margin-bottom: 10px;
             font-size: 2.5rem;
@@ -81,25 +81,25 @@
             position: relative;
         }
 
-        .description {
+        #accounting-typing-test-container .description {
             color: var(--text-light);
             font-size: 1.1rem;
             margin-bottom: 10px;
         }
 
-        .settings {
+        #accounting-typing-test-container .settings {
             display: flex;
             gap: 20px;
             margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
-        .setting-group {
+        #accounting-typing-test-container .setting-group {
             flex: 1;
             min-width: 250px;
         }
 
-        .setting-label {
+        #accounting-typing-test-container .setting-label {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -108,12 +108,12 @@
             color: var(--dark);
         }
 
-        .setting-label i {
+        #accounting-typing-test-container .setting-label i {
             color: var(--primary);
             font-size: 1.1rem;
         }
 
-        select {
+        #accounting-typing-test-container select {
             width: 100%;
             padding: 12px 15px;
             border-radius: var(--radius-sm);
@@ -130,20 +130,20 @@
             background-size: 16px;
         }
 
-        select:focus {
+        #accounting-typing-test-container select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
 
-        .progress-section {
+        #accounting-typing-test-container .progress-section {
             margin-bottom: 25px;
             background: var(--light);
             padding: 20px;
             border-radius: var(--radius);
         }
 
-        .progress-header {
+        #accounting-typing-test-container .progress-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
@@ -151,7 +151,7 @@
             color: var(--text-light);
         }
 
-        .progress-container {
+        #accounting-typing-test-container .progress-container {
             width: 100%;
             background-color: #e0e0e0;
             border-radius: 10px;
@@ -160,7 +160,7 @@
             height: 12px;
         }
 
-        .progress-bar {
+        #accounting-typing-test-container .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             width: 0%;
@@ -168,7 +168,7 @@
             border-radius: 10px;
         }
 
-        .time-progress-container {
+        #accounting-typing-test-container .time-progress-container {
             width: 100%;
             background-color: #e0e0e0;
             border-radius: 10px;
@@ -176,7 +176,7 @@
             height: 12px;
         }
 
-        .time-progress-bar {
+        #accounting-typing-test-container .time-progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--warning), var(--danger));
             width: 0%;
@@ -184,12 +184,12 @@
             border-radius: 10px;
         }
 
-        .text-display-container {
+        #accounting-typing-test-container .text-display-container {
             position: relative;
             margin-bottom: 25px;
         }
 
-        .text-display {
+        #accounting-typing-test-container .text-display {
             background: white;
             border: 2px solid var(--light);
             border-radius: var(--radius);
@@ -204,13 +204,13 @@
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .text-display:focus {
+        #accounting-typing-test-container .text-display:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .text-display-header {
+        #accounting-typing-test-container .text-display-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
@@ -218,7 +218,7 @@
             font-weight: 600;
         }
 
-        .current-char {
+        #accounting-typing-test-container .current-char {
             background-color: var(--primary);
             color: white;
             border-radius: 3px;
@@ -232,24 +232,24 @@
             100% { background-color: var(--primary); }
         }
 
-        .correct {
+        #accounting-typing-test-container .correct {
             color: var(--secondary-dark);
         }
 
-        .incorrect {
+        #accounting-typing-test-container .incorrect {
             color: var(--danger);
             background-color: rgba(231, 76, 60, 0.1);
             text-decoration: underline;
             border-radius: 2px;
         }
 
-        .controls {
+        #accounting-typing-test-container .controls {
             display: flex;
             gap: 15px;
             margin-bottom: 25px;
         }
 
-        button {
+        #accounting-typing-test-container button {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -264,36 +264,36 @@
             flex: 1;
         }
 
-        button:disabled {
+        #accounting-typing-test-container button:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none !important;
             box-shadow: none !important;
         }
 
-        #start-btn {
+        #accounting-typing-test-container #start-btn {
             background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
             color: white;
             box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
         }
 
-        #start-btn:hover:not(:disabled) {
+        #accounting-typing-test-container #start-btn:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(46, 204, 113, 0.4);
         }
 
-        #reset-btn {
+        #accounting-typing-test-container #reset-btn {
             background: linear-gradient(135deg, var(--danger), var(--danger-dark));
             color: white;
             box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
         }
 
-        #reset-btn:hover {
+        #accounting-typing-test-container #reset-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
         }
 
-        .result {
+        #accounting-typing-test-container .result {
             text-align: center;
             padding: 25px;
             background: var(--light);
@@ -303,20 +303,20 @@
             animation: fadeIn 0.5s ease;
         }
 
-        .result h3 {
+        #accounting-typing-test-container .result h3 {
             color: var(--dark);
             margin-bottom: 20px;
             font-size: 1.5rem;
         }
 
-        .result-stats {
+        #accounting-typing-test-container .result-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
 
-        .result-stat {
+        #accounting-typing-test-container .result-stat {
             text-align: center;
             padding: 15px;
             background: white;
@@ -324,40 +324,40 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .result-stat-value {
+        #accounting-typing-test-container .result-stat-value {
             font-size: 2.2rem;
             font-weight: 800;
             color: var(--primary);
             margin-bottom: 5px;
         }
 
-        .result-stat-label {
+        #accounting-typing-test-container .result-stat-label {
             font-size: 0.9rem;
             color: var(--text-light);
             font-weight: 600;
         }
 
-        .history {
+        #accounting-typing-test-container .history {
             padding: 25px;
             background: var(--light);
             border-radius: var(--radius);
             text-align: center;
         }
 
-        .history h3 {
+        #accounting-typing-test-container .history h3 {
             color: var(--dark);
             margin-bottom: 20px;
             font-size: 1.5rem;
         }
 
-        .history-stats {
+        #accounting-typing-test-container .history-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
 
-        .history-stat {
+        #accounting-typing-test-container .history-stat {
             background: white;
             padding: 20px;
             border-radius: var(--radius-sm);
@@ -365,20 +365,20 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .history-stat-value {
+        #accounting-typing-test-container .history-stat-value {
             font-size: 1.8rem;
             font-weight: 800;
             color: var(--primary);
             margin-bottom: 5px;
         }
 
-        .history-stat-label {
+        #accounting-typing-test-container .history-stat-label {
             font-size: 0.9rem;
             color: var(--text-light);
             font-weight: 600;
         }
 
-        #clear-history-btn {
+        #accounting-typing-test-container #clear-history-btn {
             background: linear-gradient(135deg, var(--warning), var(--warning-dark));
             color: white;
             margin: 10px auto 0;
@@ -386,19 +386,19 @@
             max-width: 200px;
         }
 
-        #clear-history-btn:hover {
+        #accounting-typing-test-container #clear-history-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(243, 156, 18, 0.4);
         }
 
-        .loading {
+        #accounting-typing-test-container .loading {
             color: var(--primary);
             text-align: center;
             padding: 30px;
             font-size: 1.1rem;
         }
 
-        .category-tag {
+        #accounting-typing-test-container .category-tag {
             display: inline-block;
             background: linear-gradient(135deg, var(--accent), #8e44ad);
             color: white;
@@ -415,752 +415,754 @@
         }
 
         @media (max-width: 768px) {
-            #typing-test-container {
+            #accounting-typing-test-container #typing-test-container {
                 padding: 20px;
             }
             
-            h1 {
+            #accounting-typing-test-container h1 {
                 font-size: 2rem;
             }
             
-            .settings {
+            #accounting-typing-test-container .settings {
                 flex-direction: column;
                 gap: 15px;
             }
             
-            .setting-group {
+            #accounting-typing-test-container .setting-group {
                 width: 100%;
             }
             
-            .controls {
+            #accounting-typing-test-container .controls {
                 flex-direction: column;
             }
             
-            .result-stats,
-            .history-stats {
+            #accounting-typing-test-container .result-stats,
+            #accounting-typing-test-container .history-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 480px) {
-            body {
+            #accounting-typing-test-container {
                 padding: 10px;
             }
             
-            #typing-test-container {
+            #accounting-typing-test-container #typing-test-container {
                 padding: 15px;
             }
             
-            h1 {
+            #accounting-typing-test-container h1 {
                 font-size: 1.8rem;
             }
             
-            .description {
+            #accounting-typing-test-container .description {
                 font-size: 1rem;
             }
             
-            .text-display {
+            #accounting-typing-test-container .text-display {
                 font-size: 1.1rem;
                 padding: 15px;
             }
             
-            .result-stats,
-            .history-stats {
+            #accounting-typing-test-container .result-stats,
+            #accounting-typing-test-container .history-stats {
                 grid-template-columns: 1fr;
             }
             
-            button {
+            #accounting-typing-test-container button {
                 padding: 12px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="typing-test-container">
-        <header>
-            <h1><i class="fas fa-keyboard"></i> Accounting Typing Test</h1>
-            <p class="description">Test and improve your typing speed and accuracy with accounting definitions</p>
-        </header>
-        
-        <div class="settings">
-            <div class="setting-group">
-                <div class="setting-label">
-                    <i class="fas fa-clock"></i>
-                    <span>Test Duration</span>
+    <div id="accounting-typing-test-container">
+        <div id="typing-test-container">
+            <header>
+                <h1><i class="fas fa-keyboard"></i> Accounting Typing Test</h1>
+                <p class="description">Test and improve your typing speed and accuracy with accounting definitions</p>
+            </header>
+            
+            <div class="settings">
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <i class="fas fa-clock"></i>
+                        <span>Test Duration</span>
+                    </div>
+                    <select id="time-select">
+                        <option value="30">30 Seconds</option>
+                        <option value="60" selected>60 Seconds</option>
+                        <option value="120">120 Seconds</option>
+                        <option value="180">180 Seconds</option>
+                    </select>
                 </div>
-                <select id="time-select">
-                    <option value="30">30 Seconds</option>
-                    <option value="60" selected>60 Seconds</option>
-                    <option value="120">120 Seconds</option>
-                    <option value="180">180 Seconds</option>
-                </select>
+                
+                <div class="setting-group">
+                    <div class="setting-label">
+                        <i class="fas fa-folder"></i>
+                        <span>Category</span>
+                    </div>
+                    <select id="category-select">
+                        <option value="all" selected>All Categories</option>
+                        <option value="conceptual">Conceptual Framework</option>
+                        <option value="ias2">IAS 2: Inventories</option>
+                        <option value="ias16">IAS 16: Property, Plant and Equipment</option>
+                        <option value="ias36">IAS 36: Impairment of Assets</option>
+                        <option value="ias20">IAS 20: Government Grants</option>
+                        <option value="ias23">IAS 23: Borrowing Costs</option>
+                        <option value="ias40">IAS 40: Investment Property</option>
+                        <option value="ifrs15">IFRS 15: Revenue</option>
+                        <option value="ias37">IAS 37: Provisions</option>
+                        <option value="ias38">IAS 38: Intangible Assets</option>
+                        <option value="ias19">IAS 19: Employee Benefits</option>
+                        <option value="ifrs13">IFRS 13: Fair Value</option>
+                        <option value="ifrs9">IFRS 9: Financial Instruments</option>
+                        <option value="ias12">IAS 12: Income Taxes</option>
+                        <option value="ias21">IAS 21: Foreign Exchange</option>
+                        <option value="ias41">IAS 41: Agriculture</option>
+                        <option value="ifrs6">IFRS 6: Mineral Resources</option>
+                        <option value="ifrs5">IFRS 5: Non-current Assets</option>
+                        <option value="ias1">IAS 1: Presentation</option>
+                        <option value="ias8">IAS 8: Accounting Policies</option>
+                        <option value="ias24">IAS 24: Related Parties</option>
+                        <option value="ifrs10">IFRS 10: Consolidation</option>
+                        <option value="ifrs16">IFRS 16: Leases</option>
+                        <option value="ias33">IAS 33: Earnings per Share</option>
+                    </select>
+                </div>
             </div>
             
-            <div class="setting-group">
-                <div class="setting-label">
-                    <i class="fas fa-folder"></i>
-                    <span>Category</span>
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span>Text Progress</span>
+                    <span id="text-progress-percent">0%</span>
                 </div>
-                <select id="category-select">
-                    <option value="all" selected>All Categories</option>
-                    <option value="conceptual">Conceptual Framework</option>
-                    <option value="ias2">IAS 2: Inventories</option>
-                    <option value="ias16">IAS 16: Property, Plant and Equipment</option>
-                    <option value="ias36">IAS 36: Impairment of Assets</option>
-                    <option value="ias20">IAS 20: Government Grants</option>
-                    <option value="ias23">IAS 23: Borrowing Costs</option>
-                    <option value="ias40">IAS 40: Investment Property</option>
-                    <option value="ifrs15">IFRS 15: Revenue</option>
-                    <option value="ias37">IAS 37: Provisions</option>
-                    <option value="ias38">IAS 38: Intangible Assets</option>
-                    <option value="ias19">IAS 19: Employee Benefits</option>
-                    <option value="ifrs13">IFRS 13: Fair Value</option>
-                    <option value="ifrs9">IFRS 9: Financial Instruments</option>
-                    <option value="ias12">IAS 12: Income Taxes</option>
-                    <option value="ias21">IAS 21: Foreign Exchange</option>
-                    <option value="ias41">IAS 41: Agriculture</option>
-                    <option value="ifrs6">IFRS 6: Mineral Resources</option>
-                    <option value="ifrs5">IFRS 5: Non-current Assets</option>
-                    <option value="ias1">IAS 1: Presentation</option>
-                    <option value="ias8">IAS 8: Accounting Policies</option>
-                    <option value="ias24">IAS 24: Related Parties</option>
-                    <option value="ifrs10">IFRS 10: Consolidation</option>
-                    <option value="ifrs16">IFRS 16: Leases</option>
-                    <option value="ias33">IAS 33: Earnings per Share</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="progress-section">
-            <div class="progress-header">
-                <span>Text Progress</span>
-                <span id="text-progress-percent">0%</span>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                
+                <div class="progress-header">
+                    <span>Time Remaining</span>
+                    <span id="time-progress-seconds">60s</span>
+                </div>
+                <div class="time-progress-container">
+                    <div class="time-progress-bar" id="time-progress-bar"></div>
+                </div>
             </div>
             
-            <div class="progress-header">
-                <span>Time Remaining</span>
-                <span id="time-progress-seconds">60s</span>
+            <div class="text-display-container">
+                <div class="text-display-header">
+                    <span>Type the text below</span>
+                    <span id="current-category" class="category-tag">All Categories</span>
+                </div>
+                <div class="text-display" id="text-display" tabindex="0">
+                    <div class="loading">Click Start to begin the test...</div>
+                </div>
             </div>
-            <div class="time-progress-container">
-                <div class="time-progress-bar" id="time-progress-bar"></div>
+            
+            <div class="controls">
+                <button id="start-btn"><i class="fas fa-play"></i> Start Test</button>
+                <button id="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+            
+            <div class="result" id="result">
+                <h3><i class="fas fa-trophy"></i> Test Completed!</h3>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="final-wpm">0</div>
+                        <div class="result-stat-label">Words Per Minute</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="final-accuracy">100%</div>
+                        <div class="result-stat-label">Accuracy</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="final-time">60s</div>
+                        <div class="result-stat-label">Time</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="final-characters">0</div>
+                        <div class="result-stat-label">Characters</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="history" id="history">
+                <h3><i class="fas fa-history"></i> Your Previous Results</h3>
+                <div class="history-stats">
+                    <div class="history-stat">
+                        <div class="history-stat-value" id="avg-wpm">0</div>
+                        <div class="history-stat-label">Average WPM</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-stat-value" id="avg-accuracy">0%</div>
+                        <div class="history-stat-label">Average Accuracy</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-stat-value" id="tests-taken">0</div>
+                        <div class="history-stat-label">Tests Taken</div>
+                    </div>
+                    <div class="history-stat">
+                        <div class="history-stat-value" id="best-wpm">0</div>
+                        <div class="history-stat-label">Best WPM</div>
+                    </div>
+                </div>
+                <button id="clear-history-btn"><i class="fas fa-trash"></i> Clear History</button>
             </div>
         </div>
-        
-        <div class="text-display-container">
-            <div class="text-display-header">
-                <span>Type the text below</span>
-                <span id="current-category" class="category-tag">All Categories</span>
-            </div>
-            <div class="text-display" id="text-display" tabindex="0">
-                <div class="loading">Click Start to begin the test...</div>
-            </div>
-        </div>
-        
-        <div class="controls">
-            <button id="start-btn"><i class="fas fa-play"></i> Start Test</button>
-            <button id="reset-btn"><i class="fas fa-redo"></i> Reset</button>
-        </div>
-        
-        <div class="result" id="result">
-            <h3><i class="fas fa-trophy"></i> Test Completed!</h3>
-            <div class="result-stats">
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-wpm">0</div>
-                    <div class="result-stat-label">Words Per Minute</div>
-                </div>
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-accuracy">100%</div>
-                    <div class="result-stat-label">Accuracy</div>
-                </div>
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-time">60s</div>
-                    <div class="result-stat-label">Time</div>
-                </div>
-                <div class="result-stat">
-                    <div class="result-stat-value" id="final-characters">0</div>
-                    <div class="result-stat-label">Characters</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="history" id="history">
-            <h3><i class="fas fa-history"></i> Your Previous Results</h3>
-            <div class="history-stats">
-                <div class="history-stat">
-                    <div class="history-stat-value" id="avg-wpm">0</div>
-                    <div class="history-stat-label">Average WPM</div>
-                </div>
-                <div class="history-stat">
-                    <div class="history-stat-value" id="avg-accuracy">0%</div>
-                    <div class="history-stat-label">Average Accuracy</div>
-                </div>
-                <div class="history-stat">
-                    <div class="history-stat-value" id="tests-taken">0</div>
-                    <div class="history-stat-label">Tests Taken</div>
-                </div>
-                <div class="history-stat">
-                    <div class="history-stat-value" id="best-wpm">0</div>
-                    <div class="history-stat-label">Best WPM</div>
-                </div>
-            </div>
-            <button id="clear-history-btn"><i class="fas fa-trash"></i> Clear History</button>
-        </div>
-    </div>
 
-    <script>
-        (function() {
-            const textDisplay = document.getElementById('text-display');
-            const startBtn = document.getElementById('start-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const clearHistoryBtn = document.getElementById('clear-history-btn');
-            const resultElement = document.getElementById('result');
-            const finalWpm = document.getElementById('final-wpm');
-            const finalAccuracy = document.getElementById('final-accuracy');
-            const finalTime = document.getElementById('final-time');
-            const finalCharacters = document.getElementById('final-characters');
-            const progressBar = document.getElementById('progress-bar');
-            const timeProgressBar = document.getElementById('time-progress-bar');
-            const textProgressPercent = document.getElementById('text-progress-percent');
-            const timeProgressSeconds = document.getElementById('time-progress-seconds');
-            const avgWpmElement = document.getElementById('avg-wpm');
-            const avgAccuracyElement = document.getElementById('avg-accuracy');
-            const testsTakenElement = document.getElementById('tests-taken');
-            const bestWpmElement = document.getElementById('best-wpm');
-            const timeSelect = document.getElementById('time-select');
-            const categorySelect = document.getElementById('category-select');
-            const currentCategoryElement = document.getElementById('current-category');
-            
-            const accountingDefinitions = {
-                conceptual: [
-                    "Relevant information can influence user decisions. It has predictive value, confirmatory value, or both.",
-                    "Material information could affect decisions if omitted or misstated in financial statements.",
-                    "Faithful representation means information accurately reflects the economic reality it claims to represent.",
-                    "Prudence is being cautious when making judgments under uncertain conditions.",
-                    "Comparability helps users identify similarities and differences among financial items.",
-                    "Verifiability means different independent observers could agree that information is faithfully represented.",
-                    "Timeliness means having information available early enough to influence decisions.",
-                    "Understandability is achieved by presenting information clearly and concisely.",
-                    "An asset is a present economic resource that can produce benefits and is controlled by the entity.",
-                    "A liability is a present obligation to transfer an economic resource.",
-                    "An obligation is a duty that the entity cannot practically avoid.",
-                    "Income increases assets or decreases liabilities, resulting in higher equity (excluding owner contributions).",
-                    "Expenses decrease assets or increase liabilities, resulting in lower equity (excluding owner distributions).",
-                    "Recognition is the process of including items that meet element definitions in financial statements.",
-                    "Value in use is the present value of future cash flows expected from using an asset.",
-                    "Fulfilment value is the present value of resources expected to be transferred to settle a liability.",
-                    "Current cost of an asset: The cost to acquire an equivalent asset at the measurement date.",
-                    "Current cost of a liability: The consideration expected for an equivalent liability at the measurement date."
-                ],
-                ias2: [
-                    "Inventories are assets held for sale in the ordinary course of business, in production for such sale, or materials/supplies to be consumed in production.",
-                    "Net realisable value is the estimated selling price less the estimated costs of completion and sale.",
-                    "Fixed production overheads are indirect costs of production that remain constant regardless of output (e.g., factory rent, managers' salaries).",
-                    "Variable production overheads are indirect costs of production that vary directly with the volume of production (e.g., indirect materials, indirect labor)."
-                ],
-                ias16: [
-                    "Property, plant and equipment are tangible assets that: (1) are held for use in production/supply, for rental, or administration; (2) are expected to be used for more than one period.",
-                    "Cost is the amount of cash or cash equivalents paid to acquire an asset at its acquisition date.",
-                    "Residual value is the estimated amount an entity would obtain from disposing of the asset today, after deducting estimated disposal costs.",
-                    "Entity specific value is the value of an asset to a specific entity, which may differ from its fair value.",
-                    "Carrying amount is the value at which an asset is recognized in the statement of financial position (Cost - Accumulated Depreciation - Impairment Losses).",
-                    "Depreciation is the systematic allocation of the depreciable amount of an asset over its useful life.",
-                    "Depreciable assets are assets with a limited useful life.",
-                    "Useful life is the period over which an asset is expected to be available for use by the entity.",
-                    "Depreciable amount is the cost of an asset (or other amount substituted for cost) less its residual value."
-                ],
-                ias36: [
-                    "Impairment loss is the amount by which an asset's carrying amount exceeds its recoverable amount.",
-                    "The recoverable amount of an asset is the higher of its fair value less costs to sell and its value in use.",
-                    "Cash-generating unit is the smallest identifiable group of assets that generates cash inflows largely independent of other assets."
-                ],
-                ias20: [
-                    "Government refers to government agencies and similar bodies, whether local, national, or international.",
-                    "Government grants are assistance by government in the form of transfers of resources to an entity in return for past or future compliance with conditions.",
-                    "Grants related to assets are grants for the purchase, construction, or acquisition of long-term assets.",
-                    "Grants related to income are grants other than those related to assets (e.g., to compensate for losses or specific expenses)."
-                ],
-                ias23: [
-                    "Borrowing costs are interest and other costs incurred by an entity in connection with borrowing funds.",
-                    "Qualifying asset is an asset that necessarily takes a substantial period of time to get ready for its intended use or sale (e.g., inventory, PP&E, investment properties)."
-                ],
-                ias40: [
-                    "Investment property is property (land or building) held to earn rentals or for capital appreciation (or both), not for use in production/administration or for sale.",
-                    "Owner-occupied property is property held for use in production/supply or for administrative purposes."
-                ],
-                ifrs15: [
-                    "Revenue is income arising in the ordinary course of an entity's activities (e.e.g., sales, fees, interest, royalties).",
-                    "A contract is an agreement between two or more parties that creates enforceable rights and obligations.",
-                    "A contract asset is an entity's right to consideration in exchange for goods/services transferred, conditional on something other than the passage of time.",
-                    "A receivable is an entity's right to consideration that is unconditional (only the passage of time is required).",
-                    "A contract liability is an entity's obligation to transfer goods/services to a customer for which it has received consideration.",
-                    "A customer is a party that has contracted with an entity to obtain goods/services in exchange for consideration.",
-                    "A performance obligation is a promise in a contract to transfer a distinct good or service to the customer.",
-                    "Stand-alone selling price is the price at which an entity would sell a promised good/service separately to a customer.",
-                    "Transaction price is the amount of consideration an entity expects to be entitled to in exchange for transferring goods/services."
-                ],
-                ias37: [
-                    "A provision is a liability that is of uncertain timing or amount.",
-                    "Constructive obligation is an obligation that arises from an entity's actions creating a valid expectation in other parties that it will discharge certain responsibilities.",
-                    "Restructuring is a program planned and controlled by management that materially changes the scope of business or manner of conduct.",
-                    "Contingent liability is (a) a possible obligation from past events, or (b) a present obligation not recognized because outflow is not probable or amount cannot be measured reliably.",
-                    "Contingent asset is a possible asset arising from past events, whose existence will be confirmed by uncertain future events."
-                ],
-                ias38: [
-                    "Intangible asset is an identifiable non-monetary asset without physical substance.",
-                    "Goodwill is an asset representing the future economic benefits from other assets acquired that are not individually identified and separately recognized."
-                ],
-                ias19: [
-                    "Employee benefits are all forms of consideration given by an entity in exchange for service rendered by employees.",
-                    "Short-term employee benefits are benefits due within 12 months after the end of the period in which employees render service (e.g., wages, salaries).",
-                    "Post-employment benefits are benefits payable after employment ends (e.g., pensions, post-employment life insurance).",
-                    "Other long-term employee benefits are benefits other than short-term, post-employment, and termination benefits that are not due within 12 months.",
-                    "Termination benefits are benefits payable as a result of an entity's decision to terminate an employee's employment.",
-                    "Net defined benefit liability (asset) is the deficit or surplus in a defined benefit plan adjusted for any effect of limiting a net defined benefit asset.",
-                    "Defficit or surplus is the present value of the defined benefit obligation less the fair value of plan assets.",
-                    "Asset ceiling is the present value of any economic benefits available in the form of refunds from the plan or reductions in future contributions.",
-                    "Present value of a defined benefit obligation is the present value of expected future payments required to settle the obligation from employee service.",
-                    "Plan assets are assets (held by a fund) that exist solely to pay employee benefits.",
-                    "Assets held by a long-term employee benefit fund are assets that are held by an entity that is a legal separate from the reporting entity and used solely to pay employee benefits.",
-                    "Qualifying insurance policy is an insurance policy issued by an insurer that is not a related party to the entity, where proceeds can only be used to pay employee benefits."
-                ],
-                ifrs13: [
-                    "Fair value is the price that would be received to sell an asset or paid to transfer a liability in an orderly transaction between market participants."
-                ],
-                ifrs9: [
-                    "Financial instrument is a contract that gives rise to a financial asset of one entity and a financial liability or equity instrument of another.",
-                    "Financial asset is any asset that is cash, an equity instrument of another entity, or a contractual right to receive cash/another financial asset.",
-                    "Financial liability is any liability that is a contractual obligation to deliver cash or another financial asset.",
-                    "Equity instrument is any contract that evidences a residual interest in the assets of an entity after deducting all its liabilities.",
-                    "Derivative is a financial instrument whose value changes in response to an underlying variable, requires little/no initial investment, and is settled at a future date.",
-                    "Amortised cost is the initial amount recognized minus principal repayments, plus/minus cumulative amortization, and minus any impairment.",
-                    "Effective interest method is a method of calculating the amortized cost and allocating interest income/expense over the relevant period.",
-                    "Effective interest rate is the rate that exactly discounts estimated future cash flows to the instrument's initial gross carrying amount.",
-                    "Credit-impaired financial asset is a financial asset that is considered to have significantly increased credit risk since initial recognition.",
-                    "Embedded derivative is a component of a hybrid contract that modifies some cash flows and behaves like a stand-alone derivative.",
-                    "Hedging is an economic strategy to offset exposure to changes in fair value or cash flows of an asset, liability, or forecasted transaction.",
-                    "Hedged item is an asset, liability, firm commitment, or forecasted transaction that exposes the entity to risk.",
-                    "Hedging instrument is a designated derivative or non-derivative financial asset/liability used to hedge changes in the hedged item.",
-                    "Hedge effectiveness is the degree to which changes in the hedging instrument's fair value offset changes in the hedged item's fair value/cash flows.",
-                    "Fair value hedge is a hedge of exposure to changes in the fair value of a recognized asset/liability or firm commitment.",
-                    "Cash flow hedge is a hedge of exposure to variability in future cash flows of a recognized asset/liability or forecasted transaction.",
-                    "Hedge of a net investment in a foreign operation is a hedge of the foreign currency exposure arising from a net investment in a foreign operation."
-                ],
-                ias12: [
-                    "Accounting profit is profit or loss for a period before deducting tax expense.",
-                    "Taxable profit (tax loss) is the profit (loss) for a period, determined per tax rules, upon which income taxes are payable (recoverable).",
-                    "Tax expense (tax income) is the aggregate amount included in profit or loss for the period related to current and deferred tax.",
-                    "Current tax is the amount of income taxes payable (recoverable) in respect of the taxable profit (tax loss) for a period.",
-                    "Deferred tax liabilities are the amounts of income taxes payable in future periods in respect of taxable temporary differences.",
-                    "Deferred tax assets are the amounts of income taxes recoverable in future periods in respect of deductible temporary differences and tax losses.",
-                    "Temporary differences are differences between an asset/liability's carrying amount and its tax base.",
-                    "Taxable temporary differences are temporary differences that will result in taxable amounts in determining taxable profit of future periods.",
-                    "Deductible temporary differences are temporary differences that will result in amounts that are deductible in determining taxable profit of future periods.",
-                    "Tax base is the amount attributed to an asset/liability for tax purposes.",
-                    "Taxable supply is a supply of goods or services that is subject to tax (e.g., VAT)."
-                ],
-                ias21: [
-                    "Foreign currency is a currency other than the functional currency of the entity.",
-                    "Functional currency is the currency of the primary economic environment in which the entity operates.",
-                    "Presentation currency is the currency in which the financial statements are presented.",
-                    "Exchange rate is the ratio for exchange between two currencies.",
-                    "Exchange difference is the difference from translating a given number of units of one currency into another at different exchange rates.",
-                    "Closing rate is the spot exchange rate at the end of the reporting period.",
-                    "Spot exchange rate is the exchange rate for immediate delivery of currencies.",
-                    "Monetary items are units of currency held and assets/liabilities to be received/paid in a fixed or determinable number of currency units."
-                ],
-                ias41: [
-                    "Agricultural activity is the management of biological transformation and harvest of biological assets for sale or into agricultural produce.",
-                    "Agricultural produce is the harvested product of an entity's biological assets.",
-                    "Biological asset is a living animal or plant.",
-                    "Bearer plant is a plant used solely to grow produce over multiple periods; accounted for under IAS 16 (PP&E).",
-                    "Biological transformation is the processes of growth, degeneration, production, and procreation that cause qualitative/quantitative changes in a biological asset.",
-                    "Group of biological assets is a herd, flock, etc., that is managed to achieve specific objectives.",
-                    "Harvest is the detachment of produce from a biological asset or the cessation of a biological asset's life processes."
-                ],
-                ifrs6: [
-                    "Exploration and evaluation expenditures are expenditures incurred by an entity in connection with the exploration for and evaluation of mineral resources.",
-                    "Exploration and evaluation assets are exploration and evaluation expenditures recognized as assets.",
-                    "Exploration for and evaluation of mineral resources is the search for mineral resources and the determination of the technical feasibility and commercial viability of extracting them."
-                ],
-                ifrs5: [
-                    "Disposal group is a group of assets to be disposed of, by sale or otherwise, together as a group in a single transaction, and liabilities directly associated.",
-                    "Discontinued operation is a component of an entity that has been disposed of or is classified as held for sale, representing a separate major line of business/area.",
-                    "Component of an entity is operations and cash flows that can be clearly distinguished for financial reporting purposes.",
-                    "Costs to sell are the incremental costs directly attributable to the disposal of an asset (excluding finance costs and income tax expense)."
-                ],
-                ias1: [
-                    "Current asset is an asset expected to be realized/sold/consumed within the entity's normal operating cycle or twelve months.",
-                    "Operating cycle is the time between acquiring materials and receiving cash from the sale of the resulting finished goods.",
-                    "Current liability is a liability expected to be settled within the entity's normal operating cycle or twelve months."
-                ],
-                ias8: [
-                    "Retrospective application is applying a new accounting policy to past transactions as if that policy had always been applied.",
-                    "Retrospective restatement is correcting the recognition, measurement, and disclosure of prior period errors as if they had never occurred.",
-                    "Prospective application is applying a new accounting policy to transactions after the date of change; no adjustment to prior periods.",
-                    "Impracticable is when the entity cannot apply a requirement after making every reasonable effort to do so."
-                ],
-                ias24: [
-                    "Related party is a person or entity related to the entity preparing its financial statements (e.g., parent, subsidiary, key management, close family members).",
-                    "Related party transaction is a transfer of resources, services, or obligations between related parties.",
-                    "Key management personnel are persons having authority for planning, directing, and controlling the entity's activities.",
-                    "Close members of the family of an individual are family members who may influence, or be influenced by, that individual in their dealings with the entity."
-                ],
-                ifrs10: [
-                    "Control is the power to direct the relevant activities of an investee to affect the investor's returns.",
-                    "Power is existing rights that give the current ability to direct the relevant activities.",
-                    "Subsidiary is an entity controlled by another entity (the parent).",
-                    "Parent is an entity that controls one or more entities.",
-                    "Group is a parent and all its subsidiaries.",
-                    "Associate is an entity over which the investor has significant influence.",
-                    "Significant influence is the power to participate in the financial and operating policy decisions (but not control them).",
-                    "Consolidated financial statements are the financial statements of a group presented as those of a single economic entity.",
-                    "Non-controlling interest is equity in a subsidiary not attributable, directly or indirectly, to a parent.",
-                    "Equity method is a method of accounting where the investment is initially recognized at cost and adjusted for the investor's share of profit/loss and dividends.",
-                    "Joint arrangement is an arrangement where two or more parties have joint control.",
-                    "Joint control is the contractually agreed sharing of control over an arrangement.",
-                    "Joint operation is a joint arrangement where the parties have rights to the assets and obligations for the liabilities.",
-                    "Joint venture is a joint arrangement where the parties have rights to the net assets."
-                ],
-                ifrs16: [
-                    "Lease is a contract conveying the right to use an asset for a period of time in exchange for consideration.",
-                    "Underlying asset is an asset that is the subject of a lease (e.g., a specific item of property, plant, or equipment).",
-                    "Right-of-use asset is an asset representing a lessee's right to use an underlying asset for the lease term.",
-                    "Lease term is the non-cancellable period of the lease plus periods covered by an option to extend if reasonably certain to be exercised.",
-                    "Interest rate implicit in the lease is the discount rate that causes the present value of lease payments and unguaranteed residual value to equal the fair value of the asset.",
-                    "Lessee's incremental borrowing rate is the rate a lessee would have to pay to borrow funds to obtain an asset of similar value on similar terms.",
-                    "Lease incentives are payments made by a lessor to a lessee or reimbursements/assumptions of costs by a lessor for a lessee.",
-                    "Finance lease is a lease that transfers substantially all the risks and rewards incidental to ownership of an asset.",
-                    "Operating lease is a lease other than a finance lease.",
-                    "Guaranteed residual value is (a) for a lessee: the part of the residual value guaranteed by the lessee; (b) for a lessor: the part guaranteed by the lessee or a third party.",
-                    "Unguaranteed residual value is the portion of the residual value not guaranteed by the lessee or a third party.",
-                    "Gross investment in the lease is the sum of the lease payments receivable by a lessor and any unguaranteed residual value.",
-                    "Net investment in the lease is the gross investment discounted at the interest rate implicit in the lease.",
-                    "Unearned finance income is the difference between the gross and net investment in the lease."
-                ],
-                ias33: [
-                    "Ordinary shares are equity instruments that are subordinate to all other classes of equity instruments.",
-                    "Potential ordinary share is a financial instrument or other contract that may entitle its holder to ordinary shares.",
-                    "Options, warrants and their equivalents are financial instruments that give the holder the right to purchase ordinary shares."
-                ]
-            };
-            
-            let currentText = '';
-            let currentCharIndex = 0;
-            let correctChars = 0;
-            let totalTyped = 0;
-            let startTime;
-            let timerInterval;
-            let timeLeft = 60;
-            let totalTime = 60;
-            let testActive = false;
-            let userInputHistory = [];
-            let previousResults = [];
-            
-            // Update category tag when selection changes
-            categorySelect.addEventListener('change', function() {
-                const selectedOption = categorySelect.options[categorySelect.selectedIndex];
-                currentCategoryElement.textContent = selectedOption.text;
-            });
-            
-            // Load previous results
-            function loadPreviousResults() {
-                const savedResults = localStorage.getItem('typingTestResults');
-                if (savedResults) {
-                    previousResults = JSON.parse(savedResults);
-                    updateHistoryDisplay();
-                }
-            }
-            
-            // Save results
-            function saveResults(wpm, accuracy, time, characters) {
-                previousResults.push({
-                    wpm: wpm,
-                    accuracy: accuracy,
-                    time: time,
-                    characters: characters,
-                    date: new Date().toISOString()
+        <script>
+            (function() {
+                const textDisplay = document.getElementById('text-display');
+                const startBtn = document.getElementById('start-btn');
+                const resetBtn = document.getElementById('reset-btn');
+                const clearHistoryBtn = document.getElementById('clear-history-btn');
+                const resultElement = document.getElementById('result');
+                const finalWpm = document.getElementById('final-wpm');
+                const finalAccuracy = document.getElementById('final-accuracy');
+                const finalTime = document.getElementById('final-time');
+                const finalCharacters = document.getElementById('final-characters');
+                const progressBar = document.getElementById('progress-bar');
+                const timeProgressBar = document.getElementById('time-progress-bar');
+                const textProgressPercent = document.getElementById('text-progress-percent');
+                const timeProgressSeconds = document.getElementById('time-progress-seconds');
+                const avgWpmElement = document.getElementById('avg-wpm');
+                const avgAccuracyElement = document.getElementById('avg-accuracy');
+                const testsTakenElement = document.getElementById('tests-taken');
+                const bestWpmElement = document.getElementById('best-wpm');
+                const timeSelect = document.getElementById('time-select');
+                const categorySelect = document.getElementById('category-select');
+                const currentCategoryElement = document.getElementById('current-category');
+                
+                const accountingDefinitions = {
+                    conceptual: [
+                        "Relevant information can influence user decisions. It has predictive value, confirmatory value, or both.",
+                        "Material information could affect decisions if omitted or misstated in financial statements.",
+                        "Faithful representation means information accurately reflects the economic reality it claims to represent.",
+                        "Prudence is being cautious when making judgments under uncertain conditions.",
+                        "Comparability helps users identify similarities and differences among financial items.",
+                        "Verifiability means different independent observers could agree that information is faithfully represented.",
+                        "Timeliness means having information available early enough to influence decisions.",
+                        "Understandability is achieved by presenting information clearly and concisely.",
+                        "An asset is a present economic resource that can produce benefits and is controlled by the entity.",
+                        "A liability is a present obligation to transfer an economic resource.",
+                        "An obligation is a duty that the entity cannot practically avoid.",
+                        "Income increases assets or decreases liabilities, resulting in higher equity (excluding owner contributions).",
+                        "Expenses decrease assets or increase liabilities, resulting in lower equity (excluding owner distributions).",
+                        "Recognition is the process of including items that meet element definitions in financial statements.",
+                        "Value in use is the present value of future cash flows expected from using an asset.",
+                        "Fulfilment value is the present value of resources expected to be transferred to settle a liability.",
+                        "Current cost of an asset: The cost to acquire an equivalent asset at the measurement date.",
+                        "Current cost of a liability: The consideration expected for an equivalent liability at the measurement date."
+                    ],
+                    ias2: [
+                        "Inventories are assets held for sale in the ordinary course of business, in production for such sale, or materials/supplies to be consumed in production.",
+                        "Net realisable value is the estimated selling price less the estimated costs of completion and sale.",
+                        "Fixed production overheads are indirect costs of production that remain constant regardless of output (e.g., factory rent, managers' salaries).",
+                        "Variable production overheads are indirect costs of production that vary directly with the volume of production (e.g., indirect materials, indirect labor)."
+                    ],
+                    ias16: [
+                        "Property, plant and equipment are tangible assets that: (1) are held for use in production/supply, for rental, or administration; (2) are expected to be used for more than one period.",
+                        "Cost is the amount of cash or cash equivalents paid to acquire an asset at its acquisition date.",
+                        "Residual value is the estimated amount an entity would obtain from disposing of the asset today, after deducting estimated disposal costs.",
+                        "Entity specific value is the value of an asset to a specific entity, which may differ from its fair value.",
+                        "Carrying amount is the value at which an asset is recognized in the statement of financial position (Cost - Accumulated Depreciation - Impairment Losses).",
+                        "Depreciation is the systematic allocation of the depreciable amount of an asset over its useful life.",
+                        "Depreciable assets are assets with a limited useful life.",
+                        "Useful life is the period over which an asset is expected to be available for use by the entity.",
+                        "Depreciable amount is the cost of an asset (or other amount substituted for cost) less its residual value."
+                    ],
+                    ias36: [
+                        "Impairment loss is the amount by which an asset's carrying amount exceeds its recoverable amount.",
+                        "The recoverable amount of an asset is the higher of its fair value less costs to sell and its value in use.",
+                        "Cash-generating unit is the smallest identifiable group of assets that generates cash inflows largely independent of other assets."
+                    ],
+                    ias20: [
+                        "Government refers to government agencies and similar bodies, whether local, national, or international.",
+                        "Government grants are assistance by government in the form of transfers of resources to an entity in return for past or future compliance with conditions.",
+                        "Grants related to assets are grants for the purchase, construction, or acquisition of long-term assets.",
+                        "Grants related to income are grants other than those related to assets (e.g., to compensate for losses or specific expenses)."
+                    ],
+                    ias23: [
+                        "Borrowing costs are interest and other costs incurred by an entity in connection with borrowing funds.",
+                        "Qualifying asset is an asset that necessarily takes a substantial period of time to get ready for its intended use or sale (e.g., inventory, PP&E, investment properties)."
+                    ],
+                    ias40: [
+                        "Investment property is property (land or building) held to earn rentals or for capital appreciation (or both), not for use in production/administration or for sale.",
+                        "Owner-occupied property is property held for use in production/supply or for administrative purposes."
+                    ],
+                    ifrs15: [
+                        "Revenue is income arising in the ordinary course of an entity's activities (e.e.g., sales, fees, interest, royalties).",
+                        "A contract is an agreement between two or more parties that creates enforceable rights and obligations.",
+                        "A contract asset is an entity's right to consideration in exchange for goods/services transferred, conditional on something other than the passage of time.",
+                        "A receivable is an entity's right to consideration that is unconditional (only the passage of time is required).",
+                        "A contract liability is an entity's obligation to transfer goods/services to a customer for which it has received consideration.",
+                        "A customer is a party that has contracted with an entity to obtain goods/services in exchange for consideration.",
+                        "A performance obligation is a promise in a contract to transfer a distinct good or service to the customer.",
+                        "Stand-alone selling price is the price at which an entity would sell a promised good/service separately to a customer.",
+                        "Transaction price is the amount of consideration an entity expects to be entitled to in exchange for transferring goods/services."
+                    ],
+                    ias37: [
+                        "A provision is a liability that is of uncertain timing or amount.",
+                        "Constructive obligation is an obligation that arises from an entity's actions creating a valid expectation in other parties that it will discharge certain responsibilities.",
+                        "Restructuring is a program planned and controlled by management that materially changes the scope of business or manner of conduct.",
+                        "Contingent liability is (a) a possible obligation from past events, or (b) a present obligation not recognized because outflow is not probable or amount cannot be measured reliably.",
+                        "Contingent asset is a possible asset arising from past events, whose existence will be confirmed by uncertain future events."
+                    ],
+                    ias38: [
+                        "Intangible asset is an identifiable non-monetary asset without physical substance.",
+                        "Goodwill is an asset representing the future economic benefits from other assets acquired that are not individually identified and separately recognized."
+                    ],
+                    ias19: [
+                        "Employee benefits are all forms of consideration given by an entity in exchange for service rendered by employees.",
+                        "Short-term employee benefits are benefits due within 12 months after the end of the period in which employees render service (e.e.g., wages, salaries).",
+                        "Post-employment benefits are benefits payable after employment ends (e.e.g., pensions, post-employment life insurance).",
+                        "Other long-term employee benefits are benefits other than short-term, post-employment, and termination benefits that are not due within 12 months.",
+                        "Termination benefits are benefits payable as a result of an entity's decision to terminate an employee's employment.",
+                        "Net defined benefit liability (asset) is the deficit or surplus in a defined benefit plan adjusted for any effect of limiting a net defined benefit asset.",
+                        "Defficit or surplus is the present value of the defined benefit obligation less the fair value of plan assets.",
+                        "Asset ceiling is the present value of any economic benefits available in the form of refunds from the plan or reductions in future contributions.",
+                        "Present value of a defined benefit obligation is the present value of expected future payments required to settle the obligation from employee service.",
+                        "Plan assets are assets (held by a fund) that exist solely to pay employee benefits.",
+                        "Assets held by a long-term employee benefit fund are assets that are held by an entity that is a legal separate from the reporting entity and used solely to pay employee benefits.",
+                        "Qualifying insurance policy is an insurance policy issued by an insurer that is not a related party to the entity, where proceeds can only be used to pay employee benefits."
+                    ],
+                    ifrs13: [
+                        "Fair value is the price that would be received to sell an asset or paid to transfer a liability in an orderly transaction between market participants."
+                    ],
+                    ifrs9: [
+                        "Financial instrument is a contract that gives rise to a financial asset of one entity and a financial liability or equity instrument of another.",
+                        "Financial asset is any asset that is cash, an equity instrument of another entity, or a contractual right to receive cash/another financial asset.",
+                        "Financial liability is any liability that is a contractual obligation to deliver cash or another financial asset.",
+                        "Equity instrument is any contract that evidences a residual interest in the assets of an entity after deducting all its liabilities.",
+                        "Derivative is a financial instrument whose value changes in response to an underlying variable, requires little/no initial investment, and is settled at a future date.",
+                        "Amortised cost is the initial amount recognized minus principal repayments, plus/minus cumulative amortization, and minus any impairment.",
+                        "Effective interest method is a method of calculating the amortized cost and allocating interest income/expense over the relevant period.",
+                        "Effective interest rate is the rate that exactly discounts estimated future cash flows to the instrument's initial gross carrying amount.",
+                        "Credit-impaired financial asset is a financial asset that is considered to have significantly increased credit risk since initial recognition.",
+                        "Embedded derivative is a component of a hybrid contract that modifies some cash flows and behaves like a stand-alone derivative.",
+                        "Hedging is an economic strategy to offset exposure to changes in fair value or cash flows of an asset, liability, or forecasted transaction.",
+                        "Hedged item is an asset, liability, firm commitment, or forecasted transaction that exposes the entity to risk.",
+                        "Hedging instrument is a designated derivative or non-derivative financial asset/liability used to hedge changes in the hedged item.",
+                        "Hedge effectiveness is the degree to which changes in the hedging instrument's fair value offset changes in the hedged item's fair value/c cash flows.",
+                        "Fair value hedge is a hedge of exposure to changes in the fair value of a recognized asset/liability or firm commitment.",
+                        "Cash flow hedge is a hedge of exposure to variability in future cash flows of a recognized asset/liability or forecasted transaction.",
+                        "Hedge of a net investment in a foreign operation is a hedge of the foreign currency exposure arising from a net investment in a foreign operation."
+                    ],
+                    ias12: [
+                        "Accounting profit is profit or loss for a period before deducting tax expense.",
+                        "Taxable profit (tax loss) is the profit (loss) for a period, determined per tax rules, upon which income taxes are payable (recoverable).",
+                        "Tax expense (tax income) is the aggregate amount included in profit or loss for the period related to current and deferred tax.",
+                        "Current tax is the amount of income taxes payable (recoverable) in respect of the taxable profit (tax loss) for a period.",
+                        "Deferred tax liabilities are the amounts of income taxes payable in future periods in respect of taxable temporary differences.",
+                        "Deferred tax assets are the amounts of income taxes recoverable in future periods in respect of deductible temporary differences and tax losses.",
+                        "Temporary differences are differences between an asset/liability's carrying amount and its tax base.",
+                        "Taxable temporary differences are temporary differences that will result in taxable amounts in determining taxable profit of future periods.",
+                        "Deductible temporary differences are temporary differences that will result in amounts that are deductible in determining taxable profit of future periods.",
+                        "Tax base is the amount attributed to an asset/liability for tax purposes.",
+                        "Taxable supply is a supply of goods or services that is subject to tax (e.e.g., VAT)."
+                    ],
+                    ias21: [
+                        "Foreign currency is a currency other than the functional currency of the entity.",
+                        "Functional currency is the currency of the primary economic environment in which the entity operates.",
+                        "Presentation currency is the currency in which the financial statements are presented.",
+                        "Exchange rate is the ratio for exchange between two currencies.",
+                        "Exchange difference is the difference from translating a given number of units of one currency into another at different exchange rates.",
+                        "Closing rate is the spot exchange rate at the end of the reporting period.",
+                        "Spot exchange rate is the exchange rate for immediate delivery of currencies.",
+                        "Monetary items are units of currency held and assets/liabilities to be received/paid in a fixed or determinable number of currency units."
+                    ],
+                    ias41: [
+                        "Agricultural activity is the management of biological transformation and harvest of biological assets for sale or into agricultural produce.",
+                        "Agricultural produce is the harvested product of an entity's biological assets.",
+                        "Biological asset is a living animal or plant.",
+                        "Bearer plant is a plant used solely to grow produce over multiple periods; accounted for under IAS 16 (PP&E).",
+                        "Biological transformation is the processes of growth, degeneration, production, and procreation that cause qualitative/quantitative changes in a biological asset.",
+                        "Group of biological assets is a herd, flock, etc., that is managed to achieve specific objectives.",
+                        "Harvest is the detachment of produce from a biological asset or the cessation of a biological asset's life processes."
+                    ],
+                    ifrs6: [
+                        "Exploration and evaluation expenditures are expenditures incurred by an entity in connection with the exploration for and evaluation of mineral resources.",
+                        "Exploration and evaluation assets are exploration and evaluation expenditures recognized as assets.",
+                        "Exploration for and evaluation of mineral resources is the search for mineral resources and the determination of the technical feasibility and commercial viability of extracting them."
+                    ],
+                    ifrs5: [
+                        "Disposal group is a group of assets to be disposed of, by sale or otherwise, together as a group in a single transaction, and liabilities directly associated.",
+                        "Discontinued operation is a component of an entity that has been disposed of or is classified as held for sale, representing a separate major line of business/area.",
+                        "Component of an entity is operations and cash flows that can be clearly distinguished for financial reporting purposes.",
+                        "Costs to sell are the incremental costs directly attributable to the disposal of an asset (excluding finance costs and income tax expense)."
+                    ],
+                    ias1: [
+                        "Current asset is an asset expected to be realized/sold/consumed within the entity's normal operating cycle or twelve months.",
+                        "Operating cycle is the time between acquiring materials and receiving cash from the sale of the resulting finished goods.",
+                        "Current liability is a liability expected to be settled within the entity's normal operating cycle or twelve months."
+                    ],
+                    ias8: [
+                        "Retrospective application is applying a new accounting policy to past transactions as if that policy had always been applied.",
+                        "Retrospective restatement is correcting the recognition, measurement, and disclosure of prior period errors as if they had never occurred.",
+                        "Prospective application is applying a new accounting policy to transactions after the date of change; no adjustment to prior periods.",
+                        "Impracticable is when the entity cannot apply a requirement after making every reasonable effort to do so."
+                    ],
+                    ias24: [
+                        "Related party is a person or entity related to the entity preparing its financial statements (e.e.g., parent, subsidiary, key management, close family members).",
+                        "Related party transaction is a transfer of resources, services, or obligations between related parties.",
+                        "Key management personnel are persons having authority for planning, directing, and controlling the entity's activities.",
+                        "Close members of the family of an individual are family members who may influence, or be influenced by, that individual in their dealings with the entity."
+                    ],
+                    ifrs10: [
+                        "Control is the power to direct the relevant activities of an investee to affect the investor's returns.",
+                        "Power is existing rights that give the current ability to direct the relevant activities.",
+                        "Subsidiary is an entity controlled by another entity (the parent).",
+                        "Parent is an entity that controls one or more entities.",
+                        "Group is a parent and all its subsidiaries.",
+                        "Associate is an entity over which the investor has significant influence.",
+                        "Significant influence is the power to participate in the financial and operating policy decisions (but not control them).",
+                        "Consolidated financial statements are the financial statements of a group presented as those of a single economic entity.",
+                        "Non-controlling interest is equity in a subsidiary not attributable, directly or indirectly, to a parent.",
+                        "Equity method is a method of accounting where the investment is initially recognized at cost and adjusted for the investor's share of profit/loss and dividends.",
+                        "Joint arrangement is an arrangement where two or more parties have joint control.",
+                        "Joint control is the contractually agreed sharing of control over an arrangement.",
+                        "Joint operation is a joint arrangement where the parties have rights to the assets and obligations for the liabilities.",
+                        "Joint venture is a joint arrangement where the parties have rights to the net assets."
+                    ],
+                    ifrs16: [
+                        "Lease is a contract conveying the right to use an asset for a period of time in exchange for consideration.",
+                        "Underlying asset is an asset that is the subject of a lease (e.e.g., a specific item of property, plant, or equipment).",
+                        "Right-of-use asset is an asset representing a lessee's right to use an underlying asset for the lease term.",
+                        "Lease term is the non-cancellable period of the lease plus periods covered by an option to extend if reasonably certain to be exercised.",
+                        "Interest rate implicit in the lease is the discount rate that causes the present value of lease payments and unguaranteed residual value to equal the fair value of the asset.",
+                        "Lessee's incremental borrowing rate is the rate a lessee would have to pay to borrow funds to obtain an asset of similar value on similar terms.",
+                        "Lease incentives are payments made by a lessor to a lessee or reimbursements/assumptions of costs by a lessor for a lessee.",
+                        "Finance lease is a lease that transfers substantially all the risks and rewards incidental to ownership of an asset.",
+                        "Operating lease is a lease other than a finance lease.",
+                        "Guaranteed residual value is (a) for a lessee: the part of the residual value guaranteed by the lessee; (b) for a lessor: the part guaranteed by the lessee or a third party.",
+                        "Unguaranteed residual value is the portion of the residual value not guaranteed by the lessee or a third party.",
+                        "Gross investment in the lease is the sum of the lease payments receivable by a lessor and any unguaranteed residual value.",
+                        "Net investment in the lease is the gross investment discounted at the interest rate implicit in the lease.",
+                        "Unearned finance income is the difference between the gross and net investment in the lease."
+                    ],
+                    ias33: [
+                        "Ordinary shares are equity instruments that are subordinate to all other classes of equity instruments.",
+                        "Potential ordinary share is a financial instrument or other contract that may entitle its holder to ordinary shares.",
+                        "Options, warrants and their equivalents are financial instruments that give the holder the right to purchase ordinary shares."
+                    ]
+                };
+                
+                let currentText = '';
+                let currentCharIndex = 0;
+                let correctChars = 0;
+                let totalTyped = 0;
+                let startTime;
+                let timerInterval;
+                let timeLeft = 60;
+                let totalTime = 60;
+                let testActive = false;
+                let userInputHistory = [];
+                let previousResults = [];
+                
+                // Update category tag when selection changes
+                categorySelect.addEventListener('change', function() {
+                    const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+                    currentCategoryElement.textContent = selectedOption.text;
                 });
                 
-                if (previousResults.length > 20) {
-                    previousResults = previousResults.slice(previousResults.length - 20);
+                // Load previous results
+                function loadPreviousResults() {
+                    const savedResults = localStorage.getItem('typingTestResults');
+                    if (savedResults) {
+                        previousResults = JSON.parse(savedResults);
+                        updateHistoryDisplay();
+                    }
                 }
                 
-                localStorage.setItem('typingTestResults', JSON.stringify(previousResults));
-                updateHistoryDisplay();
-            }
-            
-            // Clear history
-            function clearHistory() {
-                if (confirm("Are you sure you want to clear all your previous results? This action cannot be undone.")) {
-                    previousResults = [];
-                    localStorage.removeItem('typingTestResults');
+                // Save results
+                function saveResults(wpm, accuracy, time, characters) {
+                    previousResults.push({
+                        wpm: wpm,
+                        accuracy: accuracy,
+                        time: time,
+                        characters: characters,
+                        date: new Date().toISOString()
+                    });
+                    
+                    if (previousResults.length > 20) {
+                        previousResults = previousResults.slice(previousResults.length - 20);
+                    }
+                    
+                    localStorage.setItem('typingTestResults', JSON.stringify(previousResults));
                     updateHistoryDisplay();
                 }
-            }
-            
-            // Update history display
-            function updateHistoryDisplay() {
-                if (previousResults.length === 0) {
-                    avgWpmElement.textContent = '0';
-                    avgAccuracyElement.textContent = '0%';
-                    testsTakenElement.textContent = '0';
-                    bestWpmElement.textContent = '0';
-                    return;
-                }
                 
-                const totalWpm = previousResults.reduce((sum, result) => sum + result.wpm, 0);
-                const totalAccuracy = previousResults.reduce((sum, result) => sum + result.accuracy, 0);
-                const bestWpm = Math.max(...previousResults.map(result => result.wpm));
-                
-                avgWpmElement.textContent = Math.round(totalWpm / previousResults.length);
-                avgAccuracyElement.textContent = Math.round(totalAccuracy / previousResults.length) + '%';
-                testsTakenElement.textContent = previousResults.length;
-                bestWpmElement.textContent = bestWpm;
-            }
-            
-            // Get filtered definitions
-            function getFilteredDefinitions() {
-                const selectedCategory = categorySelect.value;
-                
-                let definitions = [];
-                
-                if (selectedCategory === 'all') {
-                    for (const category in accountingDefinitions) {
-                        definitions = definitions.concat(accountingDefinitions[category]);
+                // Clear history
+                function clearHistory() {
+                    if (confirm("Are you sure you want to clear all your previous results? This action cannot be undone.")) {
+                        previousResults = [];
+                        localStorage.removeItem('typingTestResults');
+                        updateHistoryDisplay();
                     }
-                } else {
-                    definitions = accountingDefinitions[selectedCategory] || [];
                 }
                 
-                return definitions;
-            }
-            
-            // Get random definition
-            function getRandomDefinition() {
-                const filteredDefinitions = getFilteredDefinitions();
-                
-                if (filteredDefinitions.length === 0) {
-                    let allDefinitions = [];
-                    for (const category in accountingDefinitions) {
-                        allDefinitions = allDefinitions.concat(accountingDefinitions[category]);
+                // Update history display
+                function updateHistoryDisplay() {
+                    if (previousResults.length === 0) {
+                        avgWpmElement.textContent = '0';
+                        avgAccuracyElement.textContent = '0%';
+                        testsTakenElement.textContent = '0';
+                        bestWpmElement.textContent = '0';
+                        return;
                     }
                     
-                    if (allDefinitions.length === 0) {
-                        return "No definitions available. Please select different categories.";
+                    const totalWpm = previousResults.reduce((sum, result) => sum + result.wpm, 0);
+                    const totalAccuracy = previousResults.reduce((sum, result) => sum + result.accuracy, 0);
+                    const bestWpm = Math.max(...previousResults.map(result => result.wpm));
+                    
+                    avgWpmElement.textContent = Math.round(totalWpm / previousResults.length);
+                    avgAccuracyElement.textContent = Math.round(totalAccuracy / previousResults.length) + '%';
+                    testsTakenElement.textContent = previousResults.length;
+                    bestWpmElement.textContent = bestWpm;
+                }
+                
+                // Get filtered definitions
+                function getFilteredDefinitions() {
+                    const selectedCategory = categorySelect.value;
+                    
+                    let definitions = [];
+                    
+                    if (selectedCategory === 'all') {
+                        for (const category in accountingDefinitions) {
+                            definitions = definitions.concat(accountingDefinitions[category]);
+                        }
+                    } else {
+                        definitions = accountingDefinitions[selectedCategory] || [];
                     }
                     
-                    const randomIndex = Math.floor(Math.random() * allDefinitions.length);
-                    return allDefinitions[randomIndex];
+                    return definitions;
                 }
                 
-                const randomIndex = Math.floor(Math.random() * filteredDefinitions.length);
-                return filteredDefinitions[randomIndex];
-            }
-            
-            // Event listeners
-            startBtn.addEventListener('click', startTest);
-            resetBtn.addEventListener('click', resetTest);
-            clearHistoryBtn.addEventListener('click', clearHistory);
-            document.addEventListener('keydown', handleKeyDown);
-            
-            // Start test
-            function startTest() {
-                if (testActive) return;
-                
-                timeLeft = parseInt(timeSelect.value);
-                totalTime = timeLeft;
-                
-                currentText = getRandomDefinition();
-                currentCharIndex = 0;
-                correctChars = 0;
-                totalTyped = 0;
-                userInputHistory = [];
-                
-                renderText();
-                
-                startTime = new Date().getTime();
-                timerInterval = setInterval(updateTimer, 1000);
-                
-                startBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> Test in Progress...';
-                startBtn.disabled = true;
-                timeSelect.disabled = true;
-                categorySelect.disabled = true;
-                resultElement.style.display = 'none';
-                testActive = true;
-                
-                textDisplay.focus();
-                
-                updateProgressBar();
-                updateTimeProgressBar();
-                
-                timeProgressSeconds.textContent = timeLeft + 's';
-            }
-            
-            // Reset test
-            function resetTest() {
-                clearInterval(timerInterval);
-                
-                textDisplay.innerHTML = '<div class="loading">Click Start to begin the test...</div>';
-                startBtn.innerHTML = '<i class="fas fa-play"></i> Start Test';
-                startBtn.disabled = false;
-                timeSelect.disabled = false;
-                categorySelect.disabled = false;
-                resultElement.style.display = 'none';
-                progressBar.style.width = '0%';
-                timeProgressBar.style.width = '0%';
-                textProgressPercent.textContent = '0%';
-                timeProgressSeconds.textContent = timeLeft + 's';
-                
-                testActive = false;
-                timeLeft = parseInt(timeSelect.value);
-                totalTime = timeLeft;
-            }
-            
-            // Update timer
-            function updateTimer() {
-                timeLeft--;
-                
-                updateTimeProgressBar();
-                
-                if (timeLeft <= 0) {
-                    endTest();
-                }
-            }
-            
-            // Handle key down
-            function handleKeyDown(e) {
-                if (!testActive) return;
-                
-                if (e.key === 'Backspace') {
-                    e.preventDefault();
+                // Get random definition
+                function getRandomDefinition() {
+                    const filteredDefinitions = getFilteredDefinitions();
                     
-                    if (currentCharIndex > 0) {
-                        currentCharIndex--;
-                        
-                        if (userInputHistory.length > 0) {
-                            const lastChar = userInputHistory.pop();
-                            
-                            if (lastChar.toLowerCase() === currentText.charAt(currentCharIndex).toLowerCase()) {
-                                correctChars--;
-                            }
-                            
-                            totalTyped--;
+                    if (filteredDefinitions.length === 0) {
+                        let allDefinitions = [];
+                        for (const category in accountingDefinitions) {
+                            allDefinitions = allDefinitions.concat(accountingDefinitions[category]);
                         }
                         
+                        if (allDefinitions.length === 0) {
+                            return "No definitions available. Please select different categories.";
+                        }
+                        
+                        const randomIndex = Math.floor(Math.random() * allDefinitions.length);
+                        return allDefinitions[randomIndex];
+                    }
+                    
+                    const randomIndex = Math.floor(Math.random() * filteredDefinitions.length);
+                    return filteredDefinitions[randomIndex];
+                }
+                
+                // Event listeners
+                startBtn.addEventListener('click', startTest);
+                resetBtn.addEventListener('click', resetTest);
+                clearHistoryBtn.addEventListener('click', clearHistory);
+                document.addEventListener('keydown', handleKeyDown);
+                
+                // Start test
+                function startTest() {
+                    if (testActive) return;
+                    
+                    timeLeft = parseInt(timeSelect.value);
+                    totalTime = timeLeft;
+                    
+                    currentText = getRandomDefinition();
+                    currentCharIndex = 0;
+                    correctChars = 0;
+                    totalTyped = 0;
+                    userInputHistory = [];
+                    
+                    renderText();
+                    
+                    startTime = new Date().getTime();
+                    timerInterval = setInterval(updateTimer, 1000);
+                    
+                    startBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> Test in Progress...';
+                    startBtn.disabled = true;
+                    timeSelect.disabled = true;
+                    categorySelect.disabled = true;
+                    resultElement.style.display = 'none';
+                    testActive = true;
+                    
+                    textDisplay.focus();
+                    
+                    updateProgressBar();
+                    updateTimeProgressBar();
+                    
+                    timeProgressSeconds.textContent = timeLeft + 's';
+                }
+                
+                // Reset test
+                function resetTest() {
+                    clearInterval(timerInterval);
+                    
+                    textDisplay.innerHTML = '<div class="loading">Click Start to begin the test...</div>';
+                    startBtn.innerHTML = '<i class="fas fa-play"></i> Start Test';
+                    startBtn.disabled = false;
+                    timeSelect.disabled = false;
+                    categorySelect.disabled = false;
+                    resultElement.style.display = 'none';
+                    progressBar.style.width = '0%';
+                    timeProgressBar.style.width = '0%';
+                    textProgressPercent.textContent = '0%';
+                    timeProgressSeconds.textContent = timeLeft + 's';
+                    
+                    testActive = false;
+                    timeLeft = parseInt(timeSelect.value);
+                    totalTime = timeLeft;
+                }
+                
+                // Update timer
+                function updateTimer() {
+                    timeLeft--;
+                    
+                    updateTimeProgressBar();
+                    
+                    if (timeLeft <= 0) {
+                        endTest();
+                    }
+                }
+                
+                // Handle key down
+                function handleKeyDown(e) {
+                    if (!testActive) return;
+                    
+                    if (e.key === 'Backspace') {
+                        e.preventDefault();
+                        
+                        if (currentCharIndex > 0) {
+                            currentCharIndex--;
+                            
+                            if (userInputHistory.length > 0) {
+                                const lastChar = userInputHistory.pop();
+                                
+                                if (lastChar.toLowerCase() === currentText.charAt(currentCharIndex).toLowerCase()) {
+                                    correctChars--;
+                                }
+                                
+                                totalTyped--;
+                            }
+                            
+                            renderText();
+                            updateProgressBar();
+                        }
+                        return;
+                    }
+                    
+                    if (e.key.length > 1 && e.key !== ' ') return;
+                    
+                    e.preventDefault();
+                    
+                    userInputHistory.push(e.key);
+                    
+                    const currentChar = currentText.charAt(currentCharIndex);
+                    const isCorrect = e.key.toLowerCase() === currentChar.toLowerCase();
+                    
+                    if (isCorrect) {
+                        correctChars++;
+                    }
+                    
+                    totalTyped++;
+                    currentCharIndex++;
+                    
+                    if (currentCharIndex >= currentText.length) {
+                        currentText = getRandomDefinition();
+                        currentCharIndex = 0;
+                        userInputHistory = [];
+                        renderText();
+                        updateProgressBar();
+                    } else {
                         renderText();
                         updateProgressBar();
                     }
-                    return;
                 }
                 
-                if (e.key.length > 1 && e.key !== ' ') return;
-                
-                e.preventDefault();
-                
-                userInputHistory.push(e.key);
-                
-                const currentChar = currentText.charAt(currentCharIndex);
-                const isCorrect = e.key.toLowerCase() === currentChar.toLowerCase();
-                
-                if (isCorrect) {
-                    correctChars++;
+                // Update progress bar
+                function updateProgressBar() {
+                    const progress = (currentCharIndex / currentText.length) * 100;
+                    progressBar.style.width = progress + '%';
+                    textProgressPercent.textContent = Math.round(progress) + '%';
                 }
                 
-                totalTyped++;
-                currentCharIndex++;
-                
-                if (currentCharIndex >= currentText.length) {
-                    currentText = getRandomDefinition();
-                    currentCharIndex = 0;
-                    userInputHistory = [];
-                    renderText();
-                    updateProgressBar();
-                } else {
-                    renderText();
-                    updateProgressBar();
+                // Update time progress bar
+                function updateTimeProgressBar() {
+                    const progress = ((totalTime - timeLeft) / totalTime) * 100;
+                    timeProgressBar.style.width = progress + '%';
+                    timeProgressSeconds.textContent = timeLeft + 's';
                 }
-            }
-            
-            // Update progress bar
-            function updateProgressBar() {
-                const progress = (currentCharIndex / currentText.length) * 100;
-                progressBar.style.width = progress + '%';
-                textProgressPercent.textContent = Math.round(progress) + '%';
-            }
-            
-            // Update time progress bar
-            function updateTimeProgressBar() {
-                const progress = ((totalTime - timeLeft) / totalTime) * 100;
-                timeProgressBar.style.width = progress + '%';
-                timeProgressSeconds.textContent = timeLeft + 's';
-            }
-            
-            // Render text
-            function renderText() {
-                let html = '';
                 
-                for (let i = 0; i < currentText.length; i++) {
-                    const char = currentText.charAt(i);
+                // Render text
+                function renderText() {
+                    let html = '';
                     
-                    if (i < currentCharIndex) {
-                        const userChar = userInputHistory[i];
-                        const isCorrect = userChar.toLowerCase() === currentText.charAt(i).toLowerCase();
-                        html += `<span class="${isCorrect ? 'correct' : 'incorrect'}">${char}</span>`;
-                    } else if (i === currentCharIndex) {
-                        html += `<span class="current-char">${char}</span>`;
-                    } else {
-                        html += char;
+                    for (let i = 0; i < currentText.length; i++) {
+                        const char = currentText.charAt(i);
+                        
+                        if (i < currentCharIndex) {
+                            const userChar = userInputHistory[i];
+                            const isCorrect = userChar.toLowerCase() === currentText.charAt(i).toLowerCase();
+                            html += `<span class="${isCorrect ? 'correct' : 'incorrect'}">${char}</span>`;
+                        } else if (i === currentCharIndex) {
+                            html += `<span class="current-char">${char}</span>`;
+                        } else {
+                            html += char;
+                        }
+                    }
+                    
+                    textDisplay.innerHTML = html;
+                    
+                    const currentCharElement = textDisplay.querySelector('.current-char');
+                    if (currentCharElement) {
+                        currentCharElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
                     }
                 }
                 
-                textDisplay.innerHTML = html;
-                
-                const currentCharElement = textDisplay.querySelector('.current-char');
-                if (currentCharElement) {
-                    currentCharElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                // End test
+                function endTest() {
+                    clearInterval(timerInterval);
+                    
+                    const currentTime = new Date().getTime();
+                    const elapsedTime = (currentTime - startTime) / 1000 / 60;
+                    
+                    const wordsTyped = correctChars / 5;
+                    const wpm = Math.round(wordsTyped / elapsedTime);
+                    const finalWpmValue = isFinite(wpm) ? wpm : 0;
+                    
+                    const accuracy = totalTyped > 0 ? Math.round((correctChars / totalTyped) * 100) : 100;
+                    const finalAccuracyValue = accuracy;
+                    
+                    finalWpm.textContent = finalWpmValue;
+                    finalAccuracy.textContent = finalAccuracyValue + '%';
+                    finalTime.textContent = totalTime + 's';
+                    finalCharacters.textContent = totalTyped;
+                    resultElement.style.display = 'block';
+                    
+                    saveResults(finalWpmValue, finalAccuracyValue, totalTime, totalTyped);
+                    
+                    startBtn.innerHTML = '<i class="fas fa-play"></i> Start Test';
+                    startBtn.disabled = false;
+                    timeSelect.disabled = false;
+                    categorySelect.disabled = false;
+                    
+                    testActive = false;
                 }
-            }
-            
-            // End test
-            function endTest() {
-                clearInterval(timerInterval);
                 
-                const currentTime = new Date().getTime();
-                const elapsedTime = (currentTime - startTime) / 1000 / 60;
-                
-                const wordsTyped = correctChars / 5;
-                const wpm = Math.round(wordsTyped / elapsedTime);
-                const finalWpmValue = isFinite(wpm) ? wpm : 0;
-                
-                const accuracy = totalTyped > 0 ? Math.round((correctChars / totalTyped) * 100) : 100;
-                const finalAccuracyValue = accuracy;
-                
-                finalWpm.textContent = finalWpmValue;
-                finalAccuracy.textContent = finalAccuracyValue + '%';
-                finalTime.textContent = totalTime + 's';
-                finalCharacters.textContent = totalTyped;
-                resultElement.style.display = 'block';
-                
-                saveResults(finalWpmValue, finalAccuracyValue, totalTime, totalTyped);
-                
-                startBtn.innerHTML = '<i class="fas fa-play"></i> Start Test';
-                startBtn.disabled = false;
-                timeSelect.disabled = false;
-                categorySelect.disabled = false;
-                
-                testActive = false;
-            }
-            
-            // Initialize on page load
-            document.addEventListener('DOMContentLoaded', function() {
-                loadPreviousResults();
-                const selectedOption = categorySelect.options[categorySelect.selectedIndex];
-                currentCategoryElement.textContent = selectedOption.text;
-            });
-        })();
-    </script>
+                // Initialize on page load
+                document.addEventListener('DOMContentLoaded', function() {
+                    loadPreviousResults();
+                    const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+                    currentCategoryElement.textContent = selectedOption.text;
+                });
+            })();
+        </script>
+    </div>
 </body>
 </html>
