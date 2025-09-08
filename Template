@@ -693,7 +693,7 @@
         let isLoading = false;
         let hasMorePosts = true;
         let currentPage = 1;
-        const postsPerPage = 5;
+        const postsPerPage = 1;
         let totalPosts = 0;
 
         // ====== منطق إخفاء/إظهار الهيدر مع الاتجاه ======
