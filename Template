@@ -586,11 +586,25 @@
         text-decoration: none;
         transition: all 0.2s ease;
         margin-top: 1rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
     }
 
     .read-more-btn:hover {
         background-color: var(--primary-light);
         transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .dark-mode .read-more-btn {
+        background-color: var(--primary);
+        color: #1E1E1E;
+    }
+
+    .dark-mode .read-more-btn:hover {
+        background-color: var(--primary-light);
+        color: #1E1E1E;
     }
 
     .back-to-top {
@@ -656,6 +670,9 @@
     }
 
     .search-results-counter.show { display: block; }
+
+.post-date { display: none !important; }
+
     ]]></b:skin>
 
     <script>
@@ -672,11 +689,12 @@
         const mainContent = document.getElementById('mainContent');
         const resultsCounter = document.getElementById('searchResultsCounter');
         
-        // متغيرات التمرير اللانهائي
+        // متغيرات التمرير اللانهائي المحسنة
         let isLoading = false;
         let hasMorePosts = true;
         let currentPage = 1;
-        const postsPerPage = 1;
+        const postsPerPage = 5;
+        let totalPosts = 0;
 
         // ====== منطق إخفاء/إظهار الهيدر مع الاتجاه ======
         const header = document.querySelector('nav');
@@ -699,7 +717,7 @@
             lastScrollTop = Math.max(scrollTop, 0);
         }
 
-        // وظيفة التمرير اللانهائي - للصفحة الرئيسية فقط
+        // وظيفة التمرير اللانهائي المحسنة - للصفحة الرئيسية فقط
         function checkInfiniteScroll() {
             if (isLoading || !hasMorePosts || window.location.pathname !== "/") return;
             
@@ -707,12 +725,12 @@
             const documentHeight = document.documentElement.scrollHeight;
             const windowHeight = window.innerHeight;
             
-            if (scrollPosition + windowHeight >= documentHeight * 0.8) {
+            if (scrollPosition + windowHeight >= documentHeight - 500) {
                 loadMorePosts();
             }
         }
 
-        // تهيئة التمرير اللانهائي للصفحة الرئيسية فقط وإخفاء الهيدر لجميع الصفحات
+        // تهيئة التمرير اللانهائي للصفحة الرئيسية فقط
         function initInfiniteScroll() {
             let ticking = false;
             window.addEventListener('scroll', function() {
@@ -826,15 +844,20 @@
             sidebarContent.innerHTML = '';
             sidebarContent.appendChild(loadingElement);
             
-            const apiUrl = `/feeds/posts/default?alt=json-in-script&max-results=500&callback=processPosts`;
-            const script = document.createElement('script');
-            script.src = apiUrl;
-            document.head.appendChild(script);
+            // استخدام fetch بدلاً من json-in-script
+            fetch('/feeds/posts/default?alt=json&max-results=500')
+                .then(response => response.json())
+                .then(data => processPosts(data))
+                .catch(error => {
+                    console.error('Error loading posts:', error);
+                    loadingElement.textContent = 'Error loading posts. Please refresh the page.';
+                });
         }
 
         // Process posts data from API with tags support
-        window.processPosts = function(data) {
+        function processPosts(data) {
             const posts = data.feed.entry || [];
+            totalPosts = posts.length;
             const fragment = document.createDocumentFragment();
             const section = document.createElement('div');
             section.className = 'sidebar-section';
@@ -865,15 +888,6 @@
             setupScrollSpy();
             setupSmoothScrolling();
             setupSearchFunctionality();
-
-            // Remove script element after use
-            const scripts = document.head.getElementsByTagName('script');
-            for (let i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.includes('/feeds/posts/default')) {
-                    document.head.removeChild(scripts[i]);
-                    break;
-                }
-            }
         };
 
         // Search functionality with tags support and results counter
@@ -1032,6 +1046,7 @@
             }
         }
 
+        // نظام التمرير اللانهائي المحسن
         function loadMorePosts() {
             if (isLoading || !hasMorePosts) return;
             
@@ -1039,84 +1054,137 @@
             
             const loadingIndicator = document.createElement('div');
             loadingIndicator.className = 'loading-posts visible';
-            loadingIndicator.innerHTML = "<div class='spinner'></div>";
+            loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading more posts...</p>";
             mainContent.appendChild(loadingIndicator);
             
             const startIndex = currentPage * postsPerPage;
             
-            const apiUrl = `/feeds/posts/default?alt=json-in-script&start-index=${startIndex + 1}&max-results=${postsPerPage}&callback=processMorePosts`;
-            const script = document.createElement('script');
-            script.src = apiUrl;
-            document.head.appendChild(script);
+            fetch(`/feeds/posts/default?alt=json&start-index=${startIndex + 1}&max-results=${postsPerPage}`)
+                .then(response => response.json())
+                .then(data => processMorePosts(data))
+                .catch(error => {
+                    console.error('Error loading more posts:', error);
+                    loadingIndicator.innerHTML = '<p>Error loading more posts. Please try again.</p>';
+                    isLoading = false;
+                    
+                    // إخفاء مؤشر التحميل بعد 3 ثوان
+                    setTimeout(() => {
+                        loadingIndicator.remove();
+                    }, 3000);
+                });
         }
         
         // معالجة المشاركات الإضافية من API
-        window.processMorePosts = function(data) {
-            const posts = data.feed.entry || [];
-            
-            if (posts.length === 0) {
-                hasMorePosts = false;
-                
-                const loadingIndicator = document.querySelector('.loading-posts');
-                if (loadingIndicator) {
-                    loadingIndicator.remove();
-                }
-                
-                isLoading = false;
-                return;
+function processMorePosts(data) {
+    const posts = data.feed.entry || [];
+
+    if (posts.length === 0) {
+        hasMorePosts = false;
+
+        const loadingIndicator = document.querySelector('.loading-posts');
+        if (loadingIndicator) {
+            loadingIndicator.innerHTML = '<p>No more posts to load.</p>';
+            setTimeout(() => { loadingIndicator.remove(); }, 3000);
+        }
+
+        isLoading = false;
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    posts.forEach(function(post) {
+        try {
+            const postId = (post.id && post.id.$t) ? post.id.$t.split('-').pop() : ('p' + Date.now() + Math.random());
+            const title = (post.title && post.title.$t) ? post.title.$t : 'Untitled';
+            const linkObj = (post.link || []).find(l => l.rel === 'alternate') || null;
+            const postUrl = linkObj ? linkObj.href : '#';
+            const contentHtml = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
+            const published = post.published ? new Date(post.published.$t).toLocaleDateString() : '';
+
+            // العنصر الرئيسي للبوست
+            const postCard = document.createElement('div');
+            postCard.className = 'post-card';
+            postCard.id = 'post-' + postId;
+
+            // الهيدر (العنوان + التاريخ)
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'post-header';
+            const h2 = document.createElement('h2');
+            h2.className = 'post-title';
+            h2.textContent = title;
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'post-date';
+            dateSpan.textContent = published;
+            headerDiv.appendChild(h2);
+            headerDiv.appendChild(dateSpan);
+
+            // المحتوى (صورة اختيارية + معاينة نصية مأمونة)
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'post-content';
+
+            if (post.media$thumbnail && post.media$thumbnail.url) {
+                const img = document.createElement('img');
+                img.className = 'post-image';
+                img.src = post.media$thumbnail.url;
+                img.alt = title;
+                img.loading = 'lazy';
+                img.addEventListener('load', function() { img.classList.add('loaded'); });
+                contentDiv.appendChild(img);
             }
-            
-            posts.forEach(function(post) {
-                const postId = post.id.$t.split('-').pop();
-                const title = post.title.$t;
-                const postUrl = post.link.find(link => link.rel === 'alternate').href;
-                const snippet = post.content ? post.content.$t : '';
-                
-                const postCard = document.createElement('div');
-                postCard.className = 'post-card';
-                postCard.id = 'post-' + postId;
-                
-                postCard.innerHTML = `
-                    <div class='post-header'>
-                        <h2 class='post-title'>${title}</h2>
-                    </div>
-                    
-                    <div class='post-content'>
-                        ${post.media$thumbnail ? `<img class='post-image' src='${post.media$thumbnail.url}' alt='Post Image' loading='lazy'/>` : ''}
-                        
-                        <div class='post-preview'>
-                            ${snippet}
-                        </div>
-                    </div>
-                    
-                    <div class='post-footer'>
-                        <a class='read-more-btn' href='${postUrl}'>Read More</a>
-                    </div>
-                `;
-                
-                mainContent.appendChild(postCard);
-            });
-            
-            currentPage++;
-            
-            const loadingIndicator = document.querySelector('.loading-posts');
-            if (loadingIndicator) {
-                loadingIndicator.remove();
-            }
-            
-            updateSidebarNavigation(posts);
-            updateLazyLoading();
-            
-            const scripts = document.head.getElementsByTagName('script');
-            for (let i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.includes('/feeds/posts/default')) {
-                    document.head.removeChild(scripts[i]);
-                    break;
-                }
-            }
-            
-            isLoading = false;
-        };
+
+            // صناعة معاينة نصية آمنة (نحذف الوسوم ونأخذ أول 200 حرف)
+            const previewDiv = document.createElement('div');
+            previewDiv.className = 'post-preview';
+
+            // تحويل HTML إلى نص آمن لمنع كسر الـ DOM
+            const tmp = document.createElement('div');
+            tmp.innerHTML = contentHtml || '';
+            let previewText = (tmp.textContent || tmp.innerText || '').trim();
+            if (previewText.length > 200) previewText = previewText.substring(0, 200) + '...';
+            previewDiv.textContent = previewText;
+
+            contentDiv.appendChild(previewDiv);
+
+            // الفوتر مع زر القراءة — يتم إنشاء العنصر دائماً (لا لِـ innerHTML)
+            const footerDiv = document.createElement('div');
+            footerDiv.className = 'post-footer';
+            footerDiv.style.position = 'relative'; // لضمان أي تداخل
+            footerDiv.style.zIndex = 2;
+
+            const readMoreA = document.createElement('a');
+            readMoreA.className = 'read-more-btn';
+            readMoreA.href = postUrl || '#';
+            readMoreA.textContent = 'Read More';
+            footerDiv.appendChild(readMoreA);
+
+            // تجميع كل شيء
+            postCard.appendChild(headerDiv);
+            postCard.appendChild(contentDiv);
+            postCard.appendChild(footerDiv);
+
+            fragment.appendChild(postCard);
+        } catch (err) {
+            console.error('Error building post element', err, post);
+            // نستمر في المعالجة لباقي التدوينات
+        }
+    });
+
+    mainContent.appendChild(fragment);
+    currentPage++;
+
+    const loadingIndicator = document.querySelector('.loading-posts');
+    if (loadingIndicator) loadingIndicator.remove();
+
+    // تحديثات الواجهة
+    updateSidebarNavigation(posts);
+    updateLazyLoading();
+    setupScrollSpy();
+
+    isLoading = false;
+    if (posts.length < postsPerPage) hasMorePosts = false;
+}
+
         
         // تحديث الشريط الجانبي بالمشاركات الجديدة مع الوسوم
         function updateSidebarNavigation(posts) {
@@ -1192,6 +1260,7 @@
     </div>
 
     <!-- Main Content Area with Post Cards -->
+    <!-- Main Content Area with Post Cards -->
     <main id='mainContent'>
         <b:section id='main' showaddelement='yes'>
           <b:widget id='Blog1' locked='false' title='Blog Posts' type='Blog' version='1'>
@@ -1222,7 +1291,7 @@
                       </b:if>
                       
                       <div class='post-preview'>
-                        <data:post.snippet/>
+                        <b:eval expr='data:post.body ? data:post.body : &quot;&quot;'/>
                       </div>
                     </div>
                     
