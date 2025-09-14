@@ -149,15 +149,8 @@
         justify-content: space-between;
         align-items: center;
         height: var(--header-height);
-        transition: transform 0.4s ease, box-shadow 0.4s ease;
-        will-change: transform;
-        transform: translateY(0);
     }
 
-    nav.hidden {
-        transform: translateY(-100%);
-        box-shadow: none;
-    }
 
     .nav-title {
         color: var(--primary);
@@ -176,53 +169,75 @@
         align-items: center;
     }
 
-    .menu-toggle {
-        background: none;
-        border: none;
-        color: var(--text);
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        display: flex;
-        align-items: center;
-        transition: transform 0.3s ease;
-        position: relative;
-        z-index: 2000;
-    }
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2000;
+    /* إزالة أي تأثيرات إضافية غير مرغوب فيها */
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border-radius: 4px;
+    /* منع تأثيرات التحويل غير المتسقة */
+    transform: none !important;
+}
 
-    .menu-toggle.active { 
-        transform: rotate(90deg); 
-    }
+ 
+.menu-toggle:hover {
+    background-color: rgba(255, 109, 0, 0.1) !important;
+    transform: none !important;
+}
 
-    .mode-toggle {
-        background-color: var(--primary);
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        position: relative;
-        z-index: 2000;
-    }
+.menu-toggle.active { 
+    transform: rotate(90deg) !important; 
+    background-color: rgba(255, 109, 0, 0.1) !important;
+}
 
-    .mode-toggle:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-    }
+/* توحيد أزرار الدارك مود في جميع الصفحات */
+.mode-toggle {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 2000;
+    min-width: 120px;
+    text-align: center;
+    font-size: 0.9rem;
+    /* التأكد من عدم وجود تأثيرات غير متسقة */
+    box-shadow: none;
+}
 
-    .dark-mode .mode-toggle {
-        background-color: var(--primary);
-        color: #121212 !important;
-    }
+.mode-toggle:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
 
-    nav.show {
-        transform: translateY(0);
-        opacity: 1;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    }
+.dark-mode .mode-toggle {
+    background-color: var(--primary-light);
+    color: var(--dark) !important;
+}
 
+.dark-mode .mode-toggle:hover {
+    background-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+
+    /* توحيد مظهر القائمة الجانبية */
     .sidebar {
         position: fixed;
         top: var(--header-height);
@@ -238,6 +253,7 @@
         display: flex;
         flex-direction: column;
         -webkit-overflow-scrolling: touch;
+        border-left: 1px solid var(--border-color-light);
     }
 
     .sidebar.open { 
@@ -327,6 +343,8 @@
         transition: background-color 0.15s ease-out, color 0.15s ease-out, transform 0.15s ease-out;
         word-wrap: break-word;
         overflow-wrap: break-word;
+		    /* إزالة تأثير التحويل الذي قد يسبب عدم الاتساق */
+    transform: none !important;
     }
     
     .sidebar-link.hidden { 
@@ -340,7 +358,8 @@
     .sidebar-link:hover {
         background-color: rgba(255, 109, 0, 0.1);
         color: var(--primary);
-        transform: translateX(3px);
+    /* إزالة تأثير التحويل */
+    transform: none !important;
     }
 
     .sidebar-link.active {
@@ -365,6 +384,28 @@
     .sidebar-link.active::after { 
         transform: translateX(0); 
     }
+
+
+/* التأكد من أن التنسيقات متسقة في وضع الدارك مود */
+.dark-mode .menu-toggle {
+    color: var(--text);
+}
+
+.dark-mode .menu-toggle:hover {
+    background-color: rgba(255, 145, 0, 0.2) !important;
+}
+
+.dark-mode .menu-toggle.active {
+    background-color: rgba(255, 145, 0, 0.2) !important;
+}
+
+/* إضافة قاعدة للصفحة الرئيسية لإزالة أي تأثيرات خاصة */
+body:not(.post-page) .menu-toggle,
+body:not(.post-page) .mode-toggle,
+body:not(.post-page) .sidebar-link {
+    /* التأكد من أن جميع الخصائص متسقة */
+}
+
 
     main {
         padding: calc(var(--header-height) + 2rem) 2rem 2rem;
@@ -765,26 +806,6 @@
         const postsPerPage = 5;
         let totalPosts = 0;
 
-        // ====== منطق إخفاء/إظهار الهيدر ======
-        const header = document.querySelector('nav');
-        const headerHeight = header.offsetHeight;
-        let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        header.classList.add('show');
-
-        function handleHeaderOnScroll() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const goingDown = scrollTop > lastScrollTop;
-
-            if (goingDown && scrollTop > headerHeight + 10) {
-                header.classList.add('hidden');
-                header.classList.remove('show');
-            } else {
-                header.classList.remove('hidden');
-                header.classList.add('show');
-            }
-
-            lastScrollTop = Math.max(scrollTop, 0);
-        }
 
         // وظيفة التمرير اللانهائي - للصفحة الرئيسية فقط
         function checkInfiniteScroll() {
@@ -802,11 +823,12 @@
         // تهيئة التمرير اللانهائي للصفحة الرئيسية فقط
         function initInfiniteScroll() {
             let ticking = false;
+            
             window.addEventListener('scroll', function() {
                 if (!ticking) {
                     window.requestAnimationFrame(function() {
-                        handleHeaderOnScroll();
                         
+                        // ثم التحقق من التمرير اللانهائي (أقل أولوية)
                         if (window.location.pathname === "/") {
                             checkInfiniteScroll();
                         }
@@ -859,55 +881,12 @@
             }
         });
 
-        // Lazy Loading for images
-        function initLazyLoading() {
-            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-            
-            if ('IntersectionObserver' in window) {
-                const imageObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const img = entry.target;
-                            img.classList.add('loaded');
-                            
-                            if (!img.complete) {
-                                img.onload = function() {
-                                    img.classList.add('loaded');
-                                };
-                                img.onerror = function() {
-                                    img.style.display = 'none';
-                                };
-                            } else {
-                                img.classList.add('loaded');
-                            }
-                            
-                            imageObserver.unobserve(img);
-                        }
-                    });
-                }, {
-                    rootMargin: '0px 0px 100px 0px'
-                });
-                
-                lazyImages.forEach(img => {
-                    imageObserver.observe(img);
-                });
-            } else {
-                lazyImages.forEach(img => {
-                    img.onload = function() {
-                        img.classList.add('loaded');
-                    };
-                    img.classList.add('loaded');
-                });
-            }
-        }
-
-        // تحديث Lazy Loading للصور الجديدة
-        function updateLazyLoading() {
-            initLazyLoading();
-        }
 
         // Create sidebar navigation from all blog posts
         function createSidebarNavigation() {
+            // إذا لم يكن العنصر موجوداً، توقف
+            if (!sidebarContent) return;
+            
             const loadingElement = document.createElement('div');
             loadingElement.textContent = 'Loading posts...';
             loadingElement.style.padding = '1rem';
@@ -1014,8 +993,8 @@
             const links = document.querySelectorAll('.sidebar-link');
             if (links.length === 0) return;
             
-            const headerHeight = document.querySelector('nav').offsetHeight;
-            const offset = headerHeight + 20;
+            // استخدام قيمة إزاحة ثابتة (100px) بدلاً من headerHeight
+            const offset = 100;
             let ticking = false;
             
             function onScroll() {
@@ -1064,9 +1043,10 @@
                         const targetElement = document.querySelector(link.hash);
                         
                         if (targetElement) {
-                            const headerHeight = document.querySelector('nav').offsetHeight;
+                            // استخدام قيمة إزاحة ثابتة (80px) بدلاً من headerHeight
+                            const offset = 80;
                             const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = window.pageYOffset + elementPosition - headerHeight;
+                            const offsetPosition = window.pageYOffset + elementPosition - offset;
                             
                             window.scrollTo({
                                 top: offsetPosition,
@@ -1105,9 +1085,10 @@
             const targetElement = document.querySelector(window.location.hash);
             if (targetElement) {
                 setTimeout(function() {
-                    const headerHeight = document.querySelector('nav').offsetHeight;
+                    // استخدام قيمة إزاحة ثابتة (80px) بدلاً من headerHeight
+                    const offset = 80;
                     const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = window.pageYOffset + elementPosition - headerHeight;
+                    const offsetPosition = window.pageYOffset + elementPosition - offset;
                     
                     window.scrollTo({
                         top: offsetPosition,
@@ -1283,9 +1264,26 @@
             setupSearchFunctionality();
         }
 
+        // إعادة تهيئة المكونات عند الانتقال بين الصفحات
+        function reinitializeComponents() {
+            setupScrollSpy();
+            setupSmoothScrolling();
+            setupSearchFunctionality();
+            
+            // إذا كنا في صفحة المشاركات الفردية، أوقف التمرير اللانهائي
+            if (window.location.pathname !== "/") {
+                window.removeEventListener('scroll', checkInfiniteScroll);
+            }
+        }
+
         // Initialize everything
         createSidebarNavigation();
-        initInfiniteScroll();
+        
+        // التمرير اللانهائي للصفحة الرئيسية فقط
+        if (window.location.pathname === "/") {
+            initInfiniteScroll();
+        }
+        
         initLazyLoading();
         
         // Force reflow for mobile devices
@@ -1295,6 +1293,9 @@
                 document.body.style.minHeight = window.innerHeight + 'px';
             });
         }
+        
+        // استمع لتغييرات الصفحة
+        window.addEventListener('popstate', reinitializeComponents);
     });
     //]]>
     </script>
