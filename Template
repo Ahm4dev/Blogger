@@ -191,13 +191,13 @@
 
  
 .menu-toggle:hover {
-    background-color: rgba(255, 109, 0, 0.1) !important;
+    background-color: transparent !important;
     transform: none !important;
 }
 
 .menu-toggle.active { 
     transform: rotate(90deg) !important; 
-    background-color: rgba(255, 109, 0, 0.1) !important;
+    background-color: transparent !important;
 }
 
 /* توحيد أزرار الدارك مود في جميع الصفحات */
