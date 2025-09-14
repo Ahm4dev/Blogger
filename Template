@@ -392,11 +392,13 @@
 }
 
 .dark-mode .menu-toggle:hover {
-    background-color: rgba(255, 145, 0, 0.2) !important;
+    background-color: transparent !important;
+    transform: none !important;
 }
 
 .dark-mode .menu-toggle.active {
-    background-color: rgba(255, 145, 0, 0.2) !important;
+    transform: rotate(90deg) !important; 
+    background-color: transparent !important;
 }
 
 /* إضافة قاعدة للصفحة الرئيسية لإزالة أي تأثيرات خاصة */
