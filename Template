@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
-<html xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
     <meta charset='utf-8'/>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes' name='viewport'/>
@@ -149,8 +149,17 @@
         justify-content: space-between;
         align-items: center;
         height: var(--header-height);
+        transition: transform 0.3s ease-in-out;
+        will-change: transform;
     }
 
+    nav.hidden {
+        transform: translateY(-100%);
+    }
+
+    nav.visible {
+        transform: translateY(0);
+    }
 
     .nav-title {
         color: var(--primary);
@@ -401,12 +410,6 @@
     background-color: transparent !important;
 }
 
-/* إضافة قاعدة للصفحة الرئيسية لإزالة أي تأثيرات خاصة */
-body:not(.post-page) .menu-toggle,
-body:not(.post-page) .mode-toggle,
-body:not(.post-page) .sidebar-link {
-    /* التأكد من أن جميع الخصائص متسقة */
-}
 
 
     main {
@@ -812,11 +815,69 @@ body:not(.post-page) .sidebar-link {
         const resultsCounter = document.getElementById('searchResultsCounter');
         
         // متغيرات التمرير اللانهائي
-        let isLoading = false;
-        let hasMorePosts = true;
-        let currentPage = 1;
-        const postsPerPage = 5;
-        let totalPosts = 0;
+let isLoading = false;
+let hasMorePosts = true;
+const postsPerPage = 5;
+
+// عدد المشاركات المحمّلة فعليًا (القالب + أي تحميل لاحق)
+let postsLoaded = document.querySelectorAll('.post-card').length;
+
+
+        // متغيرات للتحكم في ظهور واختفاء الهيدر
+        let lastScrollY = window.scrollY;
+        let isHeaderVisible = true;
+        let isSidebarOpen = false; // متغير جديد لتتبع حالة القائمة الجانبية
+        const header = document.querySelector('nav');
+        const headerHeight = header.offsetHeight;
+
+        // وظيفة التحكم في ظهور واختفاء الهيدر (معدلة)
+        function handleHeaderVisibility() {
+            // إذا كانت القائمة الجانبية مفتوحة، لا تخفي الهيدر
+            if (isSidebarOpen) {
+                if (!isHeaderVisible) {
+                    header.classList.remove('hidden');
+                    header.classList.add('visible');
+                    isHeaderVisible = true;
+                }
+                return;
+            }
+            
+            const currentScrollY = window.scrollY;
+            
+            // إذا كان المستخدم يمرر لأعلى أو في أعلى الصفحة
+            if (currentScrollY < lastScrollY || currentScrollY < headerHeight) {
+                if (!isHeaderVisible) {
+                    header.classList.remove('hidden');
+                    header.classList.add('visible');
+                    isHeaderVisible = true;
+                }
+            } 
+            // إذا كان المستخدم يمرر لأسفل وابتعد عن الأعلى
+            else if (currentScrollY > headerHeight) {
+                if (isHeaderVisible) {
+                    header.classList.remove('visible');
+                    header.classList.add('hidden');
+                    isHeaderVisible = false;
+                }
+            }
+            
+            lastScrollY = currentScrollY;
+        }
+
+        // تهيئة وظيفة التحكم في الهيدر
+        function initHeaderScroll() {
+            let ticking = false;
+            
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        handleHeaderVisibility();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        }
 
 
         // وظيفة التمرير اللانهائي - للصفحة الرئيسية فقط
@@ -853,19 +914,22 @@ body:not(.post-page) .sidebar-link {
         }
 
         // Dark Mode Toggle
-        function applyDarkMode(isDark) {
-            if (isDark) {
-                document.documentElement.classList.add('dark-mode');
-                document.body.classList.add('dark-mode');
-                modeToggle.innerHTML = '☀️ Light Mode';
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                document.documentElement.classList.remove('dark-mode');
-                document.body.classList.remove('dark-mode');
-                modeToggle.innerHTML = '🌙 Dark Mode';
-                localStorage.removeItem('darkMode');
-            }
-        }
+function applyDarkMode(isDark) {
+    const { classList: htmlClassList } = document.documentElement;
+    const { classList: bodyClassList } = document.body;
+    
+    if (isDark) {
+        htmlClassList.add('dark-mode');
+        bodyClassList.add('dark-mode');
+        modeToggle.textContent = '☀️ Light Mode';
+        localStorage.setItem('darkMode', 'enabled');
+    } else {
+        htmlClassList.remove('dark-mode');
+        bodyClassList.remove('dark-mode');
+        modeToggle.textContent = '🌙 Dark Mode';
+        localStorage.removeItem('darkMode');
+    }
+}
 
         // Initialize dark mode from localStorage
         const savedDarkMode = localStorage.getItem('darkMode');
@@ -877,19 +941,28 @@ body:not(.post-page) .sidebar-link {
             applyDarkMode(isDark);
         });
         
-        // Sidebar Toggle
+        // Sidebar Toggle (محدث)
         menuToggle.addEventListener('click', function() {
             const isOpen = sidebar.classList.toggle('open');
             menuToggle.classList.toggle('active');
             menuToggle.setAttribute('aria-expanded', isOpen);
+            isSidebarOpen = isOpen; // تحديث حالة القائمة الجانبية
+            
+            // إذا فتحت القائمة، تأكد من ظهور الهيدر
+            if (isOpen && !isHeaderVisible) {
+                header.classList.remove('hidden');
+                header.classList.add('visible');
+                isHeaderVisible = true;
+            }
         });
 
-        // Close sidebar when clicking outside
+        // Close sidebar when clicking outside (محدث)
         document.addEventListener('click', function(e) {
             if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle) {
                 sidebar.classList.remove('open');
                 menuToggle.classList.remove('active');
                 menuToggle.setAttribute('aria-expanded', 'false');
+                isSidebarOpen = false; // تحديث حالة القائمة الجانبية
             }
         });
 
@@ -1071,6 +1144,7 @@ link.addEventListener('click', function(e) {
                 sidebar.classList.remove('open');
                 menuToggle.classList.remove('active');
                 menuToggle.setAttribute('aria-expanded', 'false');
+                isSidebarOpen = false; // تحديث حالة القائمة الجانبية
             }
         }
     }
@@ -1121,9 +1195,10 @@ link.addEventListener('click', function(e) {
             loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading more posts...</p>";
             mainContent.appendChild(loadingIndicator);
             
-            const startIndex = currentPage * postsPerPage;
-            
-            fetch(`/feeds/posts/default?alt=json&start-index=${startIndex + 1}&max-results=${postsPerPage}`)
+const startIndex = postsLoaded + 1;
+
+fetch(`/feeds/posts/default?alt=json&start-index=${startIndex}&max-results=${postsPerPage}`)
+
                 .then(response => response.json())
                 .then(data => processMorePosts(data))
                 .catch(error => {
@@ -1238,7 +1313,7 @@ h2.appendChild(titleLink);
             });
 
             mainContent.appendChild(fragment);
-            currentPage++;
+            postsLoaded += posts.length;
 
             const loadingIndicator = document.querySelector('.loading-posts');
             if (loadingIndicator) loadingIndicator.remove();
@@ -1294,6 +1369,7 @@ h2.appendChild(titleLink);
 
         // Initialize everything
         createSidebarNavigation();
+        initHeaderScroll(); // إضافة هذه السطر
         
         // التمرير اللانهائي للصفحة الرئيسية فقط
         if (window.location.pathname === "/") {
