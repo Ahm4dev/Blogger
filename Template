@@ -171,20 +171,20 @@
        ========================================================================== */
     /* Navigation */
     nav {
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: var(--header-height);
-    transition: transform 0.3s ease-out; /* زيادة مدة الانتقال قليلاً لسلاسة أفضل */
-    will-change: transform;
+		background-color: var(--card-bg);
+		box-shadow: var(--shadow);
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1000;
+		padding: 1rem 2rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: var(--header-height);
+		transition: transform 0.3s ease-out; /* زيادة مدة الانتقال قليلاً لسلاسة أفضل */
+		will-change: transform;
     }
 
 
@@ -334,35 +334,36 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
-    .read-more-btn {
-        display: inline-block;
-        background-color: var(--primary);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: var(--border-radius);
-        text-decoration: none;
-        transition: all 0.2s ease;
-        margin-top: 1rem;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
-    }
+   .read-more-btn {
+    display: inline-block;
+    background-color: var(--primary);
+    color: white !important;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+  }
 
-    .read-more-btn:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+  .read-more-btn:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
 
-    .dark-mode .read-more-btn {
-        background-color: var(--primary);
-        color: #1E1E1E;
-    }
+  /* Dark Mode Styles */
+  .dark-mode .read-more-btn {
+    background-color: var(--primary);
+    color: #1E1E1E !important;
+  }
 
-    .dark-mode .read-more-btn:hover {
-        background-color: var(--primary-light);
-        color: #1E1E1E;
-    }
+  .dark-mode .read-more-btn:hover {
+    background-color: var(--primary-light);
+    color: #1E1E1E !important;
+  }
 
     .back-to-top {
         position: fixed;
