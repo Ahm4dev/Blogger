@@ -1297,82 +1297,145 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Scroll spy for active post highlighting
-        function setupScrollSpy() {
-            const links = document.querySelectorAll('.sidebar-link');
-            if (links.length === 0) return;
-            
-            const offset = 100;
-            let ticking = false;
-            
-            function onScroll() {
-                const scrollPosition = window.scrollY + offset;
-                let lastPassed = null;
-                
-                document.querySelectorAll('.post-card').forEach(function(post) {
-                    const postTop = post.offsetTop;
-                    if (postTop <= scrollPosition) {
-                        lastPassed = post.id;
-                    }
-                });
-                
-                if (!lastPassed) {
-                    const currentPostId = window.location.pathname.split('/').pop();
-                    lastPassed = 'post-' + currentPostId;
-                }
-                
-                links.forEach(function(link) {
-                    const isActive = link.dataset.target === lastPassed || 
-                                   link.href === window.location.href || 
-                                   link.href.endsWith(lastPassed.replace('post-', ''));
-                    link.classList.toggle('active', isActive);
-                });
+// Scroll spy for active post highlighting with auto-scroll in sidebar
+function setupScrollSpy() {
+    const links = document.querySelectorAll('.sidebar-link');
+    if (links.length === 0) return;
+    
+    const offset = 100;
+    let ticking = false;
+    let lastActiveLink = null;
+    
+    function onScroll() {
+        const scrollPosition = window.scrollY + offset;
+        let lastPassed = null;
+        
+        document.querySelectorAll('.post-card').forEach(function(post) {
+            const postTop = post.offsetTop;
+            if (postTop <= scrollPosition) {
+                lastPassed = post.id;
             }
-            
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        onScroll();
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }, { passive: true });
-            
-            onScroll();
+        });
+        
+if (!lastPassed) {
+    if (window.location.pathname === "/") {
+        // لو الصفحة الرئيسية، فعل أول بوست فقط
+        const firstPost = document.querySelector('.post-card');
+        if (firstPost) {
+            lastPassed = firstPost.id;
         }
+    } else {
+        // في صفحة الموضوع الفردي
+        const currentPostId = window.location.pathname.split('/').pop();
+        lastPassed = 'post-' + currentPostId;
+    }
+}
 
-        // Smooth scrolling to posts
-        function setupSmoothScrolling() {
-            document.querySelectorAll('.sidebar-link').forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    if (this.hash && document.querySelector(this.hash)) {
-                        e.preventDefault();
-                        const targetElement = document.querySelector(this.hash);
-                        
-                        if (targetElement) {
-                            const offset = 80;
-                            const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = window.pageYOffset + elementPosition - offset;
-                            
-                            window.scrollTo({
-                                top: offsetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            history.pushState(null, null, this.hash);
-                            
-                            if (sidebar.classList.contains('open')) {
-                                sidebar.classList.remove('open');
-                                menuToggle.classList.remove('active');
-                                menuToggle.setAttribute('aria-expanded', 'false');
-                                isSidebarOpen = false;
-                            }
-                        }
-                    }
-                });
+        
+        links.forEach(function(link) {
+            const isActive = link.dataset.target === lastPassed || 
+                           link.href === window.location.href || 
+                           link.href.endsWith(lastPassed.replace('post-', ''));
+            
+            link.classList.toggle('active', isActive);
+            
+            // إذا كان هذا الرابط هو النشط وليس آخر رابط نشط
+            if (isActive && link !== lastActiveLink) {
+                lastActiveLink = link;
+                autoScrollSidebar(link);
+            }
+        });
+    }
+    
+    // دالة للتمرير التلقائي في القائمة الجانبية
+    function autoScrollSidebar(activeLink) {
+        const sidebarContent = document.getElementById('sidebarContent');
+        if (!sidebarContent) return;
+        
+        // حساب موضع العنصر النشط بالنسبة للقائمة
+        const linkRect = activeLink.getBoundingClientRect();
+        const sidebarRect = sidebarContent.getBoundingClientRect();
+        
+        // حساب إذا كان العنصر غير مرئي في القائمة
+        const isAbove = linkRect.top < sidebarRect.top;
+        const isBelow = linkRect.bottom > sidebarRect.bottom;
+        
+        if (isAbove || isBelow) {
+            // حساب الموضع الجديد للتمرير
+            const scrollTop = sidebarContent.scrollTop;
+            const elementOffset = activeLink.offsetTop;
+            const middleOffset = elementOffset - (sidebarContent.offsetHeight / 2) + (activeLink.offsetHeight / 2);
+            
+            // التمرير السلس إلى الموضع
+            sidebarContent.scrollTo({
+                top: middleOffset,
+                behavior: 'smooth'
             });
         }
+    }
+    
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                onScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+    
+    onScroll();
+}
+
+// Smooth scrolling to posts - معدلة لمنع التداخل مع التمرير التلقائي
+function setupSmoothScrolling() {
+    // متغير لتتبع ما إذا كان التمرير يتم برمجياً (لتفادي التداخل)
+    let isProgrammaticScroll = false;
+    
+    document.querySelectorAll('.sidebar-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            if (this.hash && document.querySelector(this.hash)) {
+                e.preventDefault();
+                
+                // وضع علامة أن التمرير سيتم برمجياً
+                isProgrammaticScroll = true;
+                
+                const targetElement = document.querySelector(this.hash);
+                
+                if (targetElement) {
+                    const offset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = window.pageYOffset + elementPosition - offset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    history.pushState(null, null, this.hash);
+                    
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        isSidebarOpen = false;
+                    }
+                    
+                    // إعادة تعيين العلم بعد انتهاء التمرير
+                    setTimeout(() => {
+                        isProgrammaticScroll = false;
+                    }, 1000);
+                }
+            }
+        });
+    });
+    
+    // إرجاع دالة للتحقق من حالة التمرير البرمجي
+    return {
+        isProgrammaticScroll: () => isProgrammaticScroll,
+        setProgrammaticScroll: (value) => { isProgrammaticScroll = value; }
+    };
+}
 
         // Back to Top Button
         backToTop.addEventListener('click', function(e) {
