@@ -171,29 +171,22 @@
        ========================================================================== */
     /* Navigation */
     nav {
-        background-color: var(--card-bg);
-        box-shadow: var(--shadow);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: var(--header-height);
-        transition: transform var(--transition-speed) ease-in-out;
-        will-change: transform;
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+    transition: transform 0.3s ease-out; /* زيادة مدة الانتقال قليلاً لسلاسة أفضل */
+    will-change: transform;
     }
 
-    nav.hidden {
-        transform: translateY(-100%);
-    }
-
-    nav.visible {
-        transform: translateY(0);
-    }
 
     .nav-title {
         color: var(--primary);
@@ -1038,76 +1031,81 @@
 
     <script>
     //<![CDATA[
-    document.addEventListener('DOMContentLoaded', function() {
-        // DOM Elements
-        const menuToggle = document.getElementById('menuToggle');
-        const modeToggle = document.getElementById('modeToggle');
-        const sidebar = document.getElementById('sidebar');
-        const backToTop = document.getElementById('backToTop');
-        const sidebarSearch = document.getElementById('sidebarSearch');
-        const noResults = document.getElementById('noResults');
-        const sidebarContent = document.getElementById('sidebarContent');
-        const mainContent = document.getElementById('mainContent');
-        const resultsCounter = document.getElementById('searchResultsCounter');
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const menuToggle = document.getElementById('menuToggle');
+    const modeToggle = document.getElementById('modeToggle');
+    const sidebar = document.getElementById('sidebar');
+    const backToTop = document.getElementById('backToTop');
+    const sidebarSearch = document.getElementById('sidebarSearch');
+    const noResults = document.getElementById('noResults');
+    const sidebarContent = document.getElementById('sidebarContent');
+    const mainContent = document.getElementById('mainContent');
+    const resultsCounter = document.getElementById('searchResultsCounter');
+    
+    // متغيرات التمرير اللانهائي
+    let isLoading = false;
+    let hasMorePosts = true;
+    const postsPerPage = 5;
+    let postsLoaded = document.querySelectorAll('.post-card').length;
+
+    // متغيرات للتحكم في ظهور واختفاء الهيدر
+    let lastScrollY = window.scrollY;
+    let isHeaderVisible = true;
+    let isSidebarOpen = false;
+    const header = document.querySelector('nav');
+    const headerHeight = header.offsetHeight;
+    
+    // تهيئة تحويل الهيدر
+    header.style.transform = 'translateY(0)';
+    isHeaderVisible = true;
+    lastScrollY = window.scrollY;
+
+    // وظيفة التحكم في ظهور واختفاء الهيدر مع تأثير سلس
+    function handleHeaderVisibility() {
+        if (isSidebarOpen) {
+            header.style.transform = 'translateY(0)';
+            isHeaderVisible = true;
+            return;
+        }
         
-        // متغيرات التمرير اللانهائي
-        let isLoading = false;
-        let hasMorePosts = true;
-        const postsPerPage = 5;
-        let postsLoaded = document.querySelectorAll('.post-card').length;
-
-        // متغيرات للتحكم في ظهور واختفاء الهيدر
-        let lastScrollY = window.scrollY;
-        let isHeaderVisible = true;
-        let isSidebarOpen = false;
-        const header = document.querySelector('nav');
-        const headerHeight = header.offsetHeight;
-
-        // وظيفة التحكم في ظهور واختفاء الهيدر
-        function handleHeaderVisibility() {
-            if (isSidebarOpen) {
-                if (!isHeaderVisible) {
-                    header.classList.remove('hidden');
-                    header.classList.add('visible');
-                    isHeaderVisible = true;
-                }
-                return;
-            }
-            
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY < lastScrollY || currentScrollY < headerHeight) {
-                if (!isHeaderVisible) {
-                    header.classList.remove('hidden');
-                    header.classList.add('visible');
-                    isHeaderVisible = true;
-                }
-            } 
-            else if (currentScrollY > headerHeight) {
-                if (isHeaderVisible) {
-                    header.classList.remove('visible');
-                    header.classList.add('hidden');
-                    isHeaderVisible = false;
-                }
-            }
-            
-            lastScrollY = currentScrollY;
+        const currentScrollY = window.scrollY;
+        const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
+        
+        // عند التمرير لأسفل - يختفي الهيدر بالكامل
+        if (scrollDirection === 'down' && currentScrollY > headerHeight && isHeaderVisible) {
+            header.style.transform = 'translateY(-100%)';
+            isHeaderVisible = false;
+        } 
+        // عند التمرير لأعلى - يعود الهيدر
+        else if (scrollDirection === 'up' && !isHeaderVisible) {
+            header.style.transform = 'translateY(0)';
+            isHeaderVisible = true;
         }
-
-        // تهيئة وظيفة التحكم في الهيدر
-        function initHeaderScroll() {
-            let ticking = false;
-            
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        handleHeaderVisibility();
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }, { passive: true });
+        
+        // إذا كان المستخدم في أعلى الصفحة، تأكد من أن الهيدر ظاهر بالكامل
+        if (currentScrollY <= headerHeight && !isHeaderVisible) {
+            header.style.transform = 'translateY(0)';
+            isHeaderVisible = true;
         }
+        
+        lastScrollY = currentScrollY;
+    }
+
+    // تهيئة وظيفة التحكم في الهيدر
+    function initHeaderScroll() {
+        let ticking = false;
+        
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    handleHeaderVisibility();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
 
         // وظيفة التمرير اللانهائي - للصفحة الرئيسية فقط
         function checkInfiniteScroll() {
