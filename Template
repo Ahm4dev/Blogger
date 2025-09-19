@@ -68,23 +68,36 @@
     </script>
 
     <b:skin><![CDATA[
+    /* ==========================================================================
+       CSS Variables (Custom Properties)
+       ========================================================================== */
     :root {
+        /* Colors - Primary */
         --primary: #FF6D00;
         --primary-light: #FF9E40;
         --secondary: #2962FF;
         --accent: #00C853;
         --accent-light: #69F0AE;
+        
+        /* Colors - Neutral */
         --dark: #263238;
         --light: #f5f5f5;
         --text: #424242;
         --text-light: #757575;
         --card-bg: #ffffff;
+        
+        /* Effects */
         --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        --sidebar-width: 320px;
         --border-color-light: rgba(0,0,0,0.1);
+        
+        /* Layout */
+        --sidebar-width: 320px;
         --header-height: 80px;
+        --border-radius: 4px;
+        --transition-speed: 0.3s;
     }
 
+    /* Dark Mode Variables */
     .dark-mode {
         --primary: #FF9100;
         --primary-light: #FFB74D;
@@ -100,6 +113,9 @@
         --border-color-light: rgba(255,255,255,0.1);
     }
 
+    /* ==========================================================================
+       Base Styles (Reset & Global)
+       ========================================================================== */
     * {
         margin: 0;
         padding: 0;
@@ -107,12 +123,16 @@
         -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.7;
         color: var(--text);
         background-color: var(--light);
-        transition: all 0.3s ease;
+        transition: all var(--transition-speed) ease;
         overflow-x: hidden;
     }
 
@@ -128,6 +148,7 @@
         background-color: #121212 !important;
     }
 
+    /* Typography */
     h1, h2, h3, h4 {
         color: var(--primary);
         margin-bottom: 1rem;
@@ -135,7 +156,20 @@
         word-wrap: break-word;
     }
 
-    /* ====== الهيدر مع تأثير الظهور/الاختفاء ====== */
+    a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: color var(--transition-speed) ease;
+    }
+
+    a:hover {
+        color: var(--primary-light);
+    }
+
+    /* ==========================================================================
+       Layout Components
+       ========================================================================== */
+    /* Navigation */
     nav {
         background-color: var(--card-bg);
         box-shadow: var(--shadow);
@@ -149,7 +183,7 @@
         justify-content: space-between;
         align-items: center;
         height: var(--header-height);
-        transition: transform 0.3s ease-in-out;
+        transition: transform var(--transition-speed) ease-in-out;
         will-change: transform;
     }
 
@@ -178,75 +212,15 @@
         align-items: center;
     }
 
-.menu-toggle {
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 2000;
-    /* إزالة أي تأثيرات إضافية غير مرغوب فيها */
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border-radius: 4px;
-    /* منع تأثيرات التحويل غير المتسقة */
-    transform: none !important;
-}
+    /* Main Content */
+    main {
+        padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+    }
 
- 
-.menu-toggle:hover {
-    background-color: transparent !important;
-    transform: none !important;
-}
-
-.menu-toggle.active { 
-    transform: rotate(90deg) !important; 
-    background-color: transparent !important;
-}
-
-/* توحيد أزرار الدارك مود في جميع الصفحات */
-.mode-toggle {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    position: relative;
-    z-index: 2000;
-    min-width: 120px;
-    text-align: center;
-    font-size: 0.9rem;
-    /* التأكد من عدم وجود تأثيرات غير متسقة */
-    box-shadow: none;
-}
-
-.mode-toggle:hover {
-    background-color: var(--primary-light);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.dark-mode .mode-toggle {
-    background-color: var(--primary-light);
-    color: var(--dark) !important;
-}
-
-.dark-mode .mode-toggle:hover {
-    background-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-
-    /* توحيد مظهر القائمة الجانبية */
+    /* Sidebar */
     .sidebar {
         position: fixed;
         top: var(--header-height);
@@ -255,7 +229,7 @@
         height: calc(100vh - var(--header-height));
         background-color: var(--card-bg);
         box-shadow: var(--shadow);
-        transition: right 0.3s ease;
+        transition: right var(--transition-speed) ease;
         z-index: 999;
         overflow-y: auto;
         padding: 1.5rem;
@@ -293,6 +267,221 @@
         font-size: 1.2rem;
     }
 
+    .sidebar-content {
+        overflow-y: auto;
+        flex-grow: 1;
+        padding-top: 1rem;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ==========================================================================
+       Module Components
+       ========================================================================== */
+    /* Buttons */
+    .menu-toggle {
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        transition: all var(--transition-speed) ease;
+        position: relative;
+        z-index: 2000;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border-radius: var(--border-radius);
+    }
+ 
+    .menu-toggle:hover {
+        background-color: transparent !important;
+        transform: none !important;
+    }
+
+    .menu-toggle.active { 
+        transform: rotate(90deg) !important; 
+        background-color: transparent !important;
+    }
+
+    .mode-toggle {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        position: relative;
+        z-index: 2000;
+        min-width: 120px;
+        text-align: center;
+        font-size: 0.9rem;
+        box-shadow: none;
+    }
+
+    .mode-toggle:hover {
+        background-color: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .dark-mode .mode-toggle {
+        background-color: var(--primary-light);
+        color: var(--dark) !important;
+    }
+
+    .dark-mode .mode-toggle:hover {
+        background-color: var(--primary);
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .read-more-btn {
+        display: inline-block;
+        background-color: var(--primary);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        margin-top: 1rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+    }
+
+    .read-more-btn:hover {
+        background-color: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .dark-mode .read-more-btn {
+        background-color: var(--primary);
+        color: #1E1E1E;
+    }
+
+    .dark-mode .read-more-btn:hover {
+        background-color: var(--primary-light);
+        color: #1E1E1E;
+    }
+
+    .back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: var(--primary);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-speed) ease;
+        z-index: 998;
+        cursor: pointer;
+        border: none;
+        font-size: 1.5rem;
+    }
+
+    .back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+/* ==========================================================================
+       Category Filter Styles
+       ========================================================================== */
+    .categories-filter {
+        margin-bottom: 2rem;
+        background-color: var(--light);
+        padding: 1rem 0;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .categories-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 0.5rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+    
+    .categories-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .category-btn {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+        font-weight: 500;
+        white-space: nowrap;
+        border: 1px solid var(--border-color-light);
+        color: var(--text);
+    }
+    
+    .category-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    
+    .category-btn:hover {
+        background: var(--primary-light);
+        color: white;
+        border-color: var(--primary-light);
+    }
+
+    .dark-mode .categories-filter {
+        background-color: var(--light);
+    }
+
+    .dark-mode .categories-container {
+        border-bottom-color: var(--primary-light);
+    }
+
+    .dark-mode .category-btn {
+        background: var(--card-bg);
+        border-color: rgba(255,255,255,0.1);
+        color: var(--text);
+    }
+
+    .dark-mode .category-btn.active {
+        background: var(--primary-light);
+        color: var(--dark);
+        border-color: var(--primary-light);
+    }
+
+    .dark-mode .category-btn:hover {
+        background: var(--primary);
+        color: var(--dark);
+        border-color: var(--primary);
+    }
+
+    /* ==========================================================================
+       Search Components
+       ========================================================================== */
     .search-container {
         position: sticky;
         top: 60px;
@@ -306,7 +495,7 @@
         width: 100%;
         padding: 0.75rem 1rem;
         border: 1px solid var(--border-color-light);
-        border-radius: 4px;
+        border-radius: var(--border-radius);
         background-color: var(--card-bg);
         color: var(--text);
         font-size: 0.9rem;
@@ -330,30 +519,38 @@
         display: block; 
     }
     
-    .sidebar-content {
-        overflow-y: auto;
-        flex-grow: 1;
-        padding-top: 1rem;
-        transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-overflow-scrolling: touch;
+    .search-results-counter {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: 0.5rem;
+        text-align: center;
+        display: none;
+        transition: all var(--transition-speed) ease;
     }
     
+    .search-results-counter.show { 
+        display: block; 
+    }
+
+    /* ==========================================================================
+       Sidebar Links
+       ========================================================================== */
     .sidebar-link {
         display: block;
         padding: 0.75rem 1rem;
         color: var(--text);
         text-decoration: none;
-        border-radius: 4px;
+        border-radius: var(--border-radius);
         margin: 0.25rem 0;
         font-size: 0.9rem;
         position: relative;
         will-change: transform, background-color;
-        transition: background-color 0.15s ease-out, color 0.15s ease-out, transform 0.15s ease-out;
+        transition: background-color 0.15s ease-out, 
+                    color 0.15s ease-out, 
+                    transform 0.15s ease-out;
         word-wrap: break-word;
         overflow-wrap: break-word;
-		    /* إزالة تأثير التحويل الذي قد يسبب عدم الاتساق */
-    transform: none !important;
+        transform: none !important;
     }
     
     .sidebar-link.hidden { 
@@ -367,8 +564,7 @@
     .sidebar-link:hover {
         background-color: rgba(255, 109, 0, 0.1);
         color: var(--primary);
-    /* إزالة تأثير التحويل */
-    transform: none !important;
+        transform: none !important;
     }
 
     .sidebar-link.active {
@@ -394,31 +590,9 @@
         transform: translateX(0); 
     }
 
-
-/* التأكد من أن التنسيقات متسقة في وضع الدارك مود */
-.dark-mode .menu-toggle {
-    color: var(--text);
-}
-
-.dark-mode .menu-toggle:hover {
-    background-color: transparent !important;
-    transform: none !important;
-}
-
-.dark-mode .menu-toggle.active {
-    transform: rotate(90deg) !important; 
-    background-color: transparent !important;
-}
-
-
-
-    main {
-        padding: calc(var(--header-height) + 2rem) 2rem 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-        width: 100%;
-    }
-
+    /* ==========================================================================
+       Post Cards
+       ========================================================================== */
     .post-card {
         background-color: var(--card-bg);
         border-radius: 8px;
@@ -429,6 +603,11 @@
         scroll-margin-top: calc(var(--header-height) + 20px);
         overflow: hidden;
         width: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dark-mode .post-card:hover {
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     }
 
     .post-header {
@@ -493,7 +672,7 @@
         width: 100%;
         max-height: 300px;
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: var(--border-radius);
         margin-bottom: 1rem;
         height: auto;
         opacity: 0;
@@ -568,7 +747,7 @@
         display: block;
         padding: 1rem;
         background-color: rgba(0,0,0,0.05);
-        border-radius: 4px;
+        border-radius: var(--border-radius);
         margin: 0.5rem 0;
     }
 
@@ -577,7 +756,78 @@
         background-color: rgba(255,255,255,0.05); 
     }
 
-    /* تنسيقات الدارك مود */
+    /* ==========================================================================
+       Loading Components
+       ========================================================================== */
+    .loading-posts {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-light);
+        display: none;
+    }
+
+    .loading-posts.visible { 
+        display: block; 
+    }
+
+    .spinner {
+        border: 4px solid rgba(0,0,0,0.1);
+        border-left-color: var(--primary);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+    }
+
+    .categories-loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-light);
+    }
+
+    .categories-loading .spinner {
+        border: 3px solid rgba(0,0,0,0.1);
+        border-left-color: var(--primary);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        to { 
+            transform: rotate(360deg); 
+        }
+    }
+
+    /* ==========================================================================
+       State Styles
+       ========================================================================== */
+    .blog-pager { 
+        display: none !important; 
+    }
+
+    .post-date { 
+        display: none !important; 
+    }
+
+    /* Dark Mode Specific Styles */
+    .dark-mode .menu-toggle {
+        color: var(--text);
+    }
+
+    .dark-mode .menu-toggle:hover {
+        background-color: transparent !important;
+        transform: none !important;
+    }
+
+    .dark-mode .menu-toggle.active {
+        transform: rotate(90deg) !important; 
+        background-color: transparent !important;
+    }
+
     .dark-mode .post-body,
     .dark-mode .post-body *:not(a):not(code):not(pre):not(span) {
         color: #E0E0E0 !important;
@@ -630,7 +880,7 @@
         background-color: #2D2D2D !important;
         color: #F8F8F2 !important;
         border: 1px solid #444 !important;
-        border-radius: 4px;
+        border-radius: var(--border-radius);
     }
 
     .dark-mode .post-body blockquote {
@@ -676,127 +926,113 @@
     .dark-mode .post-body img {
         opacity: 0.9;
         border: 1px solid #555 !important;
-        border-radius: 4px;
+        border-radius: var(--border-radius);
     }
 
     .dark-mode .post-body img:hover { 
         opacity: 1; 
     }
 
-    .read-more-btn {
-        display: inline-block;
-        background-color: var(--primary);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
+    /* ==========================================================================
+       Theme & Utility Classes
+       ========================================================================== */
+    .post-title-link {
+        color: inherit;
         text-decoration: none;
-        transition: all 0.2s ease;
-        margin-top: 1rem;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
+        display: block;
+        transition: color 0.2s ease;
     }
 
-    .read-more-btn:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    .dark-mode .read-more-btn {
-        background-color: var(--primary);
-        color: #1E1E1E;
-    }
-
-    .dark-mode .read-more-btn:hover {
-        background-color: var(--primary-light);
-        color: #1E1E1E;
-    }
-
-    .back-to-top {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        background-color: var(--primary);
-        color: white;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 998;
-        cursor: pointer;
-        border: none;
-        font-size: 1.5rem;
-    }
-
-    .back-to-top.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .blog-pager { 
-        display: none !important; 
-    }
-
-    .loading-posts {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-light);
-        display: none;
-    }
-
-    .loading-posts.visible { 
-        display: block; 
-    }
-
-    .spinner {
-        border: 4px solid rgba(0,0,0,0.1);
-        border-left-color: var(--primary);
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        animation: spin 1s linear infinite;
-        margin: auto;
-    }
-
-    @keyframes spin {
-        to { 
-            transform: rotate(360deg); 
+    /* ==========================================================================
+       Responsive Design
+       ========================================================================== */
+    @media (max-width: 768px) {
+        :root {
+            --header-height: 70px;
+            --sidebar-width: 280px;
+        }
+        
+        nav {
+            padding: 1rem;
+        }
+        
+        main {
+            padding: calc(var(--header-height) + 1rem) 1rem 1rem;
+        }
+        
+        .post-card {
+            padding: 1.5rem;
+        }
+        
+        .nav-title {
+            font-size: 1.2rem;
+            max-width: 50vw;
+        }
+        
+        .nav-links {
+            gap: 1rem;
+        }
+        
+        .mode-toggle {
+            min-width: 100px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+        
+        .categories-container {
+            padding: 0 1rem;
+            overflow-x: auto;
+            justify-content: flex-start;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .categories-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-btn {
+            flex-shrink: 0;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
         }
     }
 
-    .search-results-counter {
-        font-size: 0.85rem;
-        color: var(--text-light);
-        margin-top: 0.5rem;
-        text-align: center;
-        display: none;
-        transition: all 0.3s ease;
+    @media (max-width: 480px) {
+        :root {
+            --header-height: 60px;
+        }
+        
+        .nav-title {
+            font-size: 1rem;
+        }
+        
+        .post-card {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .post-title {
+            font-size: 1.4rem;
+        }
+        
+        .back-to-top {
+            bottom: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+        
+        .categories-container {
+            gap: 0.5rem;
+        }
+        
+        .category-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
     }
-
-    .search-results-counter.show { 
-        display: block; 
-    }
-
-    .post-date { 
-        display: none !important; 
-    }
-	
-	
-	
-	.post-title-link {
-  color: inherit;
-  text-decoration: none;
-  display: block;
-  transition: color 0.2s ease;
-}
 
     ]]></b:skin>
 
@@ -815,24 +1051,20 @@
         const resultsCounter = document.getElementById('searchResultsCounter');
         
         // متغيرات التمرير اللانهائي
-let isLoading = false;
-let hasMorePosts = true;
-const postsPerPage = 5;
-
-// عدد المشاركات المحمّلة فعليًا (القالب + أي تحميل لاحق)
-let postsLoaded = document.querySelectorAll('.post-card').length;
-
+        let isLoading = false;
+        let hasMorePosts = true;
+        const postsPerPage = 5;
+        let postsLoaded = document.querySelectorAll('.post-card').length;
 
         // متغيرات للتحكم في ظهور واختفاء الهيدر
         let lastScrollY = window.scrollY;
         let isHeaderVisible = true;
-        let isSidebarOpen = false; // متغير جديد لتتبع حالة القائمة الجانبية
+        let isSidebarOpen = false;
         const header = document.querySelector('nav');
         const headerHeight = header.offsetHeight;
 
-        // وظيفة التحكم في ظهور واختفاء الهيدر (معدلة)
+        // وظيفة التحكم في ظهور واختفاء الهيدر
         function handleHeaderVisibility() {
-            // إذا كانت القائمة الجانبية مفتوحة، لا تخفي الهيدر
             if (isSidebarOpen) {
                 if (!isHeaderVisible) {
                     header.classList.remove('hidden');
@@ -844,7 +1076,6 @@ let postsLoaded = document.querySelectorAll('.post-card').length;
             
             const currentScrollY = window.scrollY;
             
-            // إذا كان المستخدم يمرر لأعلى أو في أعلى الصفحة
             if (currentScrollY < lastScrollY || currentScrollY < headerHeight) {
                 if (!isHeaderVisible) {
                     header.classList.remove('hidden');
@@ -852,7 +1083,6 @@ let postsLoaded = document.querySelectorAll('.post-card').length;
                     isHeaderVisible = true;
                 }
             } 
-            // إذا كان المستخدم يمرر لأسفل وابتعد عن الأعلى
             else if (currentScrollY > headerHeight) {
                 if (isHeaderVisible) {
                     header.classList.remove('visible');
@@ -879,7 +1109,6 @@ let postsLoaded = document.querySelectorAll('.post-card').length;
             }, { passive: true });
         }
 
-
         // وظيفة التمرير اللانهائي - للصفحة الرئيسية فقط
         function checkInfiniteScroll() {
             if (isLoading || !hasMorePosts || window.location.pathname !== "/") return;
@@ -889,7 +1118,11 @@ let postsLoaded = document.querySelectorAll('.post-card').length;
             const windowHeight = window.innerHeight;
             
             if (scrollPosition + windowHeight >= documentHeight - 500) {
-                loadMorePosts();
+                const activeButton = document.querySelector('.category-btn.active');
+                if (activeButton) {
+                    const activeCategory = activeButton.dataset.category;
+                    loadCategoryPosts(activeCategory, false);
+                }
             }
         }
 
@@ -900,12 +1133,9 @@ let postsLoaded = document.querySelectorAll('.post-card').length;
             window.addEventListener('scroll', function() {
                 if (!ticking) {
                     window.requestAnimationFrame(function() {
-                        
-                        // ثم التحقق من التمرير اللانهائي (أقل أولوية)
                         if (window.location.pathname === "/") {
                             checkInfiniteScroll();
                         }
-                        
                         ticking = false;
                     });
                     ticking = true;
@@ -914,22 +1144,22 @@ let postsLoaded = document.querySelectorAll('.post-card').length;
         }
 
         // Dark Mode Toggle
-function applyDarkMode(isDark) {
-    const { classList: htmlClassList } = document.documentElement;
-    const { classList: bodyClassList } = document.body;
-    
-    if (isDark) {
-        htmlClassList.add('dark-mode');
-        bodyClassList.add('dark-mode');
-        modeToggle.textContent = '☀️ Light Mode';
-        localStorage.setItem('darkMode', 'enabled');
-    } else {
-        htmlClassList.remove('dark-mode');
-        bodyClassList.remove('dark-mode');
-        modeToggle.textContent = '🌙 Dark Mode';
-        localStorage.removeItem('darkMode');
-    }
-}
+        function applyDarkMode(isDark) {
+            const { classList: htmlClassList } = document.documentElement;
+            const { classList: bodyClassList } = document.body;
+            
+            if (isDark) {
+                htmlClassList.add('dark-mode');
+                bodyClassList.add('dark-mode');
+                modeToggle.textContent = '☀️ Light Mode';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                htmlClassList.remove('dark-mode');
+                bodyClassList.remove('dark-mode');
+                modeToggle.textContent = '🌙 Dark Mode';
+                localStorage.removeItem('darkMode');
+            }
+        }
 
         // Initialize dark mode from localStorage
         const savedDarkMode = localStorage.getItem('darkMode');
@@ -941,14 +1171,13 @@ function applyDarkMode(isDark) {
             applyDarkMode(isDark);
         });
         
-        // Sidebar Toggle (محدث)
+        // Sidebar Toggle
         menuToggle.addEventListener('click', function() {
             const isOpen = sidebar.classList.toggle('open');
             menuToggle.classList.toggle('active');
             menuToggle.setAttribute('aria-expanded', isOpen);
-            isSidebarOpen = isOpen; // تحديث حالة القائمة الجانبية
+            isSidebarOpen = isOpen;
             
-            // إذا فتحت القائمة، تأكد من ظهور الهيدر
             if (isOpen && !isHeaderVisible) {
                 header.classList.remove('hidden');
                 header.classList.add('visible');
@@ -956,20 +1185,18 @@ function applyDarkMode(isDark) {
             }
         });
 
-        // Close sidebar when clicking outside (محدث)
+        // Close sidebar when clicking outside
         document.addEventListener('click', function(e) {
             if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle) {
                 sidebar.classList.remove('open');
                 menuToggle.classList.remove('active');
                 menuToggle.setAttribute('aria-expanded', 'false');
-                isSidebarOpen = false; // تحديث حالة القائمة الجانبية
+                isSidebarOpen = false;
             }
         });
 
-
         // Create sidebar navigation from all blog posts
         function createSidebarNavigation() {
-            // إذا لم يكن العنصر موجوداً، توقف
             if (!sidebarContent) return;
             
             const loadingElement = document.createElement('div');
@@ -979,7 +1206,6 @@ function applyDarkMode(isDark) {
             sidebarContent.innerHTML = '';
             sidebarContent.appendChild(loadingElement);
             
-            // استخدام fetch بدلاً من json-in-script
             fetch('/feeds/posts/default?alt=json&max-results=500')
                 .then(response => response.json())
                 .then(data => processPosts(data))
@@ -1078,7 +1304,6 @@ function applyDarkMode(isDark) {
             const links = document.querySelectorAll('.sidebar-link');
             if (links.length === 0) return;
             
-            // استخدام قيمة إزاحة ثابتة (100px) بدلاً من headerHeight
             const offset = 100;
             let ticking = false;
             
@@ -1122,33 +1347,32 @@ function applyDarkMode(isDark) {
         // Smooth scrolling to posts
         function setupSmoothScrolling() {
             document.querySelectorAll('.sidebar-link').forEach(function(link) {
-// بعد إضافة الرابط إلى section
-link.addEventListener('click', function(e) {
-    if (this.hash && document.querySelector(this.hash)) {
-        e.preventDefault();
-        const targetElement = document.querySelector(this.hash);
-        
-        if (targetElement) {
-            const offset = 80;
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = window.pageYOffset + elementPosition - offset;
-            
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-            
-            history.pushState(null, null, this.hash);
-            
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                menuToggle.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                isSidebarOpen = false; // تحديث حالة القائمة الجانبية
-            }
-        }
-    }
-});
+                link.addEventListener('click', function(e) {
+                    if (this.hash && document.querySelector(this.hash)) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(this.hash);
+                        
+                        if (targetElement) {
+                            const offset = 80;
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = window.pageYOffset + elementPosition - offset;
+                            
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            history.pushState(null, null, this.hash);
+                            
+                            if (sidebar.classList.contains('open')) {
+                                sidebar.classList.remove('open');
+                                menuToggle.classList.remove('active');
+                                menuToggle.setAttribute('aria-expanded', 'false');
+                                isSidebarOpen = false;
+                            }
+                        }
+                    }
+                });
             });
         }
 
@@ -1171,7 +1395,6 @@ link.addEventListener('click', function(e) {
             const targetElement = document.querySelector(window.location.hash);
             if (targetElement) {
                 setTimeout(function() {
-                    // استخدام قيمة إزاحة ثابتة (80px) بدلاً من headerHeight
                     const offset = 80;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = window.pageYOffset + elementPosition - offset;
@@ -1184,6 +1407,181 @@ link.addEventListener('click', function(e) {
             }
         }
 
+        // دالة لجمع جميع التصنيفات من المدونة
+        async function fetchAllCategories() {
+            try {
+                const response = await fetch('/feeds/posts/summary?alt=json&max-results=500');
+                const data = await response.json();
+                
+                const categories = new Set();
+                
+                if (data.feed.entry) {
+                    data.feed.entry.forEach(post => {
+                        if (post.category) {
+                            post.category.forEach(cat => categories.add(cat.term));
+                        }
+                    });
+                }
+                
+                return Array.from(categories).sort();
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                
+                try {
+                    const categoryLinks = document.querySelectorAll('a[href*="/search/label/"]');
+                    const categories = new Set();
+                    
+                    categoryLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        const match = href.match(/\/search\/label\/([^?]+)/);
+                        if (match && match[1]) {
+                            const categoryName = decodeURIComponent(match[1].replace(/\+/g, ' '));
+                            categories.add(categoryName);
+                        }
+                    });
+                    
+                    return Array.from(categories).sort();
+                } catch (fallbackError) {
+                    console.error('Fallback method also failed:', fallbackError);
+                    return [];
+                }
+            }
+        }
+
+        // دالة لإنشاء أزرار التصنيفات
+// دالة لإنشاء أزرار التصنيفات
+async function createCategoryButtons() {
+  let categoriesContainer = document.querySelector('.categories-container');
+  if (!categoriesContainer) {
+    if (window.location.pathname !== "/") return;
+    
+    const categoriesFilter = document.createElement('div');
+    categoriesFilter.className = 'categories-filter';
+    categoriesFilter.id = 'categoriesFilter';
+    
+    categoriesContainer = document.createElement('div');
+    categoriesContainer.className = 'categories-container';
+    
+    categoriesFilter.appendChild(categoriesContainer);
+    
+    const mainContent = document.getElementById('mainContent');
+    if (mainContent) {
+      mainContent.insertBefore(categoriesFilter, mainContent.firstChild);
+    } else {
+      return;
+    }
+  }
+  
+  // إضافة زر "الكل" إذا لم يكن موجوداً
+  if (!categoriesContainer.querySelector('[data-category="all"]')) {
+    const allButton = document.createElement('div');
+    allButton.className = 'category-btn active';
+    allButton.textContent = 'All';
+    allButton.dataset.category = 'all';
+    categoriesContainer.appendChild(allButton);
+  }
+  
+  const categories = await fetchAllCategories();
+  
+  // إضافة أزرار التصنيفات
+  categories.forEach(category => {
+    if (!categoriesContainer.querySelector(`[data-category="${encodeURIComponent(category)}"]`)) {
+      const button = document.createElement('div');
+      button.className = 'category-btn';
+      button.textContent = category;
+      button.dataset.category = encodeURIComponent(category);
+      categoriesContainer.appendChild(button);
+    }
+  });
+  
+  // إخفاء قسم التصنيفات إذا لم يكن هناك تصنيفات
+  if (categories.length === 0) {
+    const categoriesFilter = document.getElementById('categoriesFilter');
+    if (categoriesFilter) {
+      categoriesFilter.style.display = 'none';
+    }
+  }
+  
+  setupCategoryFilters();
+}
+
+
+        // دالة لإعداد نظام التصفية
+// دالة لإعداد نظام التصفية
+function setupCategoryFilters() {
+  const categoryButtons = document.querySelectorAll('.category-btn');
+  
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // تحديث التبويب النشط
+      categoryButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      // تحميل المشاركات بناءً على التصنيف المحدد
+      loadCategoryPosts(this.dataset.category, true);
+    });
+  });
+}
+
+// دالة لعرض رسالة عندما لا توجد مشاركات
+function showNoPostsMessage() {
+  const noPostsMessage = document.createElement('div');
+  noPostsMessage.className = 'loading-posts';
+  noPostsMessage.textContent = 'لا توجد مشاركات في هذا التصنيف.';
+  mainContent.appendChild(noPostsMessage);
+}
+
+
+// دالة لتحميل المشاركات حسب التصنيف
+function loadCategoryPosts(category, reset = true) {
+  if (isLoading) return;
+  
+  isLoading = true;
+  
+  const loadingIndicator = document.createElement('div');
+  loadingIndicator.className = 'loading-posts visible';
+  loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading posts...</p>";
+  mainContent.appendChild(loadingIndicator);
+  
+  if (reset) {
+    postsLoaded = 0;
+    hasMorePosts = true;
+    
+    const existingPosts = mainContent.querySelectorAll('.post-card');
+    existingPosts.forEach(post => post.remove());
+  }
+  
+  let apiUrl = `/feeds/posts/default?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
+  if (category !== 'all') {
+    apiUrl = `/feeds/posts/default/-/${category}?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
+  }
+  
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      processMorePosts(data);
+      isLoading = false;
+      
+      const loadingIndicator = document.querySelector('.loading-posts');
+      if (loadingIndicator) loadingIndicator.remove();
+      
+      // إذا لم توجد مشاركات بعد التحميل، عرض رسالة
+      if (mainContent.querySelectorAll('.post-card').length === 0) {
+        showNoPostsMessage();
+      }
+    })
+    .catch(error => {
+      console.error('Error loading category posts:', error);
+      const loadingIndicator = document.querySelector('.loading-posts');
+      if (loadingIndicator) loadingIndicator.remove();
+      isLoading = false;
+      
+      // عرض رسالة خطأ
+      showNoPostsMessage();
+    });
+}
+
+
         // نظام التمرير اللانهائي المحسن
         function loadMorePosts() {
             if (isLoading || !hasMorePosts) return;
@@ -1195,10 +1593,15 @@ link.addEventListener('click', function(e) {
             loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading more posts...</p>";
             mainContent.appendChild(loadingIndicator);
             
-const startIndex = postsLoaded + 1;
-
-fetch(`/feeds/posts/default?alt=json&start-index=${startIndex}&max-results=${postsPerPage}`)
-
+            const activeButton = document.querySelector('.category-btn.active');
+            const activeCategory = activeButton ? activeButton.dataset.category : 'all';
+            
+            let apiUrl = `/feeds/posts/default?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
+            if (activeCategory !== 'all') {
+                apiUrl = `/feeds/posts/default/-/${activeCategory}?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
+            }
+            
+            fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => processMorePosts(data))
                 .catch(error => {
@@ -1206,7 +1609,6 @@ fetch(`/feeds/posts/default?alt=json&start-index=${startIndex}&max-results=${pos
                     loadingIndicator.innerHTML = '<p>Error loading more posts. Please try again.</p>';
                     isLoading = false;
                     
-                    // إخفاء مؤشر التحميل بعد 3 ثوان
                     setTimeout(() => {
                         loadingIndicator.remove();
                     }, 3000);
@@ -1217,18 +1619,18 @@ fetch(`/feeds/posts/default?alt=json&start-index=${startIndex}&max-results=${pos
         function processMorePosts(data) {
             const posts = data.feed.entry || [];
 
-            if (posts.length === 0) {
-                hasMorePosts = false;
+if (posts.length === 0) {
+    hasMorePosts = false;
 
-                const loadingIndicator = document.querySelector('.loading-posts');
-                if (loadingIndicator) {
-                    loadingIndicator.innerHTML = '<p>No more posts to load.</p>';
-                    setTimeout(() => { loadingIndicator.remove(); }, 3000);
-                }
+    const loadingIndicator = document.querySelector('.loading-posts');
+    if (loadingIndicator) {
+        loadingIndicator.remove(); // إلغاء إظهار الرسالة نهائياً
+    }
 
-                isLoading = false;
-                return;
-            }
+    isLoading = false;
+    return;
+}
+
 
             const fragment = document.createDocumentFragment();
 
@@ -1241,28 +1643,25 @@ fetch(`/feeds/posts/default?alt=json&start-index=${startIndex}&max-results=${pos
                     const contentHtml = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
                     const published = post.published ? new Date(post.published.$t).toLocaleDateString() : '';
 
-                    // العنصر الرئيسي للبوست
                     const postCard = document.createElement('div');
                     postCard.className = 'post-card';
                     postCard.id = 'post-' + postId;
 
-                    // الهيدر (العنوان + التاريخ)
                     const headerDiv = document.createElement('div');
                     headerDiv.className = 'post-header';
-const h2 = document.createElement('h2');
-h2.className = 'post-title';
-const titleLink = document.createElement('a');
-titleLink.className = 'post-title-link';
-titleLink.href = postUrl;
-titleLink.textContent = title;
-h2.appendChild(titleLink);
+                    const h2 = document.createElement('h2');
+                    h2.className = 'post-title';
+                    const titleLink = document.createElement('a');
+                    titleLink.className = 'post-title-link';
+                    titleLink.href = postUrl;
+                    titleLink.textContent = title;
+                    h2.appendChild(titleLink);
                     const dateSpan = document.createElement('span');
                     dateSpan.className = 'post-date';
                     dateSpan.textContent = published;
                     headerDiv.appendChild(h2);
                     headerDiv.appendChild(dateSpan);
 
-                    // المحتوى (صورة اختيارية + معاينة نصية مأمونة)
                     const contentDiv = document.createElement('div');
                     contentDiv.className = 'post-content';
 
@@ -1276,11 +1675,9 @@ h2.appendChild(titleLink);
                         contentDiv.appendChild(img);
                     }
 
-                    // صناعة معاينة نصية آمنة (نحذف الوسوم ونأخذ أول 200 حرف)
                     const previewDiv = document.createElement('div');
                     previewDiv.className = 'post-preview';
 
-                    // تحويل HTML إلى نص آمن لمنع كسر الـ DOM
                     const tmp = document.createElement('div');
                     tmp.innerHTML = contentHtml || '';
                     let previewText = (tmp.textContent || tmp.innerText || '').trim();
@@ -1289,7 +1686,6 @@ h2.appendChild(titleLink);
 
                     contentDiv.appendChild(previewDiv);
 
-                    // الفوتر مع زر القراءة
                     const footerDiv = document.createElement('div');
                     footerDiv.className = 'post-footer';
                     footerDiv.style.position = 'relative';
@@ -1301,7 +1697,6 @@ h2.appendChild(titleLink);
                     readMoreA.textContent = 'Read More';
                     footerDiv.appendChild(readMoreA);
 
-                    // تجميع كل شيء
                     postCard.appendChild(headerDiv);
                     postCard.appendChild(contentDiv);
                     postCard.appendChild(footerDiv);
@@ -1318,8 +1713,6 @@ h2.appendChild(titleLink);
             const loadingIndicator = document.querySelector('.loading-posts');
             if (loadingIndicator) loadingIndicator.remove();
 
-            // تحديثات الواجهة
-            updateSidebarNavigation(posts);
             updateLazyLoading();
             setupScrollSpy();
 
@@ -1327,7 +1720,6 @@ h2.appendChild(titleLink);
             if (posts.length < postsPerPage) hasMorePosts = false;
         }
 
-        
         // تحديث الشريط الجانبي بالمشاركات الجديدة مع الوسوم
         function updateSidebarNavigation(posts) {
             const section = document.querySelector('.sidebar-section');
@@ -1361,22 +1753,34 @@ h2.appendChild(titleLink);
             setupSmoothScrolling();
             setupSearchFunctionality();
             
-            // إذا كنا في صفحة المشاركات الفردية، أوقف التمرير اللانهائي
             if (window.location.pathname !== "/") {
                 window.removeEventListener('scroll', checkInfiniteScroll);
             }
         }
 
+        // إعادة تعيين التصفية عند تغيير الصفحة
+        function resetCategoryFilter() {
+            if (window.location.pathname === "/") {
+                const allButton = document.querySelector('.category-btn[data-category="all"]');
+                if (allButton) {
+                    allButton.click();
+                }
+            }
+        }
+
         // Initialize everything
         createSidebarNavigation();
-        initHeaderScroll(); // إضافة هذه السطر
+        initHeaderScroll();
+        
+        // إنشاء أزرار التصنيفات للصفحة الرئيسية فقط
+        if (window.location.pathname === "/") {
+            createCategoryButtons();
+        }
         
         // التمرير اللانهائي للصفحة الرئيسية فقط
         if (window.location.pathname === "/") {
             initInfiniteScroll();
         }
-        
-        initLazyLoading();
         
         // Force reflow for mobile devices
         if ('ontouchstart' in window) {
@@ -1388,6 +1792,7 @@ h2.appendChild(titleLink);
         
         // استمع لتغييرات الصفحة
         window.addEventListener('popstate', reinitializeComponents);
+        window.addEventListener('popstate', resetCategoryFilter);
     });
     //]]>
     </script>
@@ -1424,6 +1829,17 @@ h2.appendChild(titleLink);
 
     <!-- Main Content Area with Post Cards -->
     <main id='mainContent'>
+  <!-- أزرار التصنيفات للصفحة الرئيسية فقط -->
+  <b:if cond='data:blog.pageType == "index"'>
+    <div class='categories-filter' id='categoriesFilter'>
+      <div class='categories-container'>
+        <div class='category-btn active' data-category='all'>All</div>
+        <!-- سيتم إضافة أزرار التصنيفات تلقائياً هنا -->
+      </div>
+    </div>
+  </b:if>
+
+  
         <b:section id='main' showaddelement='yes'>
           <b:widget id='Blog1' locked='false' title='Blog Posts' type='Blog' version='1'>
             <b:widget-settings>
