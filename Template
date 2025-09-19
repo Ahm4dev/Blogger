@@ -426,13 +426,15 @@
         padding: 0.5rem 1rem;
         cursor: pointer;
         background: var(--card-bg);
-        border-radius: var(--border-radius);
+        border-radius:  5px 5px 0 0;
         transition: all 0.3s ease;
         font-weight: 500;
         white-space: nowrap;
         border: 1px solid var(--border-color-light);
         color: var(--text);
     }
+	
+
     
     .category-btn.active {
         background: var(--primary);
