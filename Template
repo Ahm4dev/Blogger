@@ -167,8 +167,9 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    html, body {
+    html {
         scroll-behavior: smooth;
+        /* انتقال سلس لتغيير الألوان */
         transition: background-color 0.5s ease, color 0.5s ease;
     }
 
@@ -179,6 +180,8 @@
         background-color: var(--light);
         transition: all var(--transition-speed) ease;
         overflow-x: hidden;
+        /* انتقال سلس لتغيير الألوان */
+        transition: background-color 0.5s ease, color 0.5s ease;
     }
 
     /* Typography */
@@ -327,14 +330,12 @@
         border-radius: var(--border-radius);
     }
  
-    .menu-toggle:hover, 
-    .dark-mode .menu-toggle:hover {
+    .menu-toggle:hover {
         background-color: transparent;
         transform: none;
     }
 
-    .menu-toggle.active, 
-    .dark-mode .menu-toggle.active { 
+    .menu-toggle.active { 
         transform: rotate(90deg); 
         background-color: transparent;
     }
@@ -389,60 +390,63 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .read-more-btn, .back-to-top {
-        display: inline-flex;
+    .read-more-btn {
+        display: inline-block;
         background-color: var(--primary);
         color: white;
         padding: 0.5rem 1rem;
         border-radius: var(--border-radius);
         text-decoration: none;
         transition: all 0.3s ease;
+        margin-top: 1rem;
         font-weight: 500;
         border: none;
         cursor: pointer;
-        align-items: center;
-        justify-content: center;
     }
 
-    .read-more-btn {
-        margin-top: 1rem;
+    .read-more-btn:hover {
+        background-color: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode .read-more-btn {
+        background-color: var(--primary);
+        color: #1E1E1E;
+    }
+
+    .dark-mode .read-more-btn:hover {
+        background-color: var(--primary-light);
+        color: #1E1E1E;
     }
 
     .back-to-top {
         position: fixed;
         bottom: 2rem;
         right: 2rem;
+        background-color: var(--primary);
+        color: white;
         width: 50px;
         height: 50px;
         border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         opacity: 0;
         visibility: hidden;
+        transition: all var(--transition-speed) ease;
         z-index: 998;
+        cursor: pointer;
+        border: none;
         font-size: 1.5rem;
     }
 
     .back-to-top.visible {
         opacity: 1;
         visibility: visible;
-    }
-
-    .read-more-btn:hover, .back-to-top:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    .dark-mode .read-more-btn, 
-    .dark-mode .back-to-top {
-        background-color: var(--primary);
-        color: #1E1E1E;
-    }
-
-    .dark-mode .read-more-btn:hover, 
-    .dark-mode .back-to-top:hover {
-        background-color: var(--primary-light);
-        color: #1E1E1E;
     }
 
     /* ==========================================================================
@@ -556,20 +560,26 @@
         box-shadow: 0 0 0 2px rgba(255, 109, 0, 0.2);
     }
     
-    .no-results, .search-results-counter {
+    .no-results {
         padding: 1rem;
         color: var(--text-light);
+        text-align: center;
+        display: none;
+    }
+    
+    .no-results.show { 
+        display: block; 
+    }
+    
+    .search-results-counter {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-top: 0.5rem;
         text-align: center;
         display: none;
         transition: all var(--transition-speed) ease;
     }
     
-    .search-results-counter {
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
-    }
-    
-    .no-results.show, 
     .search-results-counter.show { 
         display: block; 
     }
@@ -644,6 +654,8 @@
         transition: all 0.5s ease;
     }
 
+
+
     .post-header {
         display: flex;
         justify-content: space-between;
@@ -701,9 +713,11 @@
         transition: background 0.5s ease;
     }
 
-    .post-image, 
-    .post-body img,
-    .post-preview img {
+    .dark-mode .post-preview::after {
+        background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, var(--card-bg) 100%);
+    }
+
+    .post-image {
         width: 100%;
         max-height: 300px;
         object-fit: cover;
@@ -716,17 +730,12 @@
         min-height: 200px;
     }
 
-    .post-body img,
-    .post-preview img {
-        max-width: 100%;
-        display: block;
-        margin: 0.5rem auto;
+    .post-image.loaded { 
+        opacity: 1; 
     }
 
-    .post-image.loaded, 
-    .post-body img.loaded,
-    .post-preview img.loaded { 
-        opacity: 1; 
+    .dark-mode .post-image { 
+        background-color: #2a2a2a; 
     }
 
     .post-body {
@@ -736,6 +745,27 @@
         hyphens: auto;
         width: 100%;
         overflow: hidden;
+    }
+
+    .post-body img,
+    .post-preview img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0.5rem auto;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        background-color: #f0f0f0;
+    }
+
+    .post-body img.loaded,
+    .post-preview img.loaded { 
+        opacity: 1; 
+    }
+
+    .dark-mode .post-body img,
+    .dark-mode .post-preview img { 
+        background-color: #2a2a2a; 
     }
 
     .post-body iframe,
@@ -771,16 +801,18 @@
         transition: background-color 0.5s ease;
     }
 
+    .dark-mode .post-body pre,
+    .dark-mode .post-body code { 
+        background-color: rgba(255,255,255,0.05); 
+    }
+
     /* ==========================================================================
        Loading Components
        ========================================================================== */
-    .loading-posts, .categories-loading {
+    .loading-posts {
         text-align: center;
         padding: 2rem;
         color: var(--text-light);
-    }
-
-    .loading-posts {
         display: none;
     }
 
@@ -798,10 +830,20 @@
         margin: auto;
     }
 
+    .categories-loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-light);
+    }
+
     .categories-loading .spinner {
-        border-width: 3px;
+        border: 3px solid rgba(0,0,0,0.1);
+        border-left-color: var(--primary);
+        border-radius: 50%;
         width: 24px;
         height: 24px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
     }
 
     @keyframes spin {
@@ -813,8 +855,27 @@
     /* ==========================================================================
        State Styles
        ========================================================================== */
-    .blog-pager, .post-date { 
+    .blog-pager { 
         display: none; 
+    }
+
+    .post-date { 
+        display: none; 
+    }
+
+    /* Dark Mode Specific Styles */
+    .dark-mode .menu-toggle {
+        color: var(--text);
+    }
+
+    .dark-mode .menu-toggle:hover {
+        background-color: transparent;
+        transform: none;
+    }
+
+    .dark-mode .menu-toggle.active {
+        transform: rotate(90deg); 
+        background-color: transparent;
     }
 
     /* ==========================================================================
@@ -826,9 +887,54 @@
         background-color: transparent !important;
     }
 
+    /* عناصر النص */
+    .dark-mode .post-body p,
+    .dark-mode .post-body div:not([class*="code"]):not([class*="highlight"]):not([class*="syntax"]),
+    .dark-mode .post-body li:not([class*="code"]):not([class*="highlight"]),
+    .dark-mode .post-body blockquote,
+    .dark-mode .post-body figcaption {
+        color: var(--dm-text-primary) !important;
+        background-color: transparent !important;
+    }
 
+    .dark-mode .post-body h1,
+    .dark-mode .post-body h2,
+    .dark-mode .post-body h3,
+    .dark-mode .post-body h4,
+    .dark-mode .post-body h5,
+    .dark-mode .post-body h6 {
+        color: var(--dm-text-accent) !important;
+        border-bottom: 1px solid var(--dm-border-primary);
+        padding-bottom: 0.5rem;
+    }
 
+    .dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]) {
+        color: #ffb74d !important;
+        text-decoration: underline;
+    }
 
+    .dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]):hover {
+        color: #ff9800 !important;
+        text-decoration: none;
+    }
+
+    .dark-mode .post-body strong,
+    .dark-mode .post-body b {
+        color: #ffcc80 !important;
+        font-weight: 600;
+    }
+
+    .dark-mode .post-body em,
+    .dark-mode .post-body i {
+        color: #80cbc4 !important;
+        font-style: italic;
+    }
+
+    .dark-mode .post-body hr {
+        border: none;
+        border-top: 1px solid var(--dm-border-primary);
+        margin: 2rem 0;
+    }
 
     /* الجداول */
     .dark-mode .post-body table {
@@ -859,6 +965,7 @@
         padding: 0.75rem;
         border: 1px solid var(--dm-table-border) !important;
         color: var(--dm-text-primary) !important;
+        background-color: transparent !important;
     }
 
     .dark-mode .post-body caption {
@@ -868,7 +975,23 @@
         font-style: italic;
     }
 
+    /* الأكواد والكتل البرمجية */
+    .dark-mode .post-body pre,
+    .dark-mode .post-body code:not([class*="language"]):not([class*="hljs"]) {
+        background-color: var(--dm-code-bg) !important;
+        color: #f8f8f2 !important;
+        border: 1px solid var(--dm-code-border) !important;
+        border-radius: 4px;
+    }
 
+    .dark-mode .post-body pre {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .dark-mode .post-body code:not([class*="language"]):not([class*="hljs"]) {
+        padding: 0.2rem 0.4rem;
+    }
 
     .dark-mode .post-body pre code {
         background-color: transparent !important;
@@ -876,7 +999,15 @@
         padding: 0 !important;
     }
 
-
+    /* Blockquotes */
+    .dark-mode .post-body blockquote {
+        border-left: 4px solid var(--dm-text-accent) !important;
+        background-color: rgba(255, 183, 77, 0.1) !important;
+        color: var(--dm-text-primary) !important;
+        padding: 1rem 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 0 4px 4px 0;
+    }
 
     .dark-mode .post-body blockquote cite {
         color: var(--dm-text-secondary) !important;
@@ -894,8 +1025,16 @@
         transition: opacity 0.3s ease, border-color 0.3s ease;
     }
 
+    .dark-mode .post-body img:hover {
+        opacity: 1;
+    }
 
-
+    .dark-mode .post-body figure {
+        background-color: var(--dm-bg-secondary) !important;
+        padding: 1rem;
+        border-radius: 4px;
+        border: 1px solid var(--dm-border-primary);
+    }
 
     /* القوائم */
     .dark-mode .post-body ul,
@@ -922,7 +1061,16 @@
         margin-bottom: 0.5rem;
     }
 
-
+    /* عناصر النماذج داخل المحتوى */
+    .dark-mode .post-body input:not([type="checkbox"]):not([type="radio"]),
+    .dark-mode .post-body textarea,
+    .dark-mode .post-body select {
+        background-color: var(--dm-bg-secondary) !important;
+        color: var(--dm-text-primary) !important;
+        border: 1px solid var(--dm-border-primary) !important;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
 
     .dark-mode .post-body button,
     .dark-mode .post-body .button,
@@ -932,25 +1080,73 @@
         border: 1px solid var(--dm-text-accent) !important;
     }
 
-
-
-
-
-
-
-     .dark-mode .post-body [style*="color"]:not([class*="code"]):not([class*="highlight"]) {
+    .dark-mode .post-body label {
         color: var(--dm-text-primary) !important;
     }
 
-        /* .dark-mode .post-body [style*="border"] {
+    /* عناصر متفرقة */
+    .dark-mode .post-body abbr[title] {
+        border-bottom: 1px dotted var(--dm-text-accent);
+        cursor: help;
+    }
+
+    .dark-mode .post-body mark {
+        background-color: rgba(255, 183, 77, 0.3) !important;
+        color: var(--dm-text-primary) !important;
+    }
+
+    .dark-mode .post-body ins {
+        background-color: rgba(76, 175, 80, 0.2) !important;
+        color: var(--dm-text-primary) !important;
+        text-decoration: none;
+    }
+
+    .dark-mode .post-body del {
+        background-color: rgba(244, 67, 54, 0.2) !important;
+        color: var(--dm-text-secondary) !important;
+    }
+
+    .dark-mode .post-body sup,
+    .dark-mode .post-body sub {
+        color: var(--dm-text-secondary);
+        font-size: 0.75em;
+    }
+
+    /* التكيف مع العناصر الديناميكية */
+    .dark-mode .post-body [style*="background"]:not([class*="code"]):not([class*="highlight"]) {
+        background-color: var(--dm-bg-secondary) !important;
+    }
+
+    .dark-mode .post-body [style*="color"]:not([class*="code"]):not([class*="highlight"]) {
+        color: var(--dm-text-primary) !important;
+    }
+
+    /* .dark-mode .post-body [style*="border"] {
         border-color: var(--dm-border-primary) !important;
     }
 
+    /* تحسينات للعناصر الشائعة في أنظمة إدارة المحتوى */
+    .dark-mode .post-body .wp-block-image,
+    .dark-mode .post-body .wp-block-gallery,
+    .dark-mode .post-body .wp-block-quote,
+    .dark-mode .post-body .wp-block-table {
+        background-color: var(--dm-bg-secondary) !important;
+        border: 1px solid var(--dm-border-primary) !important;
+        padding: 1rem;
+        border-radius: 4px;
+    }
 
+    .dark-mode .post-body .wp-block-code,
+    .dark-mode .post-body .wp-block-preformatted {
+        background-color: var(--dm-code-bg) !important;
+        border: 1px solid var(--dm-code-border) !important;
+    }
 
-
-
-
+    .dark-mode .post-body .wp-block-pullquote {
+        border-left: 4px solid var(--dm-text-accent) !important;
+        background-color: rgba(255, 183, 77, 0.1) !important;
+        color: var(--dm-text-primary) !important;
+    }
 
     /* ==========================================================================
        Theme & Utility Classes
@@ -960,166 +1156,6 @@
         text-decoration: none;
         display: block;
         transition: color 0.2s ease;
-    }
-
-    /* تأثيرات انتقال سلسة للوضع الداكن */
-    .dark-mode-transition * {
-        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
-    }
-
-    /* ==========================================================================
-       Related Posts Styles - ENHANCED DESIGN
-       ========================================================================== */
-    .related-posts-section {
-        margin: 3rem 0;
-        padding: 0;
-    }
-
-    .related-posts-title {
-        color: var(--primary);
-        font-size: 1.5rem;
-        margin-bottom: 2rem;
-        font-weight: 600;
-        position: relative;
-        padding-left: 1.2rem;
-        text-align: center;
-    }
-
-    .related-posts-title::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        height: 24px;
-        width: 4px;
-        background-color: var(--accent);
-        border-radius: 2px;
-    }
-
-    .related-posts-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .related-post-card {
-        background-color: var(--card-bg);
-        border-radius: 12px;
-        padding: 1.8rem;
-        box-shadow: var(--shadow);
-        border-left: 4px solid var(--primary);
-        transition: all 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        min-height: 120px;
-    }
-
-    .related-post-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        border-left-color: var(--accent);
-    }
-
-    .related-post-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .related-post-title {
-        margin: 0 0 0.8rem 0;
-        font-size: 1.15rem;
-        line-height: 1.4;
-        font-weight: 600;
-        color: var(--text);
-    }
-
-    .related-post-link {
-        color: var(--text);
-        text-decoration: none;
-        display: block;
-        transition: color 0.2s ease;
-    }
-
-    .related-post-link:hover {
-        color: var(--primary);
-        text-decoration: none;
-    }
-
-    .related-post-excerpt {
-        color: var(--text-light);
-        font-size: 0.95rem;
-        line-height: 1.5;
-        margin: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .loading-related, .no-related-posts {
-        text-align: center;
-        padding: 3rem;
-        color: var(--text-light);
-        grid-column: 1 / -1;
-        font-style: italic;
-        font-size: 1.1rem;
-    }
-
-    /* Dark Mode Styles */
-    .dark-mode .post-preview::after,
-    .dark-mode .post-image, 
-    .dark-mode .post-body img,
-    .dark-mode .post-preview img,
-    .dark-mode .post-body pre,
-    .dark-mode .post-body code {
-        background-color: #2a2a2a; 
-    }
-
-    .dark-mode .post-preview::after {
-        background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, var(--card-bg) 100%);
-    }
-
-    .dark-mode .menu-toggle {
-        color: var(--text);
-    }
-
-    .dark-mode .related-posts-title {
-        color: var(--primary-light);
-    }
-
-    .dark-mode .related-posts-title::before {
-        background-color: var(--accent-light);
-    }
-
-    .dark-mode .related-post-card {
-        background-color: var(--dm-bg-secondary);
-        border-left-color: var(--primary);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-
-    .dark-mode .related-post-card:hover {
-        box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-        border-left-color: var(--accent);
-    }
-
-    .dark-mode .related-post-title {
-        color: var(--dm-text-primary);
-    }
-
-    .dark-mode .related-post-link {
-        color: var(--dm-text-primary);
-    }
-
-    .dark-mode .related-post-link:hover {
-        color: var(--primary-light);
-    }
-
-    .dark-mode .related-post-excerpt {
-        color: var(--dm-text-secondary);
     }
 
     /* ==========================================================================
@@ -1175,36 +1211,6 @@
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
         }
-
-        .related-posts-section {
-            margin: 2.5rem 0;
-        }
-        
-        .related-posts-container {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-        
-        .related-posts-title {
-            font-size: 1.4rem;
-            margin-bottom: 1.8rem;
-            padding-left: 1rem;
-            text-align: left;
-        }
-        
-        .related-posts-title::before {
-            height: 20px;
-            top: 55%;
-        }
-        
-        .related-post-card {
-            padding: 1.5rem;
-            min-height: 110px;
-        }
-        
-        .related-post-title {
-            font-size: 1.1rem;
-        }
     }
 
     @media (max-width: 480px) {
@@ -1241,32 +1247,6 @@
             padding: 0.4rem 0.8rem;
             font-size: 0.85rem;
         }
-
-        .related-posts-title {
-            font-size: 1.3rem;
-            padding-left: 0.9rem;
-        }
-        
-        .related-post-card {
-            padding: 1.3rem;
-            min-height: 100px;
-        }
-        
-        .related-post-title {
-            font-size: 1.05rem;
-        }
-        
-        .related-post-excerpt {
-            font-size: 0.9rem;
-            -webkit-line-clamp: 2;
-        }
-    }
-
-    @media (max-width: 900px) {
-        .related-posts-container {
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.2rem;
-        }
     }
 
     /* ==========================================================================
@@ -1302,7 +1282,222 @@
     [data-color-preserve="true"] {
         transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
     }
-]]></b:skin>
+
+    /* تأثيرات انتقال سلسة للوضع الداكن */
+    .dark-mode-transition * {
+        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+    }
+
+
+/* ==========================================================================
+   Related Posts Styles - ENHANCED DESIGN
+   ========================================================================== */
+.related-posts-section {
+  margin: 3rem 0;
+  padding: 0;
+}
+
+.related-posts-title {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  position: relative;
+  padding-left: 1.2rem;
+  text-align: center;
+}
+
+.related-posts-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 4px;
+  background-color: var(--accent);
+  border-radius: 2px;
+}
+
+.related-posts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.related-post-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--primary);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+}
+
+.related-post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-left-color: var(--accent);
+}
+
+.related-post-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.related-post-title {
+  margin: 0 0 0.8rem 0;
+  font-size: 1.15rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.related-post-link {
+  color: var(--text);
+  text-decoration: none;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.related-post-link:hover {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.related-post-excerpt {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.loading-related {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-light);
+  grid-column: 1 / -1;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.no-related-posts {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-light);
+  grid-column: 1 / -1;
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+/* Dark Mode Styles */
+.dark-mode .related-posts-title {
+  color: var(--primary-light);
+}
+
+.dark-mode .related-posts-title::before {
+  background-color: var(--accent-light);
+}
+
+.dark-mode .related-post-card {
+  background-color: var(--dm-bg-secondary);
+  border-left-color: var(--primary);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.dark-mode .related-post-card:hover {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  border-left-color: var(--accent);
+}
+
+.dark-mode .related-post-title {
+  color: var(--dm-text-primary);
+}
+
+.dark-mode .related-post-link {
+  color: var(--dm-text-primary);
+}
+
+.dark-mode .related-post-link:hover {
+  color: var(--primary-light);
+}
+
+.dark-mode .related-post-excerpt {
+  color: var(--dm-text-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .related-posts-container {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .related-posts-section {
+    margin: 2.5rem 0;
+  }
+  
+  .related-posts-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .related-posts-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.8rem;
+    padding-left: 1rem;
+    text-align: left;
+  }
+  
+  .related-posts-title::before {
+    height: 20px;
+    top: 55%;
+  }
+  
+  .related-post-card {
+    padding: 1.5rem;
+    min-height: 110px;
+  }
+  
+  .related-post-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .related-posts-title {
+    font-size: 1.3rem;
+    padding-left: 0.9rem;
+  }
+  
+  .related-post-card {
+    padding: 1.3rem;
+    min-height: 100px;
+  }
+  
+  .related-post-title {
+    font-size: 1.05rem;
+  }
+  
+  .related-post-excerpt {
+    font-size: 0.9rem;
+    -webkit-line-clamp: 2;
+  }
+}
+    ]]></b:skin>
+
     <script>
     //<![CDATA[
 document.addEventListener('DOMContentLoaded', function() {
@@ -2129,6 +2324,466 @@ if (posts.length === 0) {
         window.addEventListener('popstate', reinitializeComponents);
         window.addEventListener('popstate', resetCategoryFilter);
     });
+	
+	// دالة لتحميل المشاركات ذات الصلة
+function loadRelatedPosts() {
+  if (window.location.pathname === "/" || !document.getElementById('related-posts-container')) return;
+  
+  const relatedContainer = document.getElementById('related-posts-container');
+  const currentPostId = window.location.pathname.split('/').pop();
+  
+  // إظهار رسالة التحميل
+  relatedContainer.innerHTML = '<div class="loading-related">جاري تحميل المقالات ذات الصلة...</div>';
+  
+  // جلب جميع المشاركات
+  fetch('/feeds/posts/default?alt=json&max-results=50')
+    .then(response => response.json())
+    .then(data => {
+      const posts = data.feed.entry || [];
+      const currentPost = posts.find(post => {
+        const postId = post.id.$t.split('-').pop();
+        return postId === currentPostId;
+      });
+      
+      if (!currentPost) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      // استخراج الوسوم من المشاركة الحالية
+      const currentTags = currentPost.category ? 
+        currentPost.category.map(cat => cat.term.toLowerCase()) : 
+        [];
+      
+      // تصفية المشاركات ذات الصلة (تستثني المشاركة الحالية)
+      const relatedPosts = posts
+        .filter(post => {
+          const postId = post.id.$t.split('-').pop();
+          if (postId === currentPostId) return false;
+          
+          const postTags = post.category ? 
+            post.category.map(cat => cat.term.toLowerCase()) : 
+            [];
+          
+          // حساب نقاط التشابه بناءً على الوسوم المشتركة
+          const commonTags = postTags.filter(tag => 
+            currentTags.includes(tag)
+          ).length;
+          
+          return commonTags > 0;
+        })
+        .sort((a, b) => {
+          // ترتيب حسب عدد الوسوم المشتركة ثم التاريخ
+          const aTags = a.category ? a.category.map(cat => cat.term.toLowerCase()) : [];
+          const bTags = b.category ? b.category.map(cat => cat.term.toLowerCase()) : [];
+          
+          const aCommon = aTags.filter(tag => currentTags.includes(tag)).length;
+          const bCommon = bTags.filter(tag => currentTags.includes(tag)).length;
+          
+          if (bCommon !== aCommon) return bCommon - aCommon;
+          
+          return new Date(b.published.$t) - new Date(a.published.$t);
+        })
+        .slice(0, 3); // عرض 3 مشاركات كحد أقصى
+      
+      displayRelatedPosts(relatedPosts, relatedContainer);
+    })
+    .catch(error => {
+      console.error('Error loading related posts:', error);
+      showNoRelatedPosts(relatedContainer);
+    });
+}
+
+// دالة لتحميل المشاركات ذات الصلة - الإصدار المصحح
+function loadRelatedPosts() {
+  // التأكد من أننا في صفحة مقال فردي وأن العنصر موجود
+  const relatedContainer = document.getElementById('related-posts-container');
+  if (!relatedContainer || window.location.pathname === "/") return;
+  
+  // إظهار رسالة التحميل
+  relatedContainer.innerHTML = '<div class="loading-related">Loading related articles...</div>';
+  
+  // جلب جميع المشاركات
+  fetch('/feeds/posts/default?alt=json&max-results=100')
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      const posts = data.feed.entry || [];
+      if (posts.length === 0) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      // الحصول على المقال الحالي من URL
+      const currentPostUrl = window.location.href;
+      let currentPost = null;
+      
+      // البحث عن المقال الحالي في القائمة
+      for (const post of posts) {
+        const postUrl = post.link.find(link => link.rel === 'alternate').href;
+        if (postUrl === currentPostUrl) {
+          currentPost = post;
+          break;
+        }
+      }
+      
+      if (!currentPost) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      // استخراج التصنيفات من المقال الحالي
+      const currentCategories = currentPost.category ? 
+        currentPost.category.map(cat => cat.term.toLowerCase()) : 
+        [];
+      
+      if (currentCategories.length === 0) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      // تصفية المقالات ذات الصلة
+      const relatedPosts = posts
+        .filter(post => {
+          // استبعاد المقال الحالي
+          const postUrl = post.link.find(link => link.rel === 'alternate').href;
+          if (postUrl === currentPostUrl) return false;
+          
+          // الحصول على تصنيفات المقال
+          const postCategories = post.category ? 
+            post.category.map(cat => cat.term.toLowerCase()) : 
+            [];
+          
+          // التحقق من وجود تصنيفات مشتركة
+          const hasCommonCategories = postCategories.some(category => 
+            currentCategories.includes(category)
+          );
+          
+          return hasCommonCategories;
+        })
+        .sort((a, b) => {
+          // ترتيب حسب عدد التصنيفات المشتركة
+          const aCategories = a.category ? a.category.map(cat => cat.term.toLowerCase()) : [];
+          const bCategories = b.category ? b.category.map(cat => cat.term.toLowerCase()) : [];
+          
+          const aCommon = aCategories.filter(cat => currentCategories.includes(cat)).length;
+          const bCommon = bCategories.filter(cat => currentCategories.includes(cat)).length;
+          
+          return bCommon - aCommon;
+        })
+        .slice(0, 3); // عرض 3 مقالات كحد أقصى
+      
+      displayRelatedPosts(relatedPosts, relatedContainer);
+    })
+    .catch(error => {
+      console.error('Error loading related posts:', error);
+      showNoRelatedPosts(relatedContainer, 'Error loading related articles');
+    });
+}
+
+// دالة لتحميل المشاركات ذات الصلة - الإصدار المعدل
+function loadRelatedPosts() {
+  const relatedContainer = document.getElementById('related-posts-container');
+  if (!relatedContainer || window.location.pathname === "/") return;
+  
+  relatedContainer.innerHTML = '<div class="loading-related">Loading related topics...</div>';
+  
+  fetch('/feeds/posts/default?alt=json&max-results=150')
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      const posts = data.feed.entry || [];
+      if (posts.length === 0) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      const currentPostUrl = window.location.href;
+      let currentPost = null;
+      
+      for (const post of posts) {
+        const postUrl = post.link.find(link => link.rel === 'alternate').href;
+        if (postUrl === currentPostUrl) {
+          currentPost = post;
+          break;
+        }
+      }
+      
+      if (!currentPost) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      const currentCategories = currentPost.category ? 
+        currentPost.category.map(cat => cat.term.toLowerCase()) : 
+        [];
+      
+      if (currentCategories.length === 0) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      // ترشيح المقالات المتعلقة
+      let relatedPosts = posts.filter(post => {
+        const postUrl = post.link.find(link => link.rel === 'alternate').href;
+        if (postUrl === currentPostUrl) return false;
+        
+        const postCategories = post.category ? 
+          post.category.map(cat => cat.term.toLowerCase()) : 
+          [];
+        
+        return postCategories.some(category => 
+          currentCategories.includes(category)
+        );
+      });
+      
+      // إذا لم يكن هناك مقالات ذات صلة، عرض مقالات عشوائية
+      if (relatedPosts.length === 0) {
+        relatedPosts = posts
+          .filter(post => {
+            const postUrl = post.link.find(link => link.rel === 'alternate').href;
+            return postUrl !== currentPostUrl;
+          })
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 4);
+      } else {
+        // ترتيب حسب عدد التصنيفات المشتركة ثم عشوائية
+        relatedPosts = relatedPosts
+          .sort((a, b) => {
+            const aCategories = a.category ? a.category.map(cat => cat.term.toLowerCase()) : [];
+            const bCategories = b.category ? b.category.map(cat => cat.term.toLowerCase()) : [];
+            
+            const aCommon = aCategories.filter(cat => currentCategories.includes(cat)).length;
+            const bCommon = bCategories.filter(cat => currentCategories.includes(cat)).length;
+            
+            // إضافة عنصر عشوائي لخلط النتائج
+            if (bCommon !== aCommon) return bCommon - aCommon;
+            return Math.random() - 0.5;
+          });
+      }
+      
+      // أخذ 4 مقالات بشكل عشوائي مع كل تحديث
+      const randomRelatedPosts = relatedPosts
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 4);
+      
+      displaySimpleRelatedPosts(randomRelatedPosts, relatedContainer);
+    })
+    .catch(error => {
+      console.error('Error loading related posts:', error);
+      showNoRelatedPosts(relatedContainer, 'Error loading related topics');
+    });
+}
+
+// متغير لتخزين آخر بيانات المحتوى
+let lastPostData = null;
+
+// دالة لتحميل المشاركات ذات الصلة مع التحديث التلقائي
+function loadRelatedPosts() {
+  const relatedContainer = document.getElementById('related-posts-container');
+  if (!relatedContainer || window.location.pathname === "/") return;
+  
+  relatedContainer.innerHTML = '<div class="loading-related">Loading suggestions...</div>';
+  
+  fetch('/feeds/posts/default?alt=json&max-results=100')
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      const posts = data.feed.entry || [];
+      if (posts.length === 0) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      const currentPostUrl = window.location.href;
+      let currentPost = null;
+      
+      // البحث عن المقال الحالي
+      for (const post of posts) {
+        const postUrl = post.link.find(link => link.rel === 'alternate').href;
+        if (postUrl === currentPostUrl) {
+          currentPost = post;
+          break;
+        }
+      }
+      
+      if (!currentPost) {
+        showNoRelatedPosts(relatedContainer);
+        return;
+      }
+      
+      // تخزين بيانات المقال الحالي للمقارنة
+      lastPostData = {
+        url: currentPostUrl,
+        categories: currentPost.category ? 
+          currentPost.category.map(cat => cat.term.toLowerCase()) : []
+      };
+      
+      // توليد مقالات ذات صلة مع عنصر عشوائي
+      const relatedPosts = generateRelatedPosts(posts, currentPost);
+      displayEnhancedRelatedPosts(relatedPosts, relatedContainer);
+    })
+    .catch(error => {
+      console.error('Error loading related posts:', error);
+      showNoRelatedPosts(relatedContainer, 'Unable to load suggestions');
+    });
+}
+
+// دالة لتوليد مقالات ذات صلة مع عشوائية
+function generateRelatedPosts(allPosts, currentPost) {
+  const currentPostUrl = currentPost.link.find(link => link.rel === 'alternate').href;
+  const currentCategories = currentPost.category ? 
+    currentPost.category.map(cat => cat.term.toLowerCase()) : [];
+  
+  // ترشيح المقالات المتعلقة
+  let relatedPosts = allPosts.filter(post => {
+    const postUrl = post.link.find(link => link.rel === 'alternate').href;
+    if (postUrl === currentPostUrl) return false;
+    
+    const postCategories = post.category ? 
+      post.category.map(cat => cat.term.toLowerCase()) : [];
+    
+    return postCategories.some(category => 
+      currentCategories.includes(category)
+    );
+  });
+  
+  // إذا لم توجد مقالات ذات صلة، نأخذ عينات عشوائية
+  if (relatedPosts.length === 0) {
+    relatedPosts = allPosts.filter(post => {
+      const postUrl = post.link.find(link => link.rel === 'alternate').href;
+      return postUrl !== currentPostUrl;
+    });
+  }
+  
+  // إضافة عنصر عشوائي للتنويع
+  const shuffledPosts = [...relatedPosts].sort(() => Math.random() - 0.5);
+  
+  // أخذ 3 مقالات مع ضمان التنويع
+  const selectedPosts = [];
+  const usedUrls = new Set();
+  
+  for (const post of shuffledPosts) {
+    if (selectedPosts.length >= 3) break;
+    
+    const postUrl = post.link.find(link => link.rel === 'alternate').href;
+    if (!usedUrls.has(postUrl)) {
+      selectedPosts.push(post);
+      usedUrls.add(postUrl);
+    }
+  }
+  
+  return selectedPosts;
+}
+
+// دالة لعرض المقالات المحسنة
+function displayEnhancedRelatedPosts(posts, container) {
+  if (posts.length === 0) {
+    showNoRelatedPosts(container);
+    return;
+  }
+  
+  const fragment = document.createDocumentFragment();
+  
+  posts.forEach(post => {
+    const title = post.title.$t;
+    const postUrl = post.link.find(link => link.rel === 'alternate').href;
+    const content = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
+    
+    // استخراج مقتطف من المحتوى
+    const tmp = document.createElement('div');
+    tmp.innerHTML = content;
+    let excerptText = (tmp.textContent || tmp.innerText || '').trim();
+    excerptText = excerptText.replace(/\s+/g, ' ');
+    if (excerptText.length > 120) {
+      excerptText = excerptText.substring(0, 120) + '...';
+    }
+    
+    const postCard = document.createElement('div');
+    postCard.className = 'related-post-card';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'related-post-content';
+    
+    const titleElement = document.createElement('h4');
+    titleElement.className = 'related-post-title';
+    
+    const titleLink = document.createElement('a');
+    titleLink.className = 'related-post-link';
+    titleLink.href = postUrl;
+    titleLink.textContent = title;
+    titleLink.title = title;
+    
+    titleElement.appendChild(titleLink);
+    
+    if (excerptText) {
+      const excerptElement = document.createElement('p');
+      excerptElement.className = 'related-post-excerpt';
+      excerptElement.textContent = excerptText;
+      contentDiv.appendChild(titleElement);
+      contentDiv.appendChild(excerptElement);
+    } else {
+      contentDiv.appendChild(titleElement);
+    }
+    
+    postCard.appendChild(contentDiv);
+    fragment.appendChild(postCard);
+  });
+  
+  container.innerHTML = '';
+  container.appendChild(fragment);
+}
+
+// دالة للتحقق من التحديث وتحميل المحتوى الجديد
+function checkAndReloadRelatedPosts() {
+  const currentUrl = window.location.href;
+  
+  // إذا تغير URL أو كانت هذه أول مرة، نحمّل المحتوى
+  if (!lastPostData || lastPostData.url !== currentUrl) {
+    loadRelatedPosts();
+  }
+}
+
+// تهيئة المقالات ذات الصلة مع التأكد من التحديث
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.location.pathname !== "/") {
+    // تحميل فوري مع تأخير بسيط
+    setTimeout(() => {
+      loadRelatedPosts();
+    }, 500);
+    
+    // أيضاً التحقق عند انتهاء تحميل الصفحة
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        checkAndReloadRelatedPosts();
+      }, 1000);
+    });
+  }
+});
+
+// التأكد من التحديث عند تغيير الصفحة
+window.addEventListener('popstate', function() {
+  if (window.location.pathname !== "/") {
+    setTimeout(() => {
+      checkAndReloadRelatedPosts();
+    }, 300);
+  }
+});
+
+// أيضاً تحديث عند أي تغيير في hash (للتأكد من التحديث)
+window.addEventListener('hashchange', function() {
+  if (window.location.pathname !== "/") {
+    setTimeout(() => {
+      checkAndReloadRelatedPosts();
+    }, 200);
+  }
+});
     //]]>
     </script>
 </head>
@@ -2217,25 +2872,34 @@ if (posts.length === 0) {
                     </div>
                   </div>
                 </b:loop>
-              <b:else/>
-                <!-- صفحة الموضوع الفردي - عرض الموضوع الحالي فقط -->
-                <b:loop values='data:posts' var='post'>
-                  <div class='post-card' expr:id='&quot;post-&quot; + data:post.id'>
-                    <div class='post-header'>
-                      <h2 class='post-title'><data:post.title/></h2>
-                    </div>
-                    
-                    <div class='post-content'>
-                      <b:if cond='data:post.firstImageUrl'>
-                        <img class='post-image' expr:src='data:post.firstImageUrl' alt='Post Image' loading='lazy'/>
-                      </b:if>
-                      
-                      <div class='post-body'>
-                        <data:post.body/>
-                      </div>
-                    </div>
-                  </div>
-                </b:loop>
+<!-- داخل قسم post-card في صفحة الموضوع الفردي -->
+<b:else/>
+<!-- صفحة الموضوع الفردي - عرض الموضوع الحالي فقط -->
+<b:loop values='data:posts' var='post'>
+  <div class='post-card' expr:id='&quot;post-&quot; + data:post.id'>
+    <div class='post-header'>
+      <h2 class='post-title'><data:post.title/></h2>
+    </div>
+    
+    <div class='post-content'>
+      <b:if cond='data:post.firstImageUrl'>
+        <img class='post-image' expr:src='data:post.firstImageUrl' alt='Post Image' loading='lazy'/>
+      </b:if>
+      
+      <div class='post-body'>
+        <data:post.body/>
+      </div>
+    </div>
+  </div>
+  
+  <!-- قسم منفصل للموضوعات ذات الصلة -->
+  <div class='related-posts-section' id='related-posts-section'>
+    <h3 class='related-posts-title'>You Might Also Like</h3>
+    <div class='related-posts-container' id='related-posts-container'>
+      <div class='loading-related'>Loading suggestions...</div>
+    </div>
+  </div>
+</b:loop>
               </b:if>
             </b:includable>
           </b:widget>
