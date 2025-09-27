@@ -1298,6 +1298,7 @@
 }
 
 
+   
     ]]></b:skin>
 
     <script>
@@ -2140,25 +2141,28 @@ if (posts.length === 0) {
         </div>
     </nav>
 
-    <!-- Sidebar for post navigation -->
-    <div aria-label='Blog Navigation' class='sidebar' id='sidebar'>
-        <div class='sidebar-sticky-header'>
-            <div class='sidebar-header'>
-                <div class='sidebar-title'>Blog Posts</div>
-            </div>
-            
-            <div class='search-container'>
-                <input aria-label='Search posts' class='search-input' id='sidebarSearch' placeholder='Search posts or tags...' type='text'/>
-                <div class="search-results-counter" id="searchResultsCounter"></div>
-            </div>
+<!-- Sidebar for post navigation -->
+<div aria-label='Blog Navigation' class='sidebar' id='sidebar'>
+    <div class='sidebar-sticky-header'>
+        <div class='sidebar-header' style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class='sidebar-title'>Blog Posts</div>
+            <a href="mailto:ahm4d.abbas@gmail.com" class="connect-us-btn" title="Contact Us">
+                Connect Us
+            </a>
         </div>
         
-        <div class='no-results' id='noResults'>No matching posts found</div>
-        
-        <div class='sidebar-content' id='sidebarContent'>
-            <!-- Dynamic post links will be inserted here -->
+        <div class='search-container'>
+            <input aria-label='Search posts' class='search-input' id='sidebarSearch' placeholder='Search posts or tags...' type='text'/>
+            <div class="search-results-counter" id="searchResultsCounter"></div>
         </div>
     </div>
+    
+    <div class='no-results' id='noResults'>No matching posts found</div>
+    
+    <div class='sidebar-content' id='sidebarContent'>
+        <!-- Dynamic post links will be inserted here -->
+    </div>
+</div>
 
     <!-- Main Content Area with Post Cards -->
     <main id='mainContent'>
