@@ -1298,6 +1298,41 @@
 }
 
 
+/* ==========================================================================
+   أزرار القائمة الجانبية
+   ========================================================================== */
+.sidebar-labels {
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-color-light);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sidebar-label-btn {
+  padding: 0.4rem 0.8rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--border-radius);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.sidebar-label-btn:hover {
+  background: var(--primary-light);
+  color: white;
+}
+
+.sidebar-label-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
    
     ]]></b:skin>
 
@@ -1484,6 +1519,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     loadingElement.textContent = 'Error loading posts. Please refresh the page.';
                 });
         }
+
+
+// إنشاء أزرار التصنيفات في الشريط الجانبي
+async function createSidebarLabels() {
+  const labelsContainer = document.getElementById('sidebarLabels');
+  if (!labelsContainer) return;
+
+  labelsContainer.innerHTML = "<div style='padding:10px; text-align:center;'>Loading labels...</div>";
+
+  const categories = await fetchAllCategories(); // موجودة عندك بالفعل
+  labelsContainer.innerHTML = "";
+
+  // زر "الكل"
+  const allBtn = document.createElement("div");
+  allBtn.className = "sidebar-label-btn active";
+  allBtn.textContent = "All";
+  allBtn.dataset.category = "all";
+  labelsContainer.appendChild(allBtn);
+
+  allBtn.addEventListener("click", () => {
+    document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
+    allBtn.classList.add("active");
+    // إظهار جميع الروابط
+    document.querySelectorAll(".sidebar-link").forEach(link => {
+      link.classList.remove("hidden");
+    });
+  });
+
+  // باقي التصنيفات
+  categories.forEach(category => {
+    const btn = document.createElement("div");
+    btn.className = "sidebar-label-btn";
+    btn.textContent = category;
+    btn.dataset.category = category;
+
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      // فلترة الروابط حسب التصنيف
+      document.querySelectorAll(".sidebar-link").forEach(link => {
+        const tags = link.dataset.tags ? link.dataset.tags.split(",") : [];
+        if (tags.includes(category)) {
+          link.classList.remove("hidden");
+        } else {
+          link.classList.add("hidden");
+        }
+      });
+    });
+
+    labelsContainer.appendChild(btn);
+  });
+}
+
+// استدعاء عند تحميل الصفحة
+createSidebarLabels();
+
 
         // Process posts data from API with tags support
         function processPosts(data) {
@@ -2154,6 +2246,7 @@ if (posts.length === 0) {
         <div class='search-container'>
             <input aria-label='Search posts' class='search-input' id='sidebarSearch' placeholder='Search posts or tags...' type='text'/>
             <div class="search-results-counter" id="searchResultsCounter"></div>
+			<div class="sidebar-labels" id="sidebarLabels"></div>
         </div>
     </div>
     
