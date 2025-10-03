@@ -6,29 +6,42 @@
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes' name='viewport'/>
     <title><data:blog.pageTitle/></title>
     
-    <!-- تحسينات البحث -->
-    <b:if cond='data:blog.pageType == "item"'>
-        <meta expr:content='data:blog.pageName + " - " + data:blog.title' name='description'/>
-    <b:else/>
+    <!-- وصف المدونة المحسن -->
+    <b:if cond='data:blog.pageType == "index"'>
+        <!-- الصفحة الرئيسية -->
+        <meta name='description' content='Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.'/>
+    <b:elseif cond='data:blog.pageType == "item"'/>
+        <!-- مقالات فردية - يستخدم وصف المقال نفسه -->
         <meta expr:content='data:blog.metaDescription' name='description'/>
+    <b:else/>
+        <!-- صفحات أخرى (أرشيف، تصنيفات، إلخ) -->
+        <meta expr:content='data:blog.pageTitle' name='description'/>
     </b:if>
     
     <!-- Open Graph -->
     <meta property="og:site_name" expr:content="data:blog.title"/>
     <meta property="og:title" expr:content="data:blog.pageName"/>
-    <meta property="og:description" expr:content="data:blog.metaDescription"/>
+    <b:if cond='data:blog.pageType == "index"'>
+        <meta property="og:description" content='Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.'/>
+    <b:else/>
+        <meta property="og:description" expr:content="data:blog.metaDescription"/>
+    </b:if>
     <b:if cond='data:blog.postImageUrl'>
         <meta property="og:image" expr:content="data:blog.postImageUrl"/>
     <b:else/>
         <meta property="og:image" expr:content="data:blog.blogspotFaviconUrl"/>
     </b:if>
-    <meta property="og:type" content="article"/>
+    <meta property="og:type" expr:content='data:blog.pageType == "item" ? "article" : "website"'/>
     <meta property="og:url" expr:content="data:blog.canonicalUrl"/>
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" expr:content="data:blog.pageName"/>
-    <meta name="twitter:description" expr:content="data:blog.metaDescription"/>
+    <b:if cond='data:blog.pageType == "index"'>
+        <meta name="twitter:description" content='Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.'/>
+    <b:else/>
+        <meta name="twitter:description" expr:content="data:blog.metaDescription"/>
+    </b:if>
     <b:if cond='data:blog.postImageUrl'>
         <meta name="twitter:image" expr:content="data:blog.postImageUrl"/>
     <b:else/>
@@ -41,14 +54,24 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
+        <b:if cond='data:blog.pageType == "item"'>
         "@type": "BlogPosting",
+        <b:else/>
+        "@type": "Blog",
+        </b:if>
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "<data:blog.canonicalUrl/>"
         },
         "headline": "<data:blog.pageName/>",
+        <b:if cond='data:blog.pageType == "index"'>
+        "description": "Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.",
+        <b:else/>
         "description": "<data:blog.metaDescription/>",
+        </b:if>
+        <b:if cond='data:blog.postImageUrl'>
         "image": "<data:blog.postImageUrl/>",
+        </b:if>
         "author": {
             "@type": "Person",
             "name": "<data:blog.title/>"
@@ -61,1242 +84,1050 @@
                 "url": "<data:blog.blogspotFaviconUrl/>"
             }
         },
+        <b:if cond='data:blog.pageType == "item"'>
         "datePublished": "<data:blog.postTimestamp/>",
         "dateModified": "<data:blog.postTimestamp/>",
+        </b:if>
         "url": "<data:blog.canonicalUrl/>"
     }
     </script>
 
 <b:skin><![CDATA[
-    /* ==========================================================================
-       CSS Variables (Custom Properties) - النظام الأساسي
-       ========================================================================== */
-    :root {
-        /* Colors - Primary */
-        --primary: #FF6D00;
-        --primary-light: #FF9E40;
-        --secondary: #2962FF;
-        --accent: #00C853;
-        --accent-light: #69F0AE;
-        
-        /* Colors - Neutral */
-        --dark: #263238;
-        --light: #f5f5f5;
-        --text: #424242;
-        --text-light: #757575;
-        --card-bg: #ffffff;
-        
-        /* Effects */
-        --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        --border-color-light: rgba(0,0,0,0.1);
-        
-        /* Layout */
-        --sidebar-width: 320px;
-        --header-height: 80px;
-        --border-radius: 4px;
-        --transition-speed: 0.3s;
-        
-        /* نظام ألوان ديناميكي للوضع الداكن - متغيرات إضافية */
-        --dm-bg-primary: #121212;
-        --dm-bg-secondary: #1e1e1e;
-        --dm-bg-tertiary: #2d2d2d;
-        --dm-text-primary: #e0e0e0;
-        --dm-text-secondary: #a0a0a0;
-        --dm-text-accent: #ffb74d;
-        --dm-border-primary: #444;
-        --dm-border-secondary: #555;
-        --dm-code-bg: #2d2d2d;
-        --dm-code-border: #444;
-        --dm-table-header-bg: #333;
-        --dm-table-border: #555;
-        --dm-table-zebra: rgba(255, 255, 255, 0.05);
-        
-        /* متغيرات الحالة */
-        --dark-mode-enabled: 0; /* سيتم تعديله عبر جافاسكريبت */
-    }
-
-    /* ==========================================================================
-       النظام الديناميكي للوضع الداكن
-       ========================================================================== */
-    .dark-mode {
-        /* تحديث المتغيرات الأساسية للوضع الداكن */
-        --primary: #FF9100;
-        --primary-light: #FFB74D;
-        --secondary: #448AFF;
-        --accent: #69F0AE;
-        --accent-light: #B9F6CA;
-        --dark: #ECEFF1;
-        --light: #121212;
-        --text: #E0E0E0;
-        --text-light: #B0BEC5;
-        --card-bg: #1E1E1E;
-        --shadow: 0 4px 6px rgba(0,0,0,0.3);
-        --border-color-light: rgba(255,255,255,0.1);
-        
-        /* تطبيق المتغيرات المحددة للوضع الداكن */
-        background-color: var(--dm-bg-primary) !important;
-        color: var(--dm-text-primary) !important;
-        
-        /* تأثير انتقال سلس للوضع الداكن */
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    /* عناصر لا تتأثر بالوضع الداكن (محفوظة ألوانها) */
-    .dark-mode .color-preserved,
-    .dark-mode [data-color-preserve="true"] {
-        /* الحفاظ على الألوان الأصلية لهذه العناصر */
-        background-color: initial !important;
-        color: initial !important;
-        border-color: initial !important;
-    }
-    
-    /* عناصر ذات مظهر خاص في الوضع الداكن */
-    .dark-mode .dark-enhanced {
-        background-color: var(--dm-bg-secondary) !important;
-        border: 1px solid var(--dm-border-primary) !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
-    }
-
-    /* ==========================================================================
-       Base Styles (Reset & Global)
-       ========================================================================== */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-    }
-
-    html {
-        scroll-behavior: smooth;
-        /* انتقال سلس لتغيير الألوان */
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.7;
-        color: var(--text);
-        background-color: var(--light);
-        transition: all var(--transition-speed) ease;
-        overflow-x: hidden;
-        /* انتقال سلس لتغيير الألوان */
-        transition: background-color 0.5s ease, color 0.5s ease;
-    }
-
-    /* Typography */
-    h1, h2, h3, h4 {
-        color: var(--primary);
-        margin-bottom: 1rem;
-        font-weight: 600;
-        word-wrap: break-word;
-        transition: color 0.5s ease;
-    }
-
-    a {
-        color: var(--primary);
-        text-decoration: none;
-        transition: color var(--transition-speed) ease;
-    }
-
-    a:hover {
-        color: var(--primary-light);
-    }
-
-    /* ==========================================================================
-       Layout Components
-       ========================================================================== */
-    /* Navigation */
-    nav {
-        background-color: var(--card-bg);
-        box-shadow: var(--shadow);
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: var(--header-height);
-        transition: all 0.3s ease-out;
-        will-change: transform, background-color, box-shadow;
-    }
-
-    .nav-title {
-        color: var(--primary);
-        font-weight: 700;
-        font-size: 1.5rem;
-        text-decoration: none;
-        max-width: 60vw;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        transition: color 0.5s ease;
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 1.5rem;
-        align-items: center;
-    }
-
-    /* Main Content */
-    main {
-        padding: calc(var(--header-height) + 2rem) 2rem 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-        width: 100%;
-        transition: background-color 0.5s ease;
-    }
-
-    /* Sidebar */
-    .sidebar {
-        position: fixed;
-        top: var(--header-height);
-        right: -100%;
-        width: var(--sidebar-width);
-        height: calc(100vh - var(--header-height));
-        background-color: var(--card-bg);
-        box-shadow: var(--shadow);
-        transition: all var(--transition-speed) ease;
-        z-index: 999;
-        overflow-y: auto;
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        -webkit-overflow-scrolling: touch;
-        border-left: 1px solid var(--border-color-light);
-    }
-
-    .sidebar.open { 
-        right: 0; 
-    }
-
-    .sidebar-sticky-header {
-        position: sticky;
-        top: 0;
-        background-color: var(--card-bg);
-        z-index: 30;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border-color-light);
-        margin-bottom: 1rem;
-        transition: background-color 0.5s ease;
-    }
-
-    .sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 1rem;
-        margin-bottom: 0;
-    }
-
-    .sidebar-title {
-        color: var(--primary);
-        font-weight: 700;
-        font-size: 1.2rem;
-        transition: color 0.5s ease;
-    }
-
-    .sidebar-content {
-        overflow-y: auto;
-        flex-grow: 1;
-        padding-top: 1rem;
-        transform: translateZ(0);
-        backface-visibility: hidden;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    /* ==========================================================================
-       Module Components
-       ========================================================================== */
-    /* Buttons */
-    .menu-toggle {
-        background: none;
-        border: none;
-        color: var(--text);
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        display: flex;
-        align-items: center;
-        transition: all var(--transition-speed) ease;
-        position: relative;
-        z-index: 2000;
-        background-color: transparent;
-        box-shadow: none;
-        border-radius: var(--border-radius);
-    }
- 
-    .menu-toggle:hover {
-        background-color: transparent;
-        transform: none;
-    }
-
-    .menu-toggle.active { 
-        transform: rotate(90deg); 
-        background-color: transparent;
-    }
-
-    .mode-toggle {
-        background-color: var(--primary);
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: var(--border-radius);
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 2000;
-        min-width: 120px;
-        text-align: center;
-        font-size: 0.9rem;
-        box-shadow: none;
-        overflow: hidden;
-    }
-
-    .mode-toggle::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.7s ease;
-    }
-
-    .mode-toggle:hover::before {
-        left: 100%;
-    }
-
-    .mode-toggle:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-
-    .dark-mode .mode-toggle {
-        background-color: var(--primary-light);
-        color: var(--dark);
-    }
-
-    .dark-mode .mode-toggle:hover {
-        background-color: var(--primary);
-        transform: translateY(-2px);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    .read-more-btn {
-        display: inline-block;
-        background-color: var(--primary);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: var(--border-radius);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        margin-top: 1rem;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
-    }
-
-    .read-more-btn:hover {
-        background-color: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    /* Dark Mode Styles */
-    .dark-mode .read-more-btn {
-        background-color: var(--primary);
-        color: #1E1E1E;
-    }
-
-    .dark-mode .read-more-btn:hover {
-        background-color: var(--primary-light);
-        color: #1E1E1E;
-    }
-
-    .back-to-top {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        background-color: var(--primary);
-        color: white;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        opacity: 0;
-        visibility: hidden;
-        transition: all var(--transition-speed) ease;
-        z-index: 998;
-        cursor: pointer;
-        border: none;
-        font-size: 1.5rem;
-    }
-
-    .back-to-top.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    /* ==========================================================================
-       Category Filter Styles
-       ========================================================================== */
-    .categories-filter {
-        margin-bottom: 2rem;
-        background-color: var(--light);
-        padding: 1rem 0;
-        position: relative;
-        z-index: 10;
-        transition: background-color 0.5s ease;
-    }
-    
-    .categories-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 0;
-        border-bottom: 2px solid var(--primary);
-        padding-bottom: 0.5rem;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-    }
-    
-    .categories-container::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .category-btn {
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        background: var(--card-bg);
-        border-radius:  5px 5px 0 0;
-        transition: all 0.3s ease;
-        font-weight: 500;
-        white-space: nowrap;
-        border: 1px solid var(--border-color-light);
-        color: var(--text);
-    }
-    
-    .category-btn.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-    }
-    
-    .category-btn:hover {
-        background: var(--primary-light);
-        color: white;
-        border-color: var(--primary-light);
-    }
-
-    .dark-mode .categories-filter {
-        background-color: var(--light);
-    }
-
-    .dark-mode .categories-container {
-        border-bottom-color: var(--primary-light);
-    }
-
-    .dark-mode .category-btn {
-        background: var(--card-bg);
-        border-color: rgba(255,255,255,0.1);
-        color: var(--text);
-    }
-
-    .dark-mode .category-btn.active {
-        background: var(--primary-light);
-        color: var(--dark);
-        border-color: var(--primary-light);
-    }
-
-    .dark-mode .category-btn:hover {
-        background: var(--primary);
-        color: var(--dark);
-        border-color: var(--primary);
-    }
-
-    /* ==========================================================================
-       Search Components
-       ========================================================================== */
-    .search-container {
-        position: sticky;
-        top: 60px;
-        background-color: var(--card-bg);
-        z-index: 20;
-        padding: 1rem 0;
-        margin-bottom: 0;
-        transition: background-color 0.5s ease;
-    }
-    
-    .search-input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid var(--border-color-light);
-        border-radius: var(--border-radius);
-        background-color: var(--card-bg);
-        color: var(--text);
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-    }
-    
-    .search-input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(255, 109, 0, 0.2);
-    }
-    
-    .no-results {
-        padding: 1rem;
-        color: var(--text-light);
-        text-align: center;
-        display: none;
-    }
-    
-    .no-results.show { 
-        display: block; 
-    }
-    
-    .search-results-counter {
-        font-size: 0.85rem;
-        color: var(--text-light);
-        margin-top: 0.5rem;
-        text-align: center;
-        display: none;
-        transition: all var(--transition-speed) ease;
-    }
-    
-    .search-results-counter.show { 
-        display: block; 
-    }
-
-    /* ==========================================================================
-       Sidebar Links
-       ========================================================================== */
-    .sidebar-link {
-        display: block;
-        padding: 0.75rem 1rem;
-        color: var(--text);
-        text-decoration: none;
-        border-radius: var(--border-radius);
-        margin: 0.25rem 0;
-        font-size: 0.9rem;
-        position: relative;
-        will-change: transform, background-color;
-        transition: all 0.3s ease;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-    
-    .sidebar-link.hidden { 
-        display: none; 
-    }
-    
-    .sidebar-section { 
-        transform-style: preserve-3d; 
-    }
-    
-    .sidebar-link:hover {
-        background-color: rgba(255, 109, 0, 0.1);
-        color: var(--primary);
-    }
-
-    .sidebar-link.active {
-        background-color: rgba(255, 109, 0, 0.2);
-        color: var(--primary);
-        font-weight: 600;
-    }
-
-    .sidebar-link::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        background-color: var(--primary);
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        will-change: transform;
-    }
-
-    .sidebar-link.active::after { 
-        transform: translateX(0); 
-    }
-
-    /* ==========================================================================
-       Post Cards
-       ========================================================================== */
-    .post-card {
-        background-color: var(--card-bg);
-        border-radius: 8px;
-        box-shadow: var(--shadow);
-        padding: 2rem;
-        margin-bottom: 2.5rem;
-        border-left: 4px solid var(--accent);
-        scroll-margin-top: calc(var(--header-height) + 20px);
-        overflow: hidden;
-        width: 100%;
-        transition: all 0.5s ease;
-    }
-
-
-
-    .post-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 1.5rem;
-    }
-
-    .post-title {
-        color: var(--primary);
-        margin-bottom: 1rem;
-        font-size: 1.6rem;
-        position: relative;
-        padding-left: 1.2rem;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        transition: color 0.5s ease;
-    }
-
-    .post-title::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 4px;
-        background-color: var(--accent);
-        border-radius: 2px;
-        transition: background-color 0.5s ease;
-    }
-
-    .post-content {
-        margin-bottom: 1.5rem;
-        width: 100%;
-        overflow: hidden;
-    }
-
-    .post-preview {
-        max-height: 2.5em;
-        overflow: hidden;
-        position: relative;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        line-height: 1.8;
-        margin-bottom: 1rem;
-    }
-
-    .post-preview::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 1.8em;
-        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--card-bg) 100%);
-        transition: background 0.5s ease;
-    }
-
-    .dark-mode .post-preview::after {
-        background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, var(--card-bg) 100%);
-    }
-
-    .post-image {
-        width: 100%;
-        max-height: 300px;
-        object-fit: cover;
-        border-radius: var(--border-radius);
-        margin-bottom: 1rem;
-        height: auto;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        background-color: #f0f0f0;
-        min-height: 200px;
-    }
-
-    .post-image.loaded { 
-        opacity: 1; 
-    }
-
-    .dark-mode .post-image { 
-        background-color: #2a2a2a; 
-    }
-
-    .post-body {
-        line-height: 1.7;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-        width: 100%;
-        overflow: hidden;
-    }
-
-    .post-body img,
-    .post-preview img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0.5rem auto;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        background-color: #f0f0f0;
-    }
-
-    .post-body img.loaded,
-    .post-preview img.loaded { 
-        opacity: 1; 
-    }
-
-    .dark-mode .post-body img,
-    .dark-mode .post-preview img { 
-        background-color: #2a2a2a; 
-    }
-
-    .post-body iframe,
-    .post-body embed,
-    .post-body object {
-        max-width: 100%;
-        width: 100%;
-        height: auto;
-        display: block;
-        margin: 0.5rem auto;
-    }
-
-    .post-body table {
-        width: 100%;
-        max-width: 100%;
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        margin: 1rem 0;
-        border-collapse: collapse;
-    }
-
-    .post-body pre,
-    .post-body code {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        overflow-x: auto;
-        display: block;
-        padding: 1rem;
-        background-color: rgba(0,0,0,0.05);
-        border-radius: var(--border-radius);
-        margin: 0.5rem 0;
-        transition: background-color 0.5s ease;
-    }
-
-    .dark-mode .post-body pre,
-    .dark-mode .post-body code { 
-        background-color: rgba(255,255,255,0.05); 
-    }
-
-    /* ==========================================================================
-       Loading Components
-       ========================================================================== */
-    .loading-posts {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-light);
-        display: none;
-    }
-
-    .loading-posts.visible { 
-        display: block; 
-    }
-
-    .spinner {
-        border: 4px solid rgba(0,0,0,0.1);
-        border-left-color: var(--primary);
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        animation: spin 1s linear infinite;
-        margin: auto;
-    }
-
-    .categories-loading {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-light);
-    }
-
-    .categories-loading .spinner {
-        border: 3px solid rgba(0,0,0,0.1);
-        border-left-color: var(--primary);
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        animation: spin 1s linear infinite;
-        margin: 0 auto;
-    }
-
-    @keyframes spin {
-        to { 
-            transform: rotate(360deg); 
-        }
-    }
-
-    /* ==========================================================================
-       State Styles
-       ========================================================================== */
-    .blog-pager { 
-        display: none; 
-    }
-
-    .post-date { 
-        display: none; 
-    }
-
-    /* Dark Mode Specific Styles */
-    .dark-mode .menu-toggle {
-        color: var(--text);
-    }
-
-    .dark-mode .menu-toggle:hover {
-        background-color: transparent;
-        transform: none;
-    }
-
-    .dark-mode .menu-toggle.active {
-        transform: rotate(90deg); 
-        background-color: transparent;
-    }
-
-    /* ==========================================================================
-       نظام ألوان ديناميكي للوضع الداكن - تطبيق الأنماط
-       ========================================================================== */
-    .dark-mode .post-body,
-    .dark-mode .post-body * {
-        /* ضمان أن الخلفيات شفافة ما لم يتم تحديدها خلاف ذلك */
-        background-color: transparent !important;
-    }
-
-    /* عناصر النص */
-    .dark-mode .post-body p,
-    .dark-mode .post-body div:not([class*="code"]):not([class*="highlight"]):not([class*="syntax"]),
-    .dark-mode .post-body li:not([class*="code"]):not([class*="highlight"]),
-    .dark-mode .post-body blockquote,
-    .dark-mode .post-body figcaption {
-        color: var(--dm-text-primary) !important;
-        background-color: transparent !important;
-    }
-
-    .dark-mode .post-body h1,
-    .dark-mode .post-body h2,
-    .dark-mode .post-body h3,
-    .dark-mode .post-body h4,
-    .dark-mode .post-body h5,
-    .dark-mode .post-body h6 {
-        color: var(--dm-text-accent) !important;
-        border-bottom: 1px solid var(--dm-border-primary);
-        padding-bottom: 0.5rem;
-    }
-
-    .dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]) {
-        color: #ffb74d !important;
-        text-decoration: underline;
-    }
-
-    .dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]):hover {
-        color: #ff9800 !important;
-        text-decoration: none;
-    }
-
-    .dark-mode .post-body strong,
-    .dark-mode .post-body b {
-        color: #ffcc80 !important;
-        font-weight: 600;
-    }
-
-    .dark-mode .post-body em,
-    .dark-mode .post-body i {
-        color: #80cbc4 !important;
-        font-style: italic;
-    }
-
-    .dark-mode .post-body hr {
-        border: none;
-        border-top: 1px solid var(--dm-border-primary);
-        margin: 2rem 0;
-    }
-
-    /* الجداول */
-    .dark-mode .post-body table {
-        border: 1px solid var(--dm-table-border) !important;
-        background-color: var(--dm-bg-secondary) !important;
-        margin: 1.5rem 0;
-        width: 100% !important;
-        border-collapse: collapse;
-    }
-
-    .dark-mode .post-body tr {
-        border-bottom: 1px solid var(--dm-border-primary) !important;
-    }
-
-    .dark-mode .post-body tr:nth-child(even) {
-        background-color: var(--dm-table-zebra) !important;
-    }
-
-    .dark-mode .post-body th {
-        background-color: var(--dm-table-header-bg) !important;
-        color: var(--dm-text-accent) !important;
-        padding: 0.75rem;
-        border: 1px solid var(--dm-table-border) !important;
-        font-weight: 600;
-    }
-
-    .dark-mode .post-body td {
-        padding: 0.75rem;
-        border: 1px solid var(--dm-table-border) !important;
-        color: var(--dm-text-primary) !important;
-        background-color: transparent !important;
-    }
-
-    .dark-mode .post-body caption {
-        color: var(--dm-text-secondary) !important;
-        caption-side: bottom;
-        padding: 0.5rem;
-        font-style: italic;
-    }
-
-    /* الأكواد والكتل البرمجية */
-    .dark-mode .post-body pre,
-    .dark-mode .post-body code:not([class*="language"]):not([class*="hljs"]) {
-        background-color: var(--dm-code-bg) !important;
-        color: #f8f8f2 !important;
-        border: 1px solid var(--dm-code-border) !important;
-        border-radius: 4px;
-    }
-
-    .dark-mode .post-body pre {
-        padding: 1rem;
-        overflow-x: auto;
-    }
-
-    .dark-mode .post-body code:not([class*="language"]):not([class*="hljs"]) {
-        padding: 0.2rem 0.4rem;
-    }
-
-    .dark-mode .post-body pre code {
-        background-color: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-    }
-
-    /* Blockquotes */
-    .dark-mode .post-body blockquote {
-        border-left: 4px solid var(--dm-text-accent) !important;
-        background-color: rgba(255, 183, 77, 0.1) !important;
-        color: var(--dm-text-primary) !important;
-        padding: 1rem 1.5rem;
-        margin: 1.5rem 0;
-        border-radius: 0 4px 4px 0;
-    }
-
-    .dark-mode .post-body blockquote cite {
-        color: var(--dm-text-secondary) !important;
-        font-style: italic;
-        display: block;
-        margin-top: 0.5rem;
-        font-size: 0.9em;
-    }
-
-    /* الصور والوسائط */
-    .dark-mode .post-body img {
-        opacity: 0.9;
-        border: 1px solid var(--dm-border-primary) !important;
-        border-radius: 4px;
-        transition: opacity 0.3s ease, border-color 0.3s ease;
-    }
-
-    .dark-mode .post-body img:hover {
-        opacity: 1;
-    }
-
-    .dark-mode .post-body figure {
-        background-color: var(--dm-bg-secondary) !important;
-        padding: 1rem;
-        border-radius: 4px;
-        border: 1px solid var(--dm-border-primary);
-    }
-
-    /* القوائم */
-    .dark-mode .post-body ul,
-    .dark-mode .post-body ol {
-        color: var(--dm-text-primary) !important;
-    }
-
-    .dark-mode .post-body ul li::marker {
-        color: var(--dm-text-accent);
-    }
-
-    .dark-mode .post-body ol li::marker {
-        color: var(--dm-text-accent);
-    }
-
-    .dark-mode .post-body dl dt {
-        color: var(--dm-text-accent);
-        font-weight: 600;
-    }
-
-    .dark-mode .post-body dl dd {
-        color: var(--dm-text-primary);
-        margin-left: 1.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    /* عناصر النماذج داخل المحتوى */
-    .dark-mode .post-body input:not([type="checkbox"]):not([type="radio"]),
-    .dark-mode .post-body textarea,
-    .dark-mode .post-body select {
-        background-color: var(--dm-bg-secondary) !important;
-        color: var(--dm-text-primary) !important;
-        border: 1px solid var(--dm-border-primary) !important;
-        padding: 0.5rem;
-        border-radius: 4px;
-    }
-
-    .dark-mode .post-body button,
-    .dark-mode .post-body .button,
-    .dark-mode .post-body [class*="button"] {
-        background-color: var(--dm-text-accent) !important;
-        color: var(--dm-bg-primary) !important;
-        border: 1px solid var(--dm-text-accent) !important;
-    }
-
-    .dark-mode .post-body label {
-        color: var(--dm-text-primary) !important;
-    }
-
-    /* عناصر متفرقة */
-    .dark-mode .post-body abbr[title] {
-        border-bottom: 1px dotted var(--dm-text-accent);
-        cursor: help;
-    }
-
-    .dark-mode .post-body mark {
-        background-color: rgba(255, 183, 77, 0.3) !important;
-        color: var(--dm-text-primary) !important;
-    }
-
-    .dark-mode .post-body ins {
-        background-color: rgba(76, 175, 80, 0.2) !important;
-        color: var(--dm-text-primary) !important;
-        text-decoration: none;
-    }
-
-    .dark-mode .post-body del {
-        background-color: rgba(244, 67, 54, 0.2) !important;
-        color: var(--dm-text-secondary) !important;
-    }
-
-    .dark-mode .post-body sup,
-    .dark-mode .post-body sub {
-        color: var(--dm-text-secondary);
-        font-size: 0.75em;
-    }
-
-    /* التكيف مع العناصر الديناميكية */
-    .dark-mode .post-body [style*="background"]:not([class*="code"]):not([class*="highlight"]) {
-        background-color: var(--dm-bg-secondary) !important;
-    }
-
-    .dark-mode .post-body [style*="color"]:not([class*="code"]):not([class*="highlight"]) {
-        color: var(--dm-text-primary) !important;
-    }
-
-    /* .dark-mode .post-body [style*="border"] {
-        border-color: var(--dm-border-primary) !important;
-    }
-
-    /* تحسينات للعناصر الشائعة في أنظمة إدارة المحتوى */
-    .dark-mode .post-body .wp-block-image,
-    .dark-mode .post-body .wp-block-gallery,
-    .dark-mode .post-body .wp-block-quote,
-    .dark-mode .post-body .wp-block-table {
-        background-color: var(--dm-bg-secondary) !important;
-        border: 1px solid var(--dm-border-primary) !important;
-        padding: 1rem;
-        border-radius: 4px;
-    }
-
-    .dark-mode .post-body .wp-block-code,
-    .dark-mode .post-body .wp-block-preformatted {
-        background-color: var(--dm-code-bg) !important;
-        border: 1px solid var(--dm-code-border) !important;
-    }
-
-    .dark-mode .post-body .wp-block-pullquote {
-        border-left: 4px solid var(--dm-text-accent) !important;
-        background-color: rgba(255, 183, 77, 0.1) !important;
-        color: var(--dm-text-primary) !important;
-    }
-
-    /* ==========================================================================
-       Theme & Utility Classes
-       ========================================================================== */
-    .post-title-link {
-        color: inherit;
-        text-decoration: none;
-        display: block;
-        transition: color 0.2s ease;
-    }
-
-    /* ==========================================================================
-       Responsive Design
-       ========================================================================== */
-    @media (max-width: 768px) {
-        :root {
-            --header-height: 70px;
-            --sidebar-width: 280px;
-        }
-        
-        nav {
-            padding: 1rem;
-        }
-        
-        main {
-            padding: calc(var(--header-height) + 1rem) 1rem 1rem;
-        }
-        
-        .post-card {
-            padding: 1.5rem;
-        }
-        
-        .nav-title {
-            font-size: 1.2rem;
-            max-width: 50vw;
-        }
-        
-        .nav-links {
-            gap: 1rem;
-        }
-        
-        .mode-toggle {
-            min-width: 100px;
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-        }
-        
-        .categories-container {
-            padding: 0 1rem;
-            overflow-x: auto;
-            justify-content: flex-start;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .categories-container::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .category-btn {
-            flex-shrink: 0;
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        :root {
-            --header-height: 60px;
-        }
-        
-        .nav-title {
-            font-size: 1rem;
-        }
-        
-        .post-card {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .post-title {
-            font-size: 1.4rem;
-        }
-        
-        .back-to-top {
-            bottom: 1rem;
-            right: 1rem;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
-        }
-        
-        .categories-container {
-            gap: 0.5rem;
-        }
-        
-        .category-btn {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.85rem;
-        }
-    }
-
-    /* ==========================================================================
-       تحسينات الوضع الداكن الديناميكي
-       ========================================================================== */
-    @media (prefers-reduced-motion: no-preference) {
-        .dark-mode .post-body a:not(.btn):not(.button) {
-            transition: color 0.2s ease;
-        }
-        
-        .dark-mode .post-body img {
-            transition: opacity 0.3s ease;
-        }
-    }
-
-    @media (prefers-contrast: high) {
-        .dark-mode {
-            --dm-text-primary: #ffffff;
-            --dm-text-secondary: #cccccc;
-            --dm-border-primary: #666666;
-        }
-    }
-
-    @media (prefers-contrast: low) {
-        .dark-mode {
-            --dm-text-primary: #cccccc;
-            --dm-text-secondary: #999999;
-        }
-    }
-
-    /* أنماط للعناصر التي يجب أن تحافظ على ألوانها في الوضع الداكن */
-    .color-preserved,
-    [data-color-preserve="true"] {
-        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
-    }
-
-    /* تأثيرات انتقال سلسة للوضع الداكن */
-    .dark-mode-transition * {
-        transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
-    }
-
-
 /* ==========================================================================
-   إصلاح مشكلة الوضع الداكن في كروت المحتوى
+   CSS Variables (Custom Properties) - النظام الأساسي
    ========================================================================== */
-
-.dark-mode [style*="background"]:not(.color-preserved):not([data-color-preserve="true"]) {
-    background-color: transparent !important;
+:root {
+    /* نظام الألوان الافتراضي (Orange) */
+    --primary: #FF6D00;
+    --primary-light: #FF9E40;
+    --primary-dark: #E65100;
+    --secondary: #2962FF;
+    --secondary-light: #448AFF;
+    --secondary-dark: #0039CB;
+    --accent: #00C853;
+    --accent-light: #69F0AE;
+    --accent-dark: #00B248;
+    
+    /* ألوان محايدة */
+    --dark: #263238;
+    --light: #f5f5f5;
+    --text: #424242;
+    --text-light: #757575;
+    --card-bg: #ffffff;
+    
+    /* تأثيرات */
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    --border-color-light: rgba(0,0,0,0.1);
+    
+    /* Layout */
+    --sidebar-width: 320px;
+    --header-height: 80px;
+    --border-radius: 4px;
+    --transition-speed: 0.3s;
+    
+    /* نظام ألوان ديناميكي للوضع الداكن */
+    --dm-bg-primary: #121212;
+    --dm-bg-secondary: #1e1e1e;
+    --dm-bg-tertiary: #2d2d2d;
+    --dm-text-primary: #e0e0e0;
+    --dm-text-secondary: #a0a0a0;
+    --dm-text-accent: #ffb74d;
+    --dm-border-primary: #444;
+    --dm-border-secondary: #555;
+    --dm-code-bg: #2d2d2d;
+    --dm-code-border: #444;
+    --dm-table-header-bg: #333;
+    --dm-table-border: #555;
+    --dm-table-zebra: rgba(255, 255, 255, 0.05);
+    
+    /* متغيرات الحالة */
+    --dark-mode-enabled: 0;
+    
+    /* نظام الألوان الافتراضي (Orange) - إضافة RGB */
+    --primary-rgb: 255, 109, 0;
+    --primary-light-rgb: 255, 158, 64;
+    --primary-dark-rgb: 230, 81, 0;
 }
 
+/* ==========================================================================
+   أنظمة الألوان المختلفة - الوضع الفاتح
+   ========================================================================== */
+
+/* Blue Theme - Light */
+[data-theme="blue"] {
+    --primary: #2962FF;
+    --primary-light: #448AFF;
+    --primary-dark: #0039CB;
+    --secondary: #FF6D00;
+    --secondary-light: #FF9E40;
+    --secondary-dark: #E65100;
+    --accent: #00BFA5;
+    --accent-light: #64FFDA;
+    --accent-dark: #008E76;
+    --primary-rgb: 41, 98, 255;
+    --primary-light-rgb: 68, 138, 255;
+    --primary-dark-rgb: 0, 57, 203;
+}
+
+/* Green Theme - Light */
+[data-theme="green"] {
+    --primary: #00C853;
+    --primary-light: #69F0AE;
+    --primary-dark: #00B248;
+    --secondary: #FF4081;
+    --secondary-light: #FF79B0;
+    --secondary-dark: #F50057;
+    --accent: #536DFE;
+    --accent-light: #8C9EFF;
+    --accent-dark: #304FFE;
+    --primary-rgb: 0, 200, 83;
+    --primary-light-rgb: 105, 240, 174;
+    --primary-dark-rgb: 0, 178, 72;
+}
+
+/* Purple Theme - Light */
+[data-theme="purple"] {
+    --primary: #7C4DFF;
+    --primary-light: #B388FF;
+    --primary-dark: #651FFF;
+    --secondary: #FF4081;
+    --secondary-light: #FF79B0;
+    --secondary-dark: #F50057;
+    --accent: #00E5FF;
+    --accent-light: #6FFFE9;
+    --accent-dark: #00B2CC;
+    --primary-rgb: 124, 77, 255;
+    --primary-light-rgb: 179, 136, 255;
+    --primary-dark-rgb: 101, 31, 255;
+}
+
+/* Pink Theme - Light */
+[data-theme="pink"] {
+    --primary: #FF4081;
+    --primary-light: #FF79B0;
+    --primary-dark: #F50057;
+    --secondary: #536DFE;
+    --secondary-light: #8C9EFF;
+    --secondary-dark: #304FFE;
+    --accent: #18FFFF;
+    --accent-light: #76FFE9;
+    --accent-dark: #00C4CC;
+    --primary-rgb: 255, 64, 129;
+    --primary-light-rgb: 255, 121, 176;
+    --primary-dark-rgb: 245, 0, 87;
+}
+
+/* Teal Theme - Light */
+[data-theme="teal"] {
+    --primary: #009688;
+    --primary-light: #4DB6AC;
+    --primary-dark: #00796B;
+    --secondary: #FF9800;
+    --secondary-light: #FFB74D;
+    --secondary-dark: #F57C00;
+    --accent: #E040FB;
+    --accent-light: #EA80FC;
+    --accent-dark: #AA00B3;
+    --primary-rgb: 0, 150, 136;
+    --primary-light-rgb: 77, 182, 172;
+    --primary-dark-rgb: 0, 121, 107;
+}
+
+/* ==========================================================================
+   النظام الديناميكي للوضع الداكن - النسخة المحسنة
+   ========================================================================== */
+.dark-mode {
+    /* تحديث المتغيرات الأساسية للوضع الداكن */
+    --dark: #ECEFF1;
+    --light: var(--dm-bg-primary);
+    --text: var(--dm-text-primary);
+    --text-light: var(--dm-text-secondary);
+    --card-bg: var(--dm-bg-secondary);
+    --shadow: 0 4px 6px rgba(0,0,0,0.3);
+    --border-color-light: var(--dm-border-primary);
+    
+    /* تأثير انتقال سلس للوضع الداكن */
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* ==========================================================================
+   أنظمة الألوان المختلفة في الوضع الداكن - النسخة المحسنة
+   ========================================================================== */
+
+/* Orange Theme - Dark (الافتراضي) */
+.dark-mode[data-theme="orange"] {
+    --primary: #FF9E40;
+    --primary-light: #FFB74D;
+    --primary-dark: #FF6D00;
+    --accent: #69F0AE;
+    --primary-rgb: 255, 158, 64;
+    --primary-light-rgb: 255, 183, 77;
+    --primary-dark-rgb: 255, 109, 0;
+}
+
+/* Blue Theme - Dark */
+.dark-mode[data-theme="blue"] {
+    --primary: #448AFF;
+    --primary-light: #82B1FF;
+    --primary-dark: #2962FF;
+    --accent: #64FFDA;
+    --primary-rgb: 68, 138, 255;
+    --primary-light-rgb: 130, 177, 255;
+    --primary-dark-rgb: 41, 98, 255;
+}
+
+/* Green Theme - Dark */
+.dark-mode[data-theme="green"] {
+    --primary: #69F0AE;
+    --primary-light: #B9F6CA;
+    --primary-dark: #00C853;
+    --accent: #8C9EFF;
+    --primary-rgb: 105, 240, 174;
+    --primary-light-rgb: 185, 246, 202;
+    --primary-dark-rgb: 0, 200, 83;
+}
+
+/* Purple Theme - Dark */
+.dark-mode[data-theme="purple"] {
+    --primary: #B388FF;
+    --primary-light: #D1C4E9;
+    --primary-dark: #7C4DFF;
+    --accent: #6FFFE9;
+    --primary-rgb: 179, 136, 255;
+    --primary-light-rgb: 209, 196, 233;
+    --primary-dark-rgb: 124, 77, 255;
+}
+
+/* Pink Theme - Dark */
+.dark-mode[data-theme="pink"] {
+    --primary: #FF79B0;
+    --primary-light: #FFA8D2;
+    --primary-dark: #FF4081;
+    --accent: #76FFE9;
+    --primary-rgb: 255, 121, 176;
+    --primary-light-rgb: 255, 168, 210;
+    --primary-dark-rgb: 255, 64, 129;
+}
+
+/* Teal Theme - Dark */
+.dark-mode[data-theme="teal"] {
+    --primary: #4DB6AC;
+    --primary-light: #80CBC4;
+    --primary-dark: #009688;
+    --accent: #EA80FC;
+    --primary-rgb: 77, 182, 172;
+    --primary-light-rgb: 128, 203, 196;
+    --primary-dark-rgb: 0, 150, 136;
+}
+
+/* ==========================================================================
+   Base Styles (Reset & Global)
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background-color: var(--light);
+    transition: all var(--transition-speed) ease;
+    overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    word-wrap: break-word;
+    transition: color 0.5s ease;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+}
+
+a:hover {
+    color: var(--primary-light);
+}
+
+/* ==========================================================================
+   Layout Components
+   ========================================================================== */
+
+/* Navigation */
+nav {
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+    transition: all 0.3s ease-out;
+    will-change: transform, background-color, box-shadow;
+}
+
+.nav-title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-decoration: none;
+    max-width: 60vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.5s ease;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+/* Main Content */
+main {
+    padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    transition: background-color 0.5s ease;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: var(--header-height);
+    right: -100%;
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow);
+    transition: all var(--transition-speed) ease;
+    z-index: 999;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+    border-left: 3px solid var(--primary);
+}
+
+.sidebar.open { 
+    right: 0;
+}
+
+.sidebar-sticky-header {
+    position: sticky;
+    top: 0;
+    background-color: var(--card-bg);
+    z-index: 30;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color-light);
+    margin-bottom: 1rem;
+    transition: background-color 0.5s ease;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    margin-bottom: 0;
+}
+
+.sidebar-title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: color 0.5s ease;
+}
+
+.sidebar-content {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-top: 1rem;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ==========================================================================
+   Module Components
+   ========================================================================== */
+
+/* Buttons */
+.menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    z-index: 2000;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: var(--border-radius);
+}
+ 
+.menu-toggle:hover {
+    background-color: transparent;
+    transform: none;
+}
+
+.menu-toggle.active { 
+    transform: rotate(90deg);
+    background-color: transparent;
+}
+
+.mode-toggle {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2000;
+    min-width: 120px;
+    text-align: center;
+    font-size: 0.9rem;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.mode-toggle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+}
+
+.mode-toggle:hover::before {
+    left: 100%;
+}
+
+.mode-toggle:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.dark-mode .mode-toggle {
+    background-color: var(--primary);
+    color: white;
+}
+
+.dark-mode .mode-toggle:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.read-more-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary);
+    color: white !important;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    min-height: 40px;
+    min-width: 120px;
+    text-align: center;
+    font-size: 0.9rem;
+    box-shadow: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.read-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.7s ease;
+}
+
+.read-more-btn:hover::before {
+    left: 100%;
+}
+
+.read-more-btn:hover {
+    background-color: var(--primary-light);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.dark-mode .read-more-btn {
+    background-color: var(--primary);
+    color: white !important;
+}
+
+.dark-mode .read-more-btn:hover {
+    background-color: var(--primary-light);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--primary);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-speed) ease;
+    z-index: 998;
+    cursor: pointer;
+    border: none;
+    font-size: 1.5rem;
+    
+    /* إضافة الشفافية مثل أزرار الأنماط */
+    opacity: 0.08;
+    transform: scale(0.8);
+}
+
+.back-to-top.visible {
+    opacity: 0.08; /* شفافية منخفضة عند الظهور */
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    opacity: 1; /* شفافية كاملة عند التمرير */
+    transform: scale(1.1);
+    background-color: var(--primary-light);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* تحسينات للوضع الداكن */
+.dark-mode .back-to-top {
+    background-color: var(--primary);
+    opacity: 0.1; /* شفافية أعلى قليلاً في الوضع الداكن */
+}
+
+.dark-mode .back-to-top.visible {
+    opacity: 0.1;
+}
+
+.dark-mode .back-to-top:hover {
+    opacity: 1;
+    background-color: var(--primary-light);
+}
+
+/* تحسينات للجوال */
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+        opacity: 0.15; /* شفافية أقل للجوال */
+    }
+    
+    .back-to-top.visible {
+        opacity: 0.15;
+    }
+    
+    .back-to-top:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 480px) {
+    .back-to-top {
+        bottom: 0.5rem;
+        right: 0.5rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        opacity: 0.2; /* شفافية أقل للشاشات الصغيرة */
+    }
+    
+    .back-to-top.visible {
+        opacity: 0.2;
+    }
+    
+    .back-to-top:active {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* ==========================================================================
+   Category Filter Styles
+   ========================================================================== */
+.categories-filter {
+    margin-bottom: 2rem;
+    background-color: var(--light);
+    padding: 1rem 0;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.5s ease;
+}
+    
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+    
+.categories-container::-webkit-scrollbar {
+    display: none;
+}
+    
+.category-btn {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    background: var(--card-bg);
+    border-radius:  5px 5px 0 0;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid var(--border-color-light);
+    color: var(--text);
+}
+    
+.category-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+    
+.category-btn:hover {
+    background: var(--primary-light);
+    color: white;
+    border-color: var(--primary-light);
+}
+
+.dark-mode .categories-filter {
+    background-color: var(--light);
+}
+
+.dark-mode .categories-container {
+    border-bottom-color: var(--primary);
+}
+
+.dark-mode .category-btn {
+    background: var(--card-bg);
+    border-color: var(--border-color-light);
+    color: var(--text);
+}
+
+.dark-mode .category-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.dark-mode .category-btn:hover {
+    background: var(--primary-light);
+    color: white;
+    border-color: var(--primary-light);
+}
+
+/* ==========================================================================
+   Search Components
+   ========================================================================== */
+.search-container {
+    position: sticky;
+    top: 60px;
+    background-color: var(--card-bg);
+    z-index: 20;
+    padding: 1rem 0;
+    margin-bottom: 0;
+    transition: background-color 0.5s ease;
+}
+    
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    background-color: var(--card-bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+    
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+    
+.no-results {
+    padding: 1rem;
+    color: var(--text-light);
+    text-align: center;
+    display: none;
+}
+    
+.no-results.show { 
+    display: block;
+}
+    
+.search-results-counter {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    text-align: center;
+    display: none;
+    transition: all var(--transition-speed) ease;
+}
+    
+.search-results-counter.show { 
+    display: block;
+}
+
+/* ==========================================================================
+   Sidebar Links
+   ========================================================================== */
+.sidebar-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+    position: relative;
+    will-change: transform, background-color;
+    transition: all 0.3s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    /* إضافة تأثير انتقال سلس للخلفية */
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar-link.hidden { 
+    display: none;
+}
+
+.sidebar-section { 
+    transform-style: preserve-3d;
+}
+
+/* تأثير التمرير مع لون خلفية خفيف ومتناسق */
+.sidebar-link:hover {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.sidebar-link.active {
+    background-color: rgba(var(--primary-rgb), 0.12);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.sidebar-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: var(--primary);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.sidebar-link.active::after { 
+    transform: translateX(0);
+}
+
+/* تحسينات للوضع الداكن */
+.dark-mode .sidebar-link:hover {
+    background-color: rgba(var(--primary-rgb), 0.15);
+    color: var(--primary-light);
+}
+
+.dark-mode .sidebar-link.active {
+    background-color: rgba(var(--primary-rgb), 0.2);
+    color: var(--primary-light);
+}
+
+/* ==========================================================================
+   Post Cards
+   ========================================================================== */
+.post-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    border-left: 4px solid var(--accent);
+    scroll-margin-top: calc(var(--header-height) + 20px);
+    overflow: hidden;
+    width: 100%;
+    transition: all 0.5s ease;
+}
+
+/* إزالة تأثير الهوفر من الكروت */
+.post-card:hover {
+    transform: none;
+    box-shadow: var(--shadow);
+    border-left-color: var(--accent);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.post-title {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    position: relative;
+    padding-left: 1.2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    transition: color 0.5s ease;
+}
+
+.post-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background-color: var(--accent);
+    border-radius: 2px;
+    transition: background-color 0.5s ease;
+}
+
+.post-content {
+    margin-bottom: 1.5rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+.post-preview {
+    max-height: 2.5em;
+    overflow: hidden;
+    position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.8;
+    margin-bottom: 0.2rem;
+}
+
+.post-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.8em;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--card-bg) 100%);
+    transition: background 0.5s ease;
+}
+
+.dark-mode .post-preview::after {
+    background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, var(--card-bg) 100%);
+}
+
+.post-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    background-color: #f0f0f0;
+    min-height: 200px;
+}
+
+.post-image.loaded { 
+    opacity: 1;
+}
+
+.dark-mode .post-image { 
+    background-color: #2a2a2a; 
+}
+
+.post-body {
+    line-height: 1.7;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+.post-body img,
+.post-preview img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.5rem auto;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    background-color: #f0f0f0;
+}
+
+.post-body img.loaded,
+.post-preview img.loaded { 
+    opacity: 1; 
+}
+
+.dark-mode .post-body img,
+.dark-mode .post-preview img { 
+    background-color: #2a2a2a; 
+}
+
+.post-body iframe,
+.post-body embed,
+.post-body object {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.5rem auto;
+}
+
+.post-body table {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 1rem 0;
+    border-collapse: collapse;
+}
+
+.post-body pre,
+.post-body code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+    display: block;
+    padding: 1rem;
+    background-color: rgba(0,0,0,0.05);
+    border-radius: var(--border-radius);
+    margin: 0.5rem 0;
+    transition: background-color 0.5s ease;
+}
+
+.dark-mode .post-body pre,
+.dark-mode .post-body code { 
+    background-color: rgba(255,255,255,0.05); 
+}
+
+/* ==========================================================================
+   Loading Components
+   ========================================================================== */
+.loading-posts {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-light);
+    display: none;
+}
+
+.loading-posts.visible { 
+    display: block;
+}
+
+.spinner {
+    border: 4px solid rgba(0,0,0,0.1);
+    border-left-color: var(--primary);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+.categories-loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-light);
+}
+
+.categories-loading .spinner {
+    border: 3px solid rgba(0,0,0,0.1);
+    border-left-color: var(--primary);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { 
+        transform: rotate(360deg);
+    }
+}
 
 /* ==========================================================================
    أزرار القائمة الجانبية
@@ -1333,12 +1164,756 @@
   border-color: var(--primary);
 }
 
-   
-    ]]></b:skin>
+/* ==========================================================================
+   تصميم الوسوم كأيقونات صغيرة
+   ========================================================================== */
+.label-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: transparent;
+    color: var(--text-light);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid var(--border-color-light);
+    cursor: pointer;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    order: 2;
+}
 
-    <script>
-    //<![CDATA[
+.label-btn:hover {
+    background-color: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.3);
+}
+
+.label-btn::before {
+    content: '\1F3F7\FE0F';
+    margin-right: 0.3rem;
+    font-size: 0.7rem;
+}
+
+/* Dark Mode */
+.dark-mode .label-btn {
+    color: var(--text-light);
+    border-color: var(--border-color-light);
+}
+
+.dark-mode .label-btn:hover {
+    background-color: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+/* ==========================================================================
+   تعديل زر Read More ليكون على اليسار
+   ========================================================================== */
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color-light);
+}
+
+/* ==========================================================================
+   أنماط أزرار اختيار الثيمات
+   ========================================================================== */
+
+.theme-selector {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 1000;
+}
+
+.theme-toggle-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* شفافية قصوى - شبه مخفي */
+    opacity: 0.08;
+    transform: scale(0.8);
+}
+
+.theme-toggle-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* إصلاح للجوال: إعادة الزر إلى وضعه الأصلي عند التمرير بعيداً */
+.theme-toggle-btn.mobile-active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.theme-palette {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    min-width: 200px;
+    border: 1px solid var(--border-color-light);
+    
+    /* إزالة الشفافية عن لوحة الألوان - غير شفافة تماماً */
+    opacity: 1;
+}
+
+.theme-palette.open {
+    display: grid;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.theme-color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-color-option:hover {
+    transform: scale(1.1);
+}
+
+.theme-color-option.active {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 3px var(--card-bg), 0 0 0 5px currentColor;
+}
+
+.theme-color-option.active::after {
+    content: '\2713';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 1;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.theme-color-option.active::after {
+    opacity: 1;
+}
+
+/* ألوان الخيارات */
+.theme-color-option[data-theme="orange"] { background: #FF6D00; }
+.theme-color-option[data-theme="blue"] { background: #2962FF; }
+.theme-color-option[data-theme="green"] { background: #00C853; }
+.theme-color-option[data-theme="purple"] { background: #7C4DFF; }
+.theme-color-option[data-theme="pink"] { background: #FF4081; }
+.theme-color-option[data-theme="teal"] { background: #009688; }
+
+/* تأثيرات الانتقال للوضع الداكن */
+.dark-mode .theme-toggle-btn {
+    background: var(--primary);
+    opacity: 0.1; /* شفافية قصوى في الوضع الداكن */
+}
+
+.dark-mode .theme-toggle-btn:hover {
+    opacity: 1;
+    background: var(--primary-light);
+}
+
+.dark-mode .theme-palette {
+    background: var(--dm-bg-secondary);
+    border: 1px solid var(--dm-border-primary);
+    /* إزالة الشفافية في الوضع الداكن أيضاً */
+    opacity: 1;
+}
+
+/* ==========================================================================
+   State Styles
+   ========================================================================== */
+.blog-pager { 
+    display: none;
+}
+
+.post-date { 
+    display: none;
+}
+
+/* Dark Mode Specific Styles */
+.dark-mode .menu-toggle {
+    color: var(--text);
+}
+
+.dark-mode .menu-toggle:hover {
+    background-color: transparent;
+    transform: none;
+}
+
+.dark-mode .menu-toggle.active {
+    transform: rotate(90deg); 
+    background-color: transparent;
+}
+
+/* ==========================================================================
+   نظام ألوان ديناميكي للوضع الداكن - تطبيق الأنماط المحسنة
+   ========================================================================== */
+.dark-mode .post-body,
+.dark-mode .post-body * {
+    background-color: transparent !important;
+}
+
+.dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]) {
+    color: #ffb74d !important;
+    text-decoration: underline;
+}
+
+.dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]):hover {
+    color: #ff9800 !important;
+    text-decoration: none;
+}
+
+.dark-mode .post-body em,
+.dark-mode .post-body i {
+    color: #80cbc4 !important;
+    font-style: italic;
+}
+
+.dark-mode .post-body hr {
+    border: none;
+    border-top: 1px solid var(--dm-border-primary);
+    margin: 2rem 0;
+}
+
+/* الجداول - النسخة المحسنة */
+.dark-mode .post-body table {
+    border: 1px solid var(--dm-table-border) !important;
+    background-color: var(--dm-bg-secondary) !important;
+    margin: 1.5rem 0 !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.dark-mode .post-body table:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode .post-body tr {
+    border-bottom: 1px solid var(--dm-table-border) !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.dark-mode .post-body tr:hover {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.dark-mode .post-body tr:nth-child(even) {
+    background-color: var(--dm-table-zebra) !important;
+}
+
+.dark-mode .post-body tr:nth-child(even):hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark-mode .post-body th {
+    background-color: var(--dm-table-header-bg) !important;
+    color: var(--dm-text-primary) !important;
+    padding: 1rem 0.75rem !important;
+    border: 1px solid var(--dm-table-border) !important;
+    font-weight: 600 !important;
+    text-align: left !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.5px !important;
+    position: relative !important;
+}
+
+.dark-mode .post-body th::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light)) !important;
+}
+
+.dark-mode .post-body td {
+    padding: 0.75rem !important;
+    border: 1px solid var(--dm-table-border) !important;
+    color: var(--dm-text-primary) !important;
+    background-color: transparent !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    vertical-align: top !important;
+}
+
+.dark-mode .post-body td:first-child {
+    font-weight: 500 !important;
+}
+
+/* الحل النهائي - استثناء العناوين والنصوص الهامة */
+.dark-mode .post-body *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(strong):not(b):not([class*="title"]):not([class*="heading"]):not([class*="header"]):not([class*="important"]):not([class*="primary"]):not(pre):not(code):not([class*="language"]):not([class*="hljs"]):not(.color-preserved) {
+    color: var(--dm-text-primary) !important;
+}
+
+/* تعيين ألوان خاصة للعناوين والنصوص البولد باستخدام متغيرات النظام */
+.dark-mode .post-body h1,
+.dark-mode .post-body h2, 
+.dark-mode .post-body h3,
+.dark-mode .post-body h4,
+.dark-mode .post-body h5,
+.dark-mode .post-body h6 {
+    color: var(--primary-light) !important;
+    border-bottom: 1px solid var(--dm-border-primary);
+    padding-bottom: 0.5rem;
+}
+
+.dark-mode .post-body strong,
+.dark-mode .post-body b {
+    color: var(--accent-light) !important;
+}
+
+/* ==========================================================================
+   Theme & Utility Classes
+   ========================================================================== */
+.post-title-link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+}
+
+/* أنماط للعناصر التي يجب أن تحافظ على ألوانها في الوضع الداكن */
+.color-preserved,
+[data-color-preserve="true"] {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+/* تأثيرات انتقال سلسة للوضع الداكن */
+.dark-mode-transition * {
+    transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 70px;
+        --sidebar-width: 280px;
+    }
+    
+    nav {
+        padding: 1rem;
+    }
+    
+    main {
+        padding: calc(var(--header-height) + 1rem) 1rem 1rem;
+    }
+    
+    .post-card {
+        padding: 1.5rem;
+    }
+    
+    .nav-title {
+        font-size: 1.2rem;
+        max-width: 50vw;
+    }
+    
+    .nav-links {
+        gap: 1rem;
+    }
+    
+    .mode-toggle {
+        min-width: 100px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .categories-container {
+        padding: 0 1rem;
+        overflow-x: auto;
+        justify-content: flex-start;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .categories-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .category-btn {
+        flex-shrink: 0;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* تحسينات الثيمات للجوال */
+    .theme-selector {
+        bottom: 1rem;
+        left: 1rem;
+    }
+    
+    .theme-toggle-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+        opacity: 0.15;
+        /* إضافة تأثير اللمس للجوال */
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    
+    /* إصلاح للجوال: إبقاء الزر مرئياً عند التفاعل */
+    .theme-toggle-btn:active,
+    .theme-toggle-btn.mobile-active {
+        opacity: 1;
+        transform: scale(1.1);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    
+    .theme-palette {
+        /* تأكد من أن لوحة الألوان غير شفافة في الجوال */
+        opacity: 1;
+        min-width: 180px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --header-height: 60px;
+    }
+    
+    .nav-title {
+        font-size: 1rem;
+    }
+    
+    .post-card {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.4rem;
+    }
+    
+    .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .categories-container {
+        gap: 0.5rem;
+    }
+    
+    .category-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    /* تحسينات إضافية للثيمات للشاشات الصغيرة */
+    .theme-selector {
+        bottom: 0.5rem;
+        left: 0.5rem;
+    }
+    
+    .theme-toggle-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        opacity: 0.2;
+    }
+    
+    .theme-toggle-btn:active,
+    .theme-toggle-btn.mobile-active {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    
+    .theme-palette {
+        min-width: 150px;
+        /* تأكد من عدم الشفافية في الشاشات الصغيرة */
+        opacity: 1;
+    }
+    
+    .theme-color-option {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .post-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+    }
+    
+    .label-btn,
+    .read-more-btn {
+        margin: 0;
+        order: unset;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .read-more-btn {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* ==========================================================================
+   تحسينات أزرار الوسوم للجوال
+   ========================================================================== */
+@media (max-width: 768px) {
+    .label-btn {
+        padding: 0.25rem 0.6rem !important;
+        font-size: 0.7rem !important;
+        margin-left: 0.3rem !important;
+        border-radius: 12px !important;
+    }
+    
+    .label-btn::before {
+        font-size: 0.6rem !important;
+        margin-right: 0.2rem !important;
+    }
+    
+    .sidebar-label-btn {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .category-btn {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .label-btn {
+        padding: 0.2rem 0.5rem !important;
+        font-size: 0.65rem !important;
+        margin-left: 0.2rem !important;
+    }
+    
+    .post-footer {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+    
+    .read-more-btn {
+        margin-bottom: 0 !important;
+        width: auto !important;
+        flex: 1 !important;
+        margin-right: 0.5rem !important;
+    }
+    
+    .label-btn {
+        width: auto !important;
+        flex-shrink: 0 !important;
+        order: 2 !important;
+    }
+    
+    .categories-container {
+        gap: 0.3rem !important;
+    }
+    
+    .category-btn {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ==========================================================================
+   تحسينات الوضع الداكن الديناميكي
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+    .dark-mode .post-body a:not(.btn):not(.button) {
+        transition: color 0.2s ease;
+    }
+    
+    .dark-mode .post-body img {
+        transition: opacity 0.3s ease;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .dark-mode {
+        --text: #ffffff;
+        --text-light: #cccccc;
+        --border-color-light: #666666;
+    }
+}
+
+@media (prefers-contrast: low) {
+    .dark-mode {
+        --text: #cccccc;
+        --text-light: #999999;
+    }
+}
+
+/* تحسينات إضافية للتفاعل على الجوال */
+@media (hover: none) and (pointer: coarse) {
+    .theme-toggle-btn {
+        /* زيادة طفيفة في الشفافية للجوال ليكون أكثر وضوحاً */
+        opacity: 0.25;
+    }
+    
+    .theme-toggle-btn:active {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+.sidebar-content:hover {
+    overflow-x: hidden;
+}
+]]></b:skin>
+
+<script>
+//<![CDATA[
+// متغير للتحكم في التحميل المزدوج
+let isInitialized = false;
+
+// نظام إدارة الثيمات
+function initThemeSystem() {
+    const themeToggle = document.getElementById('themeToggle');
+    const themePalette = document.getElementById('themePalette');
+    const themeOptions = document.querySelectorAll('.theme-color-option');
+    const html = document.documentElement;
+    
+    // الثيمات المتاحة
+    const availableThemes = [
+        'orange', 'blue', 'green', 'purple', 
+        'pink', 'teal'
+    ];
+    
+    // تحميل الثيم المحفوظ
+    const savedTheme = localStorage.getItem('blogTheme') || 'orange';
+    applyTheme(savedTheme);
+    
+    // تبديل فتح/إغلاق لوحة الألوان
+    themeToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        themePalette.classList.toggle('open');
+    });
+    
+    // اختيار لون جديد
+    themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const selectedTheme = this.dataset.theme;
+            applyTheme(selectedTheme);
+            updateActiveTheme(selectedTheme);
+            themePalette.classList.remove('open');
+        });
+    });
+    
+    // إغلاق لوحة الألوان عند النقر خارجها
+    document.addEventListener('click', function(e) {
+        if (!themeToggle.contains(e.target) && !themePalette.contains(e.target)) {
+            themePalette.classList.remove('open');
+        }
+    });
+    
+    // تطبيق الثيم المحدد
+    function applyTheme(themeName) {
+        if (!availableThemes.includes(themeName)) {
+            themeName = 'orange';
+        }
+        
+        // إضافة class الجديد
+        html.setAttribute('data-theme', themeName);
+        
+        // حفظ في localStorage
+        localStorage.setItem('blogTheme', themeName);
+        
+        // تحديث وصف الصفحة للوصول
+        updateThemeMeta(themeName);
+    }
+    
+    // تحديث الزر النشط
+    function updateActiveTheme(themeName) {
+        themeOptions.forEach(option => {
+            option.classList.toggle('active', option.dataset.theme === themeName);
+        });
+    }
+    
+    // تحديث meta tags للوصول
+    function updateThemeMeta(themeName) {
+        let themeColor = '#FF6D00';
+        
+        switch(themeName) {
+            case 'blue': themeColor = '#2962FF'; break;
+            case 'green': themeColor = '#00C853'; break;
+            case 'purple': themeColor = '#7C4DFF'; break;
+            case 'pink': themeColor = '#FF4081'; break;
+            case 'teal': themeColor = '#009688'; break;
+        }
+        
+        // تحديث meta tag theme-color
+        let themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (!themeMeta) {
+            themeMeta = document.createElement('meta');
+            themeMeta.name = 'theme-color';
+            document.head.appendChild(themeMeta);
+        }
+        themeMeta.content = themeColor;
+    }
+    
+    // التهيئة الأولية
+    updateActiveTheme(savedTheme);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // منع التهيئة المزدوجة
+    if (isInitialized) return;
+    isInitialized = true;
+    
+
     // DOM Elements
     const menuToggle = document.getElementById('menuToggle');
     const modeToggle = document.getElementById('modeToggle');
@@ -1350,11 +1925,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('mainContent');
     const resultsCounter = document.getElementById('searchResultsCounter');
     
+    // تهيئة نظام الثيمات
+    initThemeSystem();
+    
     // متغيرات التمرير اللانهائي
     let isLoading = false;
     let hasMorePosts = true;
     const postsPerPage = 5;
-    let postsLoaded = document.querySelectorAll('.post-card').length;
+    let postsLoaded = 0;
+    let currentCategory = 'all';
 
     // متغيرات للتحكم في ظهور واختفاء الهيدر
     let lastScrollY = window.scrollY;
@@ -1379,18 +1958,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentScrollY = window.scrollY;
         const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
         
-        // عند التمرير لأسفل - يختفي الهيدر بالكامل
         if (scrollDirection === 'down' && currentScrollY > headerHeight && isHeaderVisible) {
             header.style.transform = 'translateY(-100%)';
             isHeaderVisible = false;
         } 
-        // عند التمرير لأعلى - يعود الهيدر
         else if (scrollDirection === 'up' && !isHeaderVisible) {
             header.style.transform = 'translateY(0)';
             isHeaderVisible = true;
         }
         
-        // إذا كان المستخدم في أعلى الصفحة، تأكد من أن الهيدر ظاهر بالكامل
         if (currentScrollY <= headerHeight && !isHeaderVisible) {
             header.style.transform = 'translateY(0)';
             isHeaderVisible = true;
@@ -1414,814 +1990,863 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: true });
     }
 
-        // وظيفة التمرير اللانهائي - للصفحة الرئيسية فقط
-        function checkInfiniteScroll() {
-            if (isLoading || !hasMorePosts || window.location.pathname !== "/") return;
-            
-            const scrollPosition = window.pageYOffset;
-            const documentHeight = document.documentElement.scrollHeight;
-            const windowHeight = window.innerHeight;
-            
-            if (scrollPosition + windowHeight >= documentHeight - 500) {
-                const activeButton = document.querySelector('.category-btn.active');
-                if (activeButton) {
-                    const activeCategory = activeButton.dataset.category;
-                    loadCategoryPosts(activeCategory, false);
-                }
-            }
-        }
-
-        // تهيئة التمرير اللانهائي للصفحة الرئيسية فقط
-        function initInfiniteScroll() {
-            let ticking = false;
-            
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        if (window.location.pathname === "/") {
-                            checkInfiniteScroll();
-                        }
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }, { passive: true });
-        }
-
-        // Dark Mode Toggle
-        function applyDarkMode(isDark) {
-            const { classList: htmlClassList } = document.documentElement;
-            const { classList: bodyClassList } = document.body;
-            
-            if (isDark) {
-                htmlClassList.add('dark-mode');
-                bodyClassList.add('dark-mode');
-                modeToggle.textContent = '☀️ Light Mode';
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                htmlClassList.remove('dark-mode');
-                bodyClassList.remove('dark-mode');
-                modeToggle.textContent = '🌙 Dark Mode';
-                localStorage.removeItem('darkMode');
-            }
-        }
-
-        // Initialize dark mode from localStorage
-        const savedDarkMode = localStorage.getItem('darkMode');
-        applyDarkMode(savedDarkMode === 'enabled');
-
-        // Toggle dark mode
-        modeToggle.addEventListener('click', function() {
-            const isDark = !document.body.classList.contains('dark-mode');
-            applyDarkMode(isDark);
-        });
+    // وظيفة التمرير اللانهائي - للصفحة الرئيسية وصفحات التصنيفات
+    function checkInfiniteScroll() {
+        if (isLoading || !hasMorePosts) return;
         
-        // Sidebar Toggle
-        menuToggle.addEventListener('click', function() {
-            const isOpen = sidebar.classList.toggle('open');
-            menuToggle.classList.toggle('active');
-            menuToggle.setAttribute('aria-expanded', isOpen);
-            isSidebarOpen = isOpen;
-            
-            if (isOpen && !isHeaderVisible) {
-                header.classList.remove('hidden');
-                header.classList.add('visible');
-                isHeaderVisible = true;
-            }
-        });
-
-        // Close sidebar when clicking outside
-        document.addEventListener('click', function(e) {
-            if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle) {
-                sidebar.classList.remove('open');
-                menuToggle.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
-                isSidebarOpen = false;
-            }
-        });
-
-        // Create sidebar navigation from all blog posts
-        function createSidebarNavigation() {
-            if (!sidebarContent) return;
-            
-            const loadingElement = document.createElement('div');
-            loadingElement.textContent = 'Loading posts...';
-            loadingElement.style.padding = '1rem';
-            loadingElement.style.textAlign = 'center';
-            sidebarContent.innerHTML = '';
-            sidebarContent.appendChild(loadingElement);
-            
-            fetch('/feeds/posts/default?alt=json&max-results=500')
-                .then(response => response.json())
-                .then(data => processPosts(data))
-                .catch(error => {
-                    console.error('Error loading posts:', error);
-                    loadingElement.textContent = 'Error loading posts. Please refresh the page.';
-                });
-        }
-
-
-// إنشاء أزرار التصنيفات في الشريط الجانبي
-async function createSidebarLabels() {
-  const labelsContainer = document.getElementById('sidebarLabels');
-  if (!labelsContainer) return;
-
-  labelsContainer.innerHTML = "<div style='padding:10px; text-align:center;'>Loading labels...</div>";
-
-  const categories = await fetchAllCategories(); // موجودة عندك بالفعل
-  labelsContainer.innerHTML = "";
-
-  // زر "الكل"
-  const allBtn = document.createElement("div");
-  allBtn.className = "sidebar-label-btn active";
-  allBtn.textContent = "All";
-  allBtn.dataset.category = "all";
-  labelsContainer.appendChild(allBtn);
-
-  allBtn.addEventListener("click", () => {
-    document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
-    allBtn.classList.add("active");
-    // إظهار جميع الروابط
-    document.querySelectorAll(".sidebar-link").forEach(link => {
-      link.classList.remove("hidden");
-    });
-  });
-
-  // باقي التصنيفات
-  categories.forEach(category => {
-    const btn = document.createElement("div");
-    btn.className = "sidebar-label-btn";
-    btn.textContent = category;
-    btn.dataset.category = category;
-
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      // فلترة الروابط حسب التصنيف
-      document.querySelectorAll(".sidebar-link").forEach(link => {
-        const tags = link.dataset.tags ? link.dataset.tags.split(",") : [];
-        if (tags.includes(category)) {
-          link.classList.remove("hidden");
-        } else {
-          link.classList.add("hidden");
-        }
-      });
-    });
-
-    labelsContainer.appendChild(btn);
-  });
-}
-
-// استدعاء عند تحميل الصفحة
-createSidebarLabels();
-
-
-        // Process posts data from API with tags support
-        function processPosts(data) {
-            const posts = data.feed.entry || [];
-            totalPosts = posts.length;
-            const fragment = document.createDocumentFragment();
-            const section = document.createElement('div');
-            section.className = 'sidebar-section';
-            
-            posts.forEach(function(post) {
-                const postId = post.id.$t.split('-').pop();
-                const title = post.title.$t;
-                const postUrl = post.link.find(link => link.rel === 'alternate').href;
-                
-                const tags = post.category ? 
-                    post.category.map(cat => cat.term) : 
-                    [];
-                
-                const link = document.createElement('a');
-                link.href = postUrl;
-                link.className = 'sidebar-link';
-                link.textContent = title;
-                link.dataset.target = 'post-' + postId;
-                link.dataset.tags = tags.join(',');
-                
-                section.appendChild(link);
-            });
-            
-            fragment.appendChild(section);
-            sidebarContent.innerHTML = '';
-            sidebarContent.appendChild(fragment);
-            
-            setupScrollSpy();
-            setupSmoothScrolling();
-            setupSearchFunctionality();
-        };
-
-        // Search functionality with tags support and results counter
-        function setupSearchFunctionality() {
-            const searchInput = document.getElementById('sidebarSearch');
-            const links = Array.from(document.querySelectorAll('.sidebar-link'));
-            
-            const postTags = {};
-            links.forEach(function(link) {
-                const postId = link.dataset.target;
-                postTags[postId] = link.dataset.tags ? link.dataset.tags.split(',') : [];
-            });
-            
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                let resultsCount = 0;
-                
-                window.requestAnimationFrame(function() {
-                    links.forEach(function(link) {
-                        const text = link.textContent.toLowerCase();
-                        const postId = link.dataset.target;
-                        const tags = postTags[postId] || [];
-                        
-                        const isTitleMatch = text.includes(searchTerm);
-                        const isTagMatch = tags.some(tag => 
-                            tag.toLowerCase().includes(searchTerm)
-                        );
-                        
-                        const isMatch = isTitleMatch || isTagMatch;
-                        
-                        if (isMatch) {
-                            link.classList.remove('hidden');
-                            resultsCount++;
-                        } else {
-                            link.classList.add('hidden');
-                        }
-                    });
-                    
-                    if (searchTerm !== '') {
-                        resultsCounter.textContent = resultsCount + ' result(s) found';
-                        resultsCounter.classList.add('show');
-                    } else {
-                        resultsCounter.classList.remove('show');
-                    }
-                    
-                    noResults.classList.toggle('show', resultsCount === 0 && searchTerm !== '');
-                });
-            });
-        }
-
-// Scroll spy for active post highlighting with auto-scroll in sidebar
-function setupScrollSpy() {
-    const links = document.querySelectorAll('.sidebar-link');
-    if (links.length === 0) return;
-    
-    const offset = 100;
-    let ticking = false;
-    let lastActiveLink = null;
-    
-    function onScroll() {
-        const scrollPosition = window.scrollY + offset;
-        let lastPassed = null;
+        const isHomePage = window.location.pathname === "/";
+        const isLabelPage = window.location.pathname.startsWith("/search/label/");
         
-        document.querySelectorAll('.post-card').forEach(function(post) {
-            const postTop = post.offsetTop;
-            if (postTop <= scrollPosition) {
-                lastPassed = post.id;
-            }
-        });
+        if (!isHomePage && !isLabelPage) return;
         
-if (!lastPassed) {
-    if (window.location.pathname === "/") {
-        // لو الصفحة الرئيسية، فعل أول بوست فقط
-        const firstPost = document.querySelector('.post-card');
-        if (firstPost) {
-            lastPassed = firstPost.id;
-        }
-    } else {
-        // في صفحة الموضوع الفردي
-        const currentPostId = window.location.pathname.split('/').pop();
-        lastPassed = 'post-' + currentPostId;
-    }
-}
-
+        const scrollPosition = window.pageYOffset;
+        const documentHeight = document.documentElement.scrollHeight;
+        const windowHeight = window.innerHeight;
         
-        links.forEach(function(link) {
-            const isActive = link.dataset.target === lastPassed || 
-                           link.href === window.location.href || 
-                           link.href.endsWith(lastPassed.replace('post-', ''));
-            
-            link.classList.toggle('active', isActive);
-            
-            // إذا كان هذا الرابط هو النشط وليس آخر رابط نشط
-            if (isActive && link !== lastActiveLink) {
-                lastActiveLink = link;
-                autoScrollSidebar(link);
-            }
-        });
-    }
-    
-    // دالة للتمرير التلقائي في القائمة الجانبية
-    function autoScrollSidebar(activeLink) {
-        const sidebarContent = document.getElementById('sidebarContent');
-        if (!sidebarContent) return;
-        
-        // حساب موضع العنصر النشط بالنسبة للقائمة
-        const linkRect = activeLink.getBoundingClientRect();
-        const sidebarRect = sidebarContent.getBoundingClientRect();
-        
-        // حساب إذا كان العنصر غير مرئي في القائمة
-        const isAbove = linkRect.top < sidebarRect.top;
-        const isBelow = linkRect.bottom > sidebarRect.bottom;
-        
-        if (isAbove || isBelow) {
-            // حساب الموضع الجديد للتمرير
-            const scrollTop = sidebarContent.scrollTop;
-            const elementOffset = activeLink.offsetTop;
-            const middleOffset = elementOffset - (sidebarContent.offsetHeight / 2) + (activeLink.offsetHeight / 2);
-            
-            // التمرير السلس إلى الموضع
-            sidebarContent.scrollTo({
-                top: middleOffset,
-                behavior: 'smooth'
-            });
+        if (scrollPosition + windowHeight >= documentHeight - 500) {
+            loadCategoryPosts(currentCategory, false);
         }
     }
-    
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(function() {
-                onScroll();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-    
-    onScroll();
-}
 
-// Smooth scrolling to posts - معدلة لمنع التداخل مع التمرير التلقائي
-function setupSmoothScrolling() {
-    // متغير لتتبع ما إذا كان التمرير يتم برمجياً (لتفادي التداخل)
-    let isProgrammaticScroll = false;
-    
-    document.querySelectorAll('.sidebar-link').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            if (this.hash && document.querySelector(this.hash)) {
-                e.preventDefault();
-                
-                // وضع علامة أن التمرير سيتم برمجياً
-                isProgrammaticScroll = true;
-                
-                const targetElement = document.querySelector(this.hash);
-                
-                if (targetElement) {
-                    const offset = 80;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = window.pageYOffset + elementPosition - offset;
-                    
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    history.pushState(null, null, this.hash);
-                    
-                    if (sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                        menuToggle.classList.remove('active');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        isSidebarOpen = false;
-                    }
-                    
-                    // إعادة تعيين العلم بعد انتهاء التمرير
-                    setTimeout(() => {
-                        isProgrammaticScroll = false;
-                    }, 1000);
-                }
-            }
-        });
-    });
-    
-    // إرجاع دالة للتحقق من حالة التمرير البرمجي
-    return {
-        isProgrammaticScroll: () => isProgrammaticScroll,
-        setProgrammaticScroll: (value) => { isProgrammaticScroll = value; }
-    };
-}
-
-        // Back to Top Button
-        backToTop.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Show/hide back to top button
-        window.addEventListener('scroll', function() {
-            backToTop.classList.toggle('visible', window.scrollY > 300);
-        });
-
-        // Handle hash links on page load
-        if (window.location.hash) {
-            const targetElement = document.querySelector(window.location.hash);
-            if (targetElement) {
-                setTimeout(function() {
-                    const offset = 80;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = window.pageYOffset + elementPosition - offset;
-                    
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }, 100);
-            }
-        }
-
-        // دالة لجمع جميع التصنيفات من المدونة
-        async function fetchAllCategories() {
-            try {
-                const response = await fetch('/feeds/posts/summary?alt=json&max-results=500');
-                const data = await response.json();
-                
-                const categories = new Set();
-                
-                if (data.feed.entry) {
-                    data.feed.entry.forEach(post => {
-                        if (post.category) {
-                            post.category.forEach(cat => categories.add(cat.term));
-                        }
-                    });
-                }
-                
-                return Array.from(categories).sort();
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-                
-                try {
-                    const categoryLinks = document.querySelectorAll('a[href*="/search/label/"]');
-                    const categories = new Set();
-                    
-                    categoryLinks.forEach(link => {
-                        const href = link.getAttribute('href');
-                        const match = href.match(/\/search\/label\/([^?]+)/);
-                        if (match && match[1]) {
-                            const categoryName = decodeURIComponent(match[1].replace(/\+/g, ' '));
-                            categories.add(categoryName);
-                        }
-                    });
-                    
-                    return Array.from(categories).sort();
-                } catch (fallbackError) {
-                    console.error('Fallback method also failed:', fallbackError);
-                    return [];
-                }
-            }
-        }
-
-        // دالة لإنشاء أزرار التصنيفات
-// دالة لإنشاء أزرار التصنيفات
-async function createCategoryButtons() {
-  let categoriesContainer = document.querySelector('.categories-container');
-  if (!categoriesContainer) {
-    if (window.location.pathname !== "/") return;
-    
-    const categoriesFilter = document.createElement('div');
-    categoriesFilter.className = 'categories-filter';
-    categoriesFilter.id = 'categoriesFilter';
-    
-    categoriesContainer = document.createElement('div');
-    categoriesContainer.className = 'categories-container';
-    
-    categoriesFilter.appendChild(categoriesContainer);
-    
-    const mainContent = document.getElementById('mainContent');
-    if (mainContent) {
-      mainContent.insertBefore(categoriesFilter, mainContent.firstChild);
-    } else {
-      return;
-    }
-  }
-  
-  // إضافة زر "الكل" إذا لم يكن موجوداً
-  if (!categoriesContainer.querySelector('[data-category="all"]')) {
-    const allButton = document.createElement('div');
-    allButton.className = 'category-btn active';
-    allButton.textContent = 'All';
-    allButton.dataset.category = 'all';
-    categoriesContainer.appendChild(allButton);
-  }
-  
-  const categories = await fetchAllCategories();
-  
-  // إضافة أزرار التصنيفات
-  categories.forEach(category => {
-    if (!categoriesContainer.querySelector(`[data-category="${encodeURIComponent(category)}"]`)) {
-      const button = document.createElement('div');
-      button.className = 'category-btn';
-      button.textContent = category;
-      button.dataset.category = encodeURIComponent(category);
-      categoriesContainer.appendChild(button);
-    }
-  });
-  
-  // إخفاء قسم التصنيفات إذا لم يكن هناك تصنيفات
-  if (categories.length === 0) {
-    const categoriesFilter = document.getElementById('categoriesFilter');
-    if (categoriesFilter) {
-      categoriesFilter.style.display = 'none';
-    }
-  }
-  
-  setupCategoryFilters();
-}
-
-
-        // دالة لإعداد نظام التصفية
-// دالة لإعداد نظام التصفية
-function setupCategoryFilters() {
-  const categoryButtons = document.querySelectorAll('.category-btn');
-  
-  categoryButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      // تحديث التبويب النشط
-      categoryButtons.forEach(btn => btn.classList.remove('active'));
-      this.classList.add('active');
-      
-      // تحميل المشاركات بناءً على التصنيف المحدد
-      loadCategoryPosts(this.dataset.category, true);
-    });
-  });
-}
-
-// دالة لعرض رسالة عندما لا توجد مشاركات
-function showNoPostsMessage() {
-  const noPostsMessage = document.createElement('div');
-  noPostsMessage.className = 'loading-posts';
-  noPostsMessage.textContent = 'لا توجد مشاركات في هذا التصنيف.';
-  mainContent.appendChild(noPostsMessage);
-}
-
-
-// دالة لتحميل المشاركات حسب التصنيف
-function loadCategoryPosts(category, reset = true) {
-  if (isLoading) return;
-  
-  isLoading = true;
-  
-  const loadingIndicator = document.createElement('div');
-  loadingIndicator.className = 'loading-posts visible';
-  loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading posts...</p>";
-  mainContent.appendChild(loadingIndicator);
-  
-  if (reset) {
-    postsLoaded = 0;
-    hasMorePosts = true;
-    
-    const existingPosts = mainContent.querySelectorAll('.post-card');
-    existingPosts.forEach(post => post.remove());
-  }
-  
-  let apiUrl = `/feeds/posts/default?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
-  if (category !== 'all') {
-    apiUrl = `/feeds/posts/default/-/${category}?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
-  }
-  
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      processMorePosts(data);
-      isLoading = false;
-      
-      const loadingIndicator = document.querySelector('.loading-posts');
-      if (loadingIndicator) loadingIndicator.remove();
-      
-      // إذا لم توجد مشاركات بعد التحميل، عرض رسالة
-      if (mainContent.querySelectorAll('.post-card').length === 0) {
-        showNoPostsMessage();
-      }
-    })
-    .catch(error => {
-      console.error('Error loading category posts:', error);
-      const loadingIndicator = document.querySelector('.loading-posts');
-      if (loadingIndicator) loadingIndicator.remove();
-      isLoading = false;
-      
-      // عرض رسالة خطأ
-      showNoPostsMessage();
-    });
-}
-
-
-        // نظام التمرير اللانهائي المحسن
-        function loadMorePosts() {
-            if (isLoading || !hasMorePosts) return;
-            
-            isLoading = true;
-            
-            const loadingIndicator = document.createElement('div');
-            loadingIndicator.className = 'loading-posts visible';
-            loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading more posts...</p>";
-            mainContent.appendChild(loadingIndicator);
-            
-            const activeButton = document.querySelector('.category-btn.active');
-            const activeCategory = activeButton ? activeButton.dataset.category : 'all';
-            
-            let apiUrl = `/feeds/posts/default?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
-            if (activeCategory !== 'all') {
-                apiUrl = `/feeds/posts/default/-/${activeCategory}?alt=json&start-index=${postsLoaded + 1}&max-results=${postsPerPage}`;
-            }
-            
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => processMorePosts(data))
-                .catch(error => {
-                    console.error('Error loading more posts:', error);
-                    loadingIndicator.innerHTML = '<p>Error loading more posts. Please try again.</p>';
-                    isLoading = false;
-                    
-                    setTimeout(() => {
-                        loadingIndicator.remove();
-                    }, 3000);
-                });
-        }
+    // دالة محسنة لتحميل المشاركات
+    async function loadCategoryPosts(category, reset = false) {
+        if (isLoading) return;
         
-        // معالجة المشاركات الإضافية من API
-        function processMorePosts(data) {
-            const posts = data.feed.entry || [];
-
-if (posts.length === 0) {
-    hasMorePosts = false;
-
-    const loadingIndicator = document.querySelector('.loading-posts');
-    if (loadingIndicator) {
-        loadingIndicator.remove(); // إلغاء إظهار الرسالة نهائياً
-    }
-
-    isLoading = false;
-    return;
-}
-
-
-            const fragment = document.createDocumentFragment();
-
-            posts.forEach(function(post) {
-                try {
-                    const postId = (post.id && post.id.$t) ? post.id.$t.split('-').pop() : ('p' + Date.now() + Math.random());
-                    const title = (post.title && post.title.$t) ? post.title.$t : 'Untitled';
-                    const linkObj = (post.link || []).find(l => l.rel === 'alternate') || null;
-                    const postUrl = linkObj ? linkObj.href : '#';
-                    const contentHtml = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
-                    const published = post.published ? new Date(post.published.$t).toLocaleDateString() : '';
-
-                    const postCard = document.createElement('div');
-                    postCard.className = 'post-card';
-                    postCard.id = 'post-' + postId;
-
-                    const headerDiv = document.createElement('div');
-                    headerDiv.className = 'post-header';
-                    const h2 = document.createElement('h2');
-                    h2.className = 'post-title';
-                    const titleLink = document.createElement('a');
-                    titleLink.className = 'post-title-link';
-                    titleLink.href = postUrl;
-                    titleLink.textContent = title;
-                    h2.appendChild(titleLink);
-                    const dateSpan = document.createElement('span');
-                    dateSpan.className = 'post-date';
-                    dateSpan.textContent = published;
-                    headerDiv.appendChild(h2);
-                    headerDiv.appendChild(dateSpan);
-
-                    const contentDiv = document.createElement('div');
-                    contentDiv.className = 'post-content';
-
-                    if (post.media$thumbnail && post.media$thumbnail.url) {
-                        const img = document.createElement('img');
-                        img.className = 'post-image';
-                        img.src = post.media$thumbnail.url;
-                        img.alt = title;
-                        img.loading = 'lazy';
-                        img.addEventListener('load', function() { img.classList.add('loaded'); });
-                        contentDiv.appendChild(img);
-                    }
-
-                    const previewDiv = document.createElement('div');
-                    previewDiv.className = 'post-preview';
-
-                    const tmp = document.createElement('div');
-                    tmp.innerHTML = contentHtml || '';
-                    let previewText = (tmp.textContent || tmp.innerText || '').trim();
-                    if (previewText.length > 200) previewText = previewText.substring(0, 200) + '...';
-                    previewDiv.textContent = previewText;
-
-                    contentDiv.appendChild(previewDiv);
-
-                    const footerDiv = document.createElement('div');
-                    footerDiv.className = 'post-footer';
-                    footerDiv.style.position = 'relative';
-                    footerDiv.style.zIndex = 2;
-
-                    const readMoreA = document.createElement('a');
-                    readMoreA.className = 'read-more-btn';
-                    readMoreA.href = postUrl || '#';
-                    readMoreA.textContent = 'Read More';
-                    footerDiv.appendChild(readMoreA);
-
-                    postCard.appendChild(headerDiv);
-                    postCard.appendChild(contentDiv);
-                    postCard.appendChild(footerDiv);
-
-                    fragment.appendChild(postCard);
-                } catch (err) {
-                    console.error('Error building post element', err, post);
-                }
-            });
-
-            mainContent.appendChild(fragment);
-            postsLoaded += posts.length;
-
+        isLoading = true;
+        currentCategory = category;
+        
+        try {
+            if (reset) {
+                const loadingIndicator = document.createElement('div');
+                loadingIndicator.className = 'loading-posts visible';
+                loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading posts...</p>";
+                mainContent.appendChild(loadingIndicator);
+                postsLoaded = 0;
+                hasMorePosts = true;
+            }
+            
+            const startIndex = postsLoaded + 1;
+            const apiUrl = `/feeds/posts/default${category !== 'all' ? '/-/' + encodeURIComponent(category) : ''}?alt=json&start-index=${startIndex}&max-results=${postsPerPage}`;
+            
+            
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            processMorePosts(data, reset);
+            
+        } catch (error) {
+            console.error('Error loading posts:', error);
+            showErrorMessage('Error loading posts. Please try again.');
+        } finally {
+            isLoading = false;
             const loadingIndicator = document.querySelector('.loading-posts');
             if (loadingIndicator) loadingIndicator.remove();
-
-            updateLazyLoading();
-            setupScrollSpy();
-
-            isLoading = false;
-            if (posts.length < postsPerPage) hasMorePosts = false;
         }
+    }
 
-        // تحديث الشريط الجانبي بالمشاركات الجديدة مع الوسوم
-        function updateSidebarNavigation(posts) {
-            const section = document.querySelector('.sidebar-section');
+    // دالة محسنة لجلب التصنيفات والمشاركات معاً
+    async function fetchCategoriesAndPosts(category = 'all', reset = true) {
+        if (isLoading) return;
+        
+        isLoading = true;
+        currentCategory = category;
+        
+        try {
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'loading-posts visible';
+            loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading content...</p>";
+            mainContent.appendChild(loadingIndicator);
             
-            posts.forEach(function(post) {
-                const postId = post.id.$t.split('-').pop();
-                const title = post.title.$t;
-                const postUrl = post.link.find(link => link.rel === 'alternate').href;
+            const [categories, postsData] = await Promise.all([
+                fetchAllCategories(),
+                fetch(`/feeds/posts/default${category !== 'all' ? '/-/' + encodeURIComponent(category) : ''}?alt=json&start-index=1&max-results=${postsPerPage}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        return response.json();
+                    })
+            ]);
+            
+            await createCategoryButtons(categories);
+            
+            if (reset) {
+                postsLoaded = 0;
+                hasMorePosts = true;
+                const existingPosts = mainContent.querySelectorAll('.post-card');
+                existingPosts.forEach(post => post.remove());
+            }
+            
+            processMorePosts(postsData, reset);
+            
+            loadingIndicator.remove();
+            
+        } catch (error) {
+            console.error('Error loading content:', error);
+            showErrorMessage('Error loading content. Please refresh the page.');
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    // دالة لعرض رسائل الخطأ
+    function showErrorMessage(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'loading-posts visible';
+        errorDiv.innerHTML = `<p style="color: #ff4444;">${message}</p>`;
+        mainContent.appendChild(errorDiv);
+        
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
+    }
+
+    // دالة للمساعدة في تصحيح الأخطاء
+    function debugCategoryButtons() {
+        console.log('Category buttons debug:');
+        const buttons = document.querySelectorAll('.category-btn');
+        console.log('Found buttons:', buttons.length);
+        
+        buttons.forEach((btn, index) => {
+            console.log(`Button ${index}:`, {
+                text: btn.textContent,
+                category: btn.dataset.category,
+                active: btn.classList.contains('active')
+            });
+        });
+    }
+
+    // تهيئة التمرير اللانهائي
+    function initInfiniteScroll() {
+        let ticking = false;
+        
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    checkInfiniteScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    // Dark Mode Toggle
+    function applyDarkMode(isDark) {
+        const { classList: htmlClassList } = document.documentElement;
+        const { classList: bodyClassList } = document.body;
+        
+        if (isDark) {
+            htmlClassList.add('dark-mode');
+            bodyClassList.add('dark-mode');
+            modeToggle.textContent = '☀️ Light Mode';
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            htmlClassList.remove('dark-mode');
+            bodyClassList.remove('dark-mode');
+            modeToggle.textContent = '🌙 Dark Mode';
+            localStorage.removeItem('darkMode');
+        }
+    }
+
+    // Initialize dark mode from localStorage
+    const savedDarkMode = localStorage.getItem('darkMode');
+    applyDarkMode(savedDarkMode === 'enabled');
+
+    // Toggle dark mode
+    modeToggle.addEventListener('click', function() {
+        const isDark = !document.body.classList.contains('dark-mode');
+        applyDarkMode(isDark);
+    });
+    
+    // Sidebar Toggle
+    menuToggle.addEventListener('click', function() {
+        const isOpen = sidebar.classList.toggle('open');
+        menuToggle.classList.toggle('active');
+        menuToggle.setAttribute('aria-expanded', isOpen);
+        isSidebarOpen = isOpen;
+        
+        if (isOpen && !isHeaderVisible) {
+            header.style.transform = 'translateY(0)';
+            isHeaderVisible = true;
+        }
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(e) {
+        if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle) {
+            sidebar.classList.remove('open');
+            menuToggle.classList.remove('active');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            isSidebarOpen = false;
+        }
+    });
+
+    // Create sidebar navigation from all blog posts
+    function createSidebarNavigation() {
+        if (!sidebarContent) return;
+        
+        const loadingElement = document.createElement('div');
+        loadingElement.textContent = 'Loading posts...';
+        loadingElement.style.padding = '1rem';
+        loadingElement.style.textAlign = 'center';
+        sidebarContent.innerHTML = '';
+        sidebarContent.appendChild(loadingElement);
+        
+        fetch('/feeds/posts/default?alt=json&max-results=500')
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => processPosts(data))
+            .catch(error => {
+                console.error('Error loading posts:', error);
+                loadingElement.textContent = 'Error loading posts. Please refresh the page.';
+            });
+    }
+
+    // إنشاء أزرار التصنيفات في الشريط الجانبي
+    async function createSidebarLabels() {
+        const labelsContainer = document.getElementById('sidebarLabels');
+        if (!labelsContainer) return;
+
+        labelsContainer.innerHTML = "<div style='padding:10px; text-align:center;'>Loading labels...</div>";
+
+        try {
+            const categories = await fetchAllCategories();
+            labelsContainer.innerHTML = "";
+
+            // زر "الكل"
+            const allBtn = document.createElement("div");
+            allBtn.className = "sidebar-label-btn active";
+            allBtn.textContent = "All";
+            allBtn.dataset.category = "all";
+            labelsContainer.appendChild(allBtn);
+
+            allBtn.addEventListener("click", () => {
+                document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
+                allBtn.classList.add("active");
+                document.querySelectorAll(".sidebar-link").forEach(link => {
+                    link.classList.remove("hidden");
+                });
+            });
+
+            // باقي التصنيفات
+            categories.forEach(category => {
+                const btn = document.createElement("div");
+                btn.className = "sidebar-label-btn";
+                btn.textContent = category;
+                btn.dataset.category = category;
+
+                btn.addEventListener("click", () => {
+                    document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+
+                    document.querySelectorAll(".sidebar-link").forEach(link => {
+                        const tags = link.dataset.tags ? link.dataset.tags.split(",") : [];
+                        if (tags.includes(category)) {
+                            link.classList.remove("hidden");
+                        } else {
+                            link.classList.add("hidden");
+                        }
+                    });
+                });
+
+                labelsContainer.appendChild(btn);
+            });
+        } catch (error) {
+            console.error('Error creating sidebar labels:', error);
+            labelsContainer.innerHTML = "<div style='padding:10px; text-align:center; color: #ff4444;'>Error loading labels</div>";
+        }
+    }
+
+    // Process posts data from API with tags support
+    function processPosts(data) {
+        const posts = data.feed.entry || [];
+        const fragment = document.createDocumentFragment();
+        const section = document.createElement('div');
+        section.className = 'sidebar-section';
+        
+        posts.forEach(function(post) {
+            const postId = post.id.$t.split('-').pop();
+            const title = post.title.$t;
+            const postUrl = post.link.find(link => link.rel === 'alternate').href;
+            
+            const tags = post.category ? 
+                post.category.map(cat => cat.term) : 
+                [];
+            
+            const link = document.createElement('a');
+            link.href = postUrl;
+            link.className = 'sidebar-link';
+            link.textContent = title;
+            link.dataset.target = 'post-' + postId;
+            link.dataset.tags = tags.join(',');
+            
+            section.appendChild(link);
+        });
+        
+        fragment.appendChild(section);
+        sidebarContent.innerHTML = '';
+        sidebarContent.appendChild(fragment);
+        
+        setupScrollSpy();
+        setupSmoothScrolling();
+        setupSearchFunctionality();
+    }
+
+    // Search functionality with tags support and results counter
+    function setupSearchFunctionality() {
+        const searchInput = document.getElementById('sidebarSearch');
+        if (!searchInput) return;
+        
+        const links = Array.from(document.querySelectorAll('.sidebar-link'));
+        const postTags = {};
+        
+        links.forEach(function(link) {
+            const postId = link.dataset.target;
+            postTags[postId] = link.dataset.tags ? link.dataset.tags.split(',') : [];
+        });
+        
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            let resultsCount = 0;
+            
+            window.requestAnimationFrame(function() {
+                links.forEach(function(link) {
+                    const text = link.textContent.toLowerCase();
+                    const postId = link.dataset.target;
+                    const tags = postTags[postId] || [];
+                    
+                    const isTitleMatch = text.includes(searchTerm);
+                    const isTagMatch = tags.some(tag => 
+                        tag.toLowerCase().includes(searchTerm)
+                    );
+                    
+                    const isMatch = isTitleMatch || isTagMatch;
+                    
+                    if (isMatch) {
+                        link.classList.remove('hidden');
+                        resultsCount++;
+                    } else {
+                        link.classList.add('hidden');
+                    }
+                });
                 
-                const tags = post.category ? 
-                    post.category.map(cat => cat.term) : 
-                    [];
+                if (searchTerm !== '') {
+                    resultsCounter.textContent = resultsCount + ' result(s) found';
+                    resultsCounter.classList.add('show');
+                } else {
+                    resultsCounter.classList.remove('show');
+                }
                 
-                const link = document.createElement('a');
-                link.href = postUrl;
-                link.className = 'sidebar-link';
-                link.textContent = title;
-                link.dataset.target = 'post-' + postId;
-                link.dataset.tags = tags.join(',');
-                
-                section.appendChild(link);
+                noResults.classList.toggle('show', resultsCount === 0 && searchTerm !== '');
+            });
+        });
+    }
+
+    // Scroll spy for active post highlighting with auto-scroll in sidebar
+    function setupScrollSpy() {
+        const links = document.querySelectorAll('.sidebar-link');
+        if (links.length === 0) return;
+        
+        const offset = 100;
+        let ticking = false;
+        let lastActiveLink = null;
+        
+        function onScroll() {
+            const scrollPosition = window.scrollY + offset;
+            let lastPassed = null;
+            
+            document.querySelectorAll('.post-card').forEach(function(post) {
+                const postTop = post.offsetTop;
+                if (postTop <= scrollPosition) {
+                    lastPassed = post.id;
+                }
             });
             
-            setupSmoothScrolling();
-            setupSearchFunctionality();
-        }
-
-        // إعادة تهيئة المكونات عند الانتقال بين الصفحات
-        function reinitializeComponents() {
-            setupScrollSpy();
-            setupSmoothScrolling();
-            setupSearchFunctionality();
-            
-            if (window.location.pathname !== "/") {
-                window.removeEventListener('scroll', checkInfiniteScroll);
-            }
-        }
-
-        // إعادة تعيين التصفية عند تغيير الصفحة
-        function resetCategoryFilter() {
-            if (window.location.pathname === "/") {
-                const allButton = document.querySelector('.category-btn[data-category="all"]');
-                if (allButton) {
-                    allButton.click();
+            if (!lastPassed) {
+                if (window.location.pathname === "/") {
+                    const firstPost = document.querySelector('.post-card');
+                    if (firstPost) {
+                        lastPassed = firstPost.id;
+                    }
+                } else {
+                    const currentPostId = window.location.pathname.split('/').pop();
+                    lastPassed = 'post-' + currentPostId;
                 }
             }
-        }
-
-        // Initialize everything
-        createSidebarNavigation();
-        initHeaderScroll();
-        
-        // إنشاء أزرار التصنيفات للصفحة الرئيسية فقط
-        if (window.location.pathname === "/") {
-            createCategoryButtons();
-        }
-        
-        // التمرير اللانهائي للصفحة الرئيسية فقط
-        if (window.location.pathname === "/") {
-            initInfiniteScroll();
-        }
-        
-        // Force reflow for mobile devices
-        if ('ontouchstart' in window) {
-            document.body.style.minHeight = window.innerHeight + 'px';
-            window.addEventListener('resize', function() {
-                document.body.style.minHeight = window.innerHeight + 'px';
+            
+            links.forEach(function(link) {
+                const isActive = link.dataset.target === lastPassed || 
+                               link.href === window.location.href || 
+                               link.href.endsWith(lastPassed.replace('post-', ''));
+                
+                link.classList.toggle('active', isActive);
+                
+                if (isActive && link !== lastActiveLink) {
+                    lastActiveLink = link;
+                    autoScrollSidebar(link);
+                }
             });
         }
         
-        // استمع لتغييرات الصفحة
-        window.addEventListener('popstate', reinitializeComponents);
-        window.addEventListener('popstate', resetCategoryFilter);
+        function autoScrollSidebar(activeLink) {
+            const sidebarContent = document.getElementById('sidebarContent');
+            if (!sidebarContent) return;
+            
+            const linkRect = activeLink.getBoundingClientRect();
+            const sidebarRect = sidebarContent.getBoundingClientRect();
+            
+            const isAbove = linkRect.top < sidebarRect.top;
+            const isBelow = linkRect.bottom > sidebarRect.bottom;
+            
+            if (isAbove || isBelow) {
+                const scrollTop = sidebarContent.scrollTop;
+                const elementOffset = activeLink.offsetTop;
+                const middleOffset = elementOffset - (sidebarContent.offsetHeight / 2) + (activeLink.offsetHeight / 2);
+                
+                sidebarContent.scrollTo({
+                    top: middleOffset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    onScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+        
+        onScroll();
+    }
+
+    // Smooth scrolling to posts
+    function setupSmoothScrolling() {
+        let isProgrammaticScroll = false;
+        
+        document.querySelectorAll('.sidebar-link').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                if (this.hash && document.querySelector(this.hash)) {
+                    e.preventDefault();
+                    
+                    isProgrammaticScroll = true;
+                    
+                    const targetElement = document.querySelector(this.hash);
+                    
+                    if (targetElement) {
+                        const offset = 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = window.pageYOffset + elementPosition - offset;
+                        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        history.pushState(null, null, this.hash);
+                        
+                        if (sidebar.classList.contains('open')) {
+                            sidebar.classList.remove('open');
+                            menuToggle.classList.remove('active');
+                            menuToggle.setAttribute('aria-expanded', 'false');
+                            isSidebarOpen = false;
+                        }
+                        
+                        setTimeout(() => {
+                            isProgrammaticScroll = false;
+                        }, 1000);
+                    }
+                }
+            });
+        });
+    }
+
+    // Back to Top Button
+    backToTop.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
-	
-    //]]>
-    </script>
+
+    // Show/hide back to top button
+    window.addEventListener('scroll', function() {
+        backToTop.classList.toggle('visible', window.scrollY > 300);
+    });
+
+    // Handle hash links on page load
+    if (window.location.hash) {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+            setTimeout(function() {
+                const offset = 80;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = window.pageYOffset + elementPosition - offset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+    }
+
+    // دالة لجمع جميع التصنيفات من المدونة
+    async function fetchAllCategories() {
+        try {
+            const response = await fetch('/feeds/posts/summary?alt=json&max-results=500');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            const categories = new Set();
+            
+            if (data.feed.entry) {
+                data.feed.entry.forEach(post => {
+                    if (post.category) {
+                        post.category.forEach(cat => categories.add(cat.term));
+                    }
+                });
+            }
+            
+            return Array.from(categories).sort();
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            
+            try {
+                const categoryLinks = document.querySelectorAll('a[href*="/search/label/"]');
+                const categories = new Set();
+                
+                categoryLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    const match = href.match(/\/search\/label\/([^?]+)/);
+                    if (match && match[1]) {
+                        const categoryName = decodeURIComponent(match[1].replace(/\+/g, ' '));
+                        categories.add(categoryName);
+                    }
+                });
+                
+                return Array.from(categories).sort();
+            } catch (fallbackError) {
+                console.error('Fallback method also failed:', fallbackError);
+                return [];
+            }
+        }
+    }
+
+    // دالة محسنة لإنشاء أزرار التصنيفات
+    async function createCategoryButtons(categories = null) {
+        let categoriesContainer = document.querySelector('.categories-container');
+        
+        if (!categoriesContainer) {
+            if (window.location.pathname !== "/" && !window.location.pathname.startsWith("/search/label/")) return;
+            
+            const categoriesFilter = document.createElement('div');
+            categoriesFilter.className = 'categories-filter';
+            categoriesFilter.id = 'categoriesFilter';
+            
+            categoriesContainer = document.createElement('div');
+            categoriesContainer.className = 'categories-container';
+            
+            categoriesFilter.appendChild(categoriesContainer);
+            
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.insertBefore(categoriesFilter, mainContent.firstChild);
+            } else {
+                return;
+            }
+        }
+        
+        if (!categories) {
+            categories = await fetchAllCategories();
+        }
+        
+        categoriesContainer.innerHTML = '';
+        
+        // زر "الكل"
+        const allButton = document.createElement('div');
+        allButton.className = 'category-btn active';
+        allButton.textContent = 'All';
+        allButton.dataset.category = 'all';
+        categoriesContainer.appendChild(allButton);
+        
+        // أزرار التصنيفات
+        categories.forEach(category => {
+            const button = document.createElement('div');
+            button.className = 'category-btn';
+            button.textContent = category;
+            button.dataset.category = category;
+            categoriesContainer.appendChild(button);
+        });
+        
+        if (categories.length === 0) {
+            const categoriesFilter = document.getElementById('categoriesFilter');
+            if (categoriesFilter) {
+                categoriesFilter.style.display = 'none';
+            }
+        }
+        
+        setupCategoryFilters();
+        activateCurrentCategory();
+    }
+
+    // دالة جديدة لتفعيل التصنيف الحالي من URL
+    function activateCurrentCategory() {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        
+        if (window.location.pathname.startsWith("/search/label/")) {
+            const labelMatch = window.location.pathname.match(/\/search\/label\/([^/?]+)/);
+            if (labelMatch) {
+                const currentCategory = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
+                const matchingButton = Array.from(categoryButtons).find(btn => 
+                    btn.dataset.category === currentCategory
+                );
+                
+                if (matchingButton) {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    matchingButton.classList.add('active');
+                    console.log('Activated category:', currentCategory);
+                }
+            }
+        } else if (window.location.pathname === "/") {
+            const allButton = document.querySelector('.category-btn[data-category="all"]');
+            if (allButton) {
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                allButton.classList.add('active');
+            }
+        }
+    }
+
+    // دالة محسنة لإعداد نظام التصفية
+    function setupCategoryFilters() {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        
+        categoryButtons.forEach(button => {
+            // إزالة أي event listeners سابقة
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+        });
+        
+        const newCategoryButtons = document.querySelectorAll('.category-btn');
+        
+        newCategoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (isLoading) return;
+                
+                newCategoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const newCategory = this.dataset.category;
+                console.log('Category button clicked:', newCategory);
+                
+                if (window.location.pathname.startsWith("/search/label/")) {
+                    if (newCategory !== 'all') {
+                        const newUrl = `/search/label/${encodeURIComponent(newCategory)}`;
+                        window.history.pushState({}, '', newUrl);
+                    } else {
+                        window.history.pushState({}, '', '/');
+                    }
+                }
+                
+                loadCategoryPosts(newCategory, true);
+            });
+        });
+    }
+
+    // دالة لعرض رسالة عندما لا توجد مشاركات
+    function showNoPostsMessage() {
+        const noPostsMessage = document.createElement('div');
+        noPostsMessage.className = 'loading-posts';
+        noPostsMessage.innerHTML = '<p>No posts found in this category.</p>';
+        mainContent.appendChild(noPostsMessage);
+    }
+
+    // دالة محسنة لمعالجة المشاركات الإضافية
+    function processMorePosts(data, reset = false) {
+        const posts = data.feed.entry || [];
+
+        if (posts.length === 0) {
+            hasMorePosts = false;
+            isLoading = false;
+            
+            const loadingIndicator = document.querySelector('.loading-posts');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+            
+            if (postsLoaded === 0 && reset) {
+                showNoPostsMessage();
+            }
+            
+            return;
+        }
+
+        if (reset) {
+            const existingPosts = mainContent.querySelectorAll('.post-card');
+            existingPosts.forEach(post => post.remove());
+            postsLoaded = 0;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        posts.forEach(function(post) {
+            try {
+                const postId = (post.id && post.id.$t) ? post.id.$t.split('-').pop() : ('p' + Date.now() + Math.random());
+                const title = (post.title && post.title.$t) ? post.title.$t : 'Untitled';
+                const linkObj = (post.link || []).find(l => l.rel === 'alternate') || null;
+                const postUrl = linkObj ? linkObj.href : '#';
+                const contentHtml = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
+                const published = post.published ? new Date(post.published.$t).toLocaleDateString() : '';
+                
+                const categories = post.category || [];
+                const firstCategory = categories.length > 0 ? categories[0].term : null;
+                const categoryUrl = firstCategory ? '/search/label/' + encodeURIComponent(firstCategory) : '#';
+
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                postCard.id = 'post-' + postId;
+
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'post-header';
+                const h2 = document.createElement('h2');
+                h2.className = 'post-title';
+                const titleLink = document.createElement('a');
+                titleLink.className = 'post-title-link';
+                titleLink.href = postUrl;
+                titleLink.textContent = title;
+                h2.appendChild(titleLink);
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'post-date';
+                dateSpan.textContent = published;
+                headerDiv.appendChild(h2);
+                headerDiv.appendChild(dateSpan);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'post-content';
+
+                if (post.media$thumbnail && post.media$thumbnail.url) {
+                    const img = document.createElement('img');
+                    img.className = 'post-image';
+                    img.src = post.media$thumbnail.url;
+                    img.alt = title;
+                    img.loading = 'lazy';
+                    img.addEventListener('load', function() { img.classList.add('loaded'); });
+                    contentDiv.appendChild(img);
+                }
+
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'post-preview';
+
+                const tmp = document.createElement('div');
+                tmp.innerHTML = contentHtml || '';
+                let previewText = (tmp.textContent || tmp.innerText || '').trim();
+                if (previewText.length > 100) previewText = previewText.substring(0, 100) + '...';
+                previewDiv.textContent = previewText;
+
+                contentDiv.appendChild(previewDiv);
+
+                const footerDiv = document.createElement('div');
+                footerDiv.className = 'post-footer';
+
+                if (firstCategory) {
+                    const labelBtn = document.createElement('a');
+                    labelBtn.className = 'label-btn';
+                    labelBtn.href = categoryUrl;
+                    labelBtn.textContent = firstCategory;
+                    labelBtn.title = 'View all posts in ' + firstCategory;
+                    footerDiv.appendChild(labelBtn);
+                }
+
+                const readMoreA = document.createElement('a');
+                readMoreA.className = 'read-more-btn';
+                readMoreA.href = postUrl || '#';
+                readMoreA.textContent = 'Read More';
+                footerDiv.appendChild(readMoreA);
+
+                postCard.appendChild(headerDiv);
+                postCard.appendChild(contentDiv);
+                postCard.appendChild(footerDiv);
+
+                fragment.appendChild(postCard);
+            } catch (err) {
+                console.error('Error building post element', err, post);
+            }
+        });
+
+        mainContent.appendChild(fragment);
+        postsLoaded += posts.length;
+
+        const loadingIndicator = document.querySelector('.loading-posts');
+        if (loadingIndicator) loadingIndicator.remove();
+
+        setupScrollSpy();
+
+        isLoading = false;
+        if (posts.length < postsPerPage) {
+            hasMorePosts = false;
+        }
+        
+    }
+
+    // Initialize everything
+    createSidebarNavigation();
+    initHeaderScroll();
+    
+    // التهيئة المحسنة للصفحة الرئيسية وصفحات التصنيفات
+    if (window.location.pathname === "/" || window.location.pathname.startsWith("/search/label/")) {
+        let targetCategory = 'all';
+        if (window.location.pathname.startsWith("/search/label/")) {
+            const labelMatch = window.location.pathname.match(/\/search\/label\/([^/?]+)/);
+            if (labelMatch) {
+                targetCategory = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
+            }
+        }
+        
+        console.log('Initializing with category:', targetCategory);
+        
+        fetchCategoriesAndPosts(targetCategory, true).then(() => {
+            console.log('Content loaded successfully');
+        }).catch(error => {
+            console.error('Error loading content:', error);
+        });
+    }
+    
+    // التمرير اللانهائي للصفحة الرئيسية وصفحات التصنيفات
+    initInfiniteScroll();
+    
+    // Force reflow for mobile devices
+    if ('ontouchstart' in window) {
+        document.body.style.minHeight = window.innerHeight + 'px';
+        window.addEventListener('resize', function() {
+            document.body.style.minHeight = window.innerHeight + 'px';
+        });
+    }
+    
+    // استمع لتغييرات الصفحة
+    window.addEventListener('popstate', function() {
+        setTimeout(() => {
+            activateCurrentCategory();
+            
+            const activeButton = document.querySelector('.category-btn.active');
+            if (activeButton && mainContent.querySelectorAll('.post-card').length === 0) {
+                loadCategoryPosts(activeButton.dataset.category, true);
+            }
+        }, 100);
+    });
+    
+    // إنشاء أزرار التصنيفات في الشريط الجانبي
+    createSidebarLabels();
+});
+//]]>
+</script>
 </head>
 <body>
     <!-- Navigation -->
@@ -2233,110 +2858,129 @@ if (posts.length === 0) {
         </div>
     </nav>
 
-<!-- Sidebar for post navigation -->
-<div aria-label='Blog Navigation' class='sidebar' id='sidebar'>
-    <div class='sidebar-sticky-header'>
-        <div class='sidebar-header' style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <div class='sidebar-title'>Blog Posts</div>
-            <a href="mailto:ahm4d.abbas@gmail.com" class="connect-us-btn" title="Contact Us">
-                Connect Us
-            </a>
+    <!-- Sidebar for post navigation -->
+    <div aria-label='Blog Navigation' class='sidebar' id='sidebar'>
+        <div class='sidebar-sticky-header'>
+    <div class='sidebar-header' style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <a href="/" class='sidebar-title' style="color: var(--primary); text-decoration: none; cursor: pointer;">
+            Blog Posts
+        </a>
+        <a href="mailto:ahm4d.abbas@gmail.com" class="connect-us-btn" title="Contact Us">
+            Connect Us
+        </a>
+    </div>
+            
+            <div class='search-container'>
+                <input aria-label='Search posts' class='search-input' id='sidebarSearch' placeholder='Search posts or tags...' type='text'/>
+                <div class="search-results-counter" id="searchResultsCounter"></div>
+                <div class="sidebar-labels" id="sidebarLabels"></div>
+            </div>
         </div>
         
-        <div class='search-container'>
-            <input aria-label='Search posts' class='search-input' id='sidebarSearch' placeholder='Search posts or tags...' type='text'/>
-            <div class="search-results-counter" id="searchResultsCounter"></div>
-			<div class="sidebar-labels" id="sidebarLabels"></div>
+        <div class='no-results' id='noResults'>No matching posts found</div>
+        
+        <div class='sidebar-content' id='sidebarContent'>
+            <!-- Dynamic post links will be inserted here -->
         </div>
     </div>
-    
-    <div class='no-results' id='noResults'>No matching posts found</div>
-    
-    <div class='sidebar-content' id='sidebarContent'>
-        <!-- Dynamic post links will be inserted here -->
-    </div>
-</div>
 
     <!-- Main Content Area with Post Cards -->
     <main id='mainContent'>
-  <!-- أزرار التصنيفات للصفحة الرئيسية فقط -->
-  <b:if cond='data:blog.pageType == "index"'>
-    <div class='categories-filter' id='categoriesFilter'>
-      <div class='categories-container'>
-        <div class='category-btn active' data-category='all'>All</div>
-        <!-- سيتم إضافة أزرار التصنيفات تلقائياً هنا -->
-      </div>
-    </div>
-  </b:if>
-
-  
+        <!-- أزرار التصنيفات للصفحة الرئيسية فقط -->
+        <b:if cond='data:blog.pageType == "index"'>
+            <div class='categories-filter' id='categoriesFilter'>
+                <div class='categories-container'>
+                    <div class='category-btn active' data-category='all'>All</div>
+                    <!-- سيتم إضافة أزرار التصنيفات تلقائياً هنا -->
+                </div>
+            </div>
+        </b:if>
         <b:section id='main' showaddelement='yes'>
-          <b:widget id='Blog1' locked='false' title='Blog Posts' type='Blog' version='1'>
-            <b:widget-settings>
-              <b:widget-setting name='showDateHeader'>false</b:widget-setting>
-              <b:widget-setting name='showShareButtons'>true</b:widget-setting>
-              <b:widget-setting name='authorLabel'>By</b:widget-setting>
-              <b:widget-setting name='showCommentLink'>true</b:widget-setting>
-              <b:widget-setting name='showAuthor'>false</b:widget-setting>
-              <b:widget-setting name='showLabels'>true</b:widget-setting>
-              <b:widget-setting name='showLocation'>true</b:widget-setting>
-              <b:widget-setting name='showTimestamp'>true</b:widget-setting>
-              <b:widget-setting name='showInlineAds'>true</b:widget-setting>
-              <b:widget-setting name='showReactions'>false</b:widget-setting>
-            </b:widget-settings>
-            <b:includable id='main' var='top'>
-              <b:if cond='data:blog.pageType != "item"'>
-                <!-- الصفحة الرئيسية - عرض المشاركات مع التمرير اللانهائي -->
-                <b:loop index='index' values='data:posts' var='post'>
-                  <div class='post-card' expr:id='&quot;post-&quot; + data:post.id'>
-                    <div class='post-header'>
-                      <h2 class='post-title'>
-  <a class='post-title-link' expr:href='data:post.url'>
-    <data:post.title/>
-  </a>
-</h2>
-                    </div>
-                    
-                    <div class='post-content'>
-                      <b:if cond='data:post.firstImageUrl'>
-                        <img class='post-image' expr:src='data:post.firstImageUrl' alt='Post Image' loading='lazy'/>
-                      </b:if>
-                      
-                      <div class='post-preview'>
-                        <b:eval expr='data:post.body ? data:post.body : &quot;&quot;'/>
-                      </div>
-                    </div>
-                    
-                    <div class='post-footer'>
-                      <a class='read-more-btn' expr:href='data:post.url'>Read More</a>
-                    </div>
-                  </div>
-                </b:loop>
-<!-- داخل قسم post-card في صفحة الموضوع الفردي -->
-<b:else/>
-<!-- صفحة الموضوع الفردي - عرض الموضوع الحالي فقط -->
-<b:loop values='data:posts' var='post'>
-  <div class='post-card' expr:id='&quot;post-&quot; + data:post.id'>
-    <div class='post-header'>
-      <h2 class='post-title'><data:post.title/></h2>
-    </div>
-    
-    <div class='post-content'>
-      <b:if cond='data:post.firstImageUrl'>
-        <img class='post-image' expr:src='data:post.firstImageUrl' alt='Post Image' loading='lazy'/>
-      </b:if>
-      
-      <div class='post-body'>
-        <data:post.body/>
-      </div>
-    </div>
-  </div>
-</b:loop>
-              </b:if>
-            </b:includable>
-          </b:widget>
+            <b:widget id='Blog1' locked='false' title='Blog Posts' type='Blog' version='1'>
+                <b:widget-settings>
+                    <b:widget-setting name='showDateHeader'>false</b:widget-setting>
+                    <b:widget-setting name='showShareButtons'>true</b:widget-setting>
+                    <b:widget-setting name='authorLabel'>By</b:widget-setting>
+                    <b:widget-setting name='showCommentLink'>true</b:widget-setting>
+                    <b:widget-setting name='showAuthor'>false</b:widget-setting>
+                    <b:widget-setting name='showLabels'>true</b:widget-setting>
+                    <b:widget-setting name='showTimestamp'>true</b:widget-setting>
+                </b:widget-settings>
+                <b:includable id='main' var='top'>
+                    <b:if cond='data:blog.pageType != "item"'>
+                        <!-- الصفحة الرئيسية - عرض المشاركات مع التمرير اللانهائي -->
+                        <b:loop index='index' values='data:posts' var='post'>
+                            <div class='post-card' expr:id='&quot;post-&quot; + data:post.id'>
+                                <div class='post-header'>
+                                    <h2 class='post-title'>
+                                        <a class='post-title-link' expr:href='data:post.url'>
+                                            <data:post.title/>
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class='post-content'>
+                                    <b:if cond='data:post.firstImageUrl'>
+                                        <img class='post-image' expr:src='data:post.firstImageUrl' alt='Post Image' loading='lazy'/>
+                                    </b:if>
+                                    
+                                    <div class='post-preview'>
+                                        <b:eval expr='data:post.body ? data:post.body : &quot;&quot;'/>
+                                    </div>
+                                </div>
+                                
+                                <div class='post-footer'>
+                                    <!-- زر Read More -->
+                                    <a class='read-more-btn' expr:href='data:post.url'>Read More</a>
+                                    
+                                    <!-- زر التصنيف (Label) -->
+                                    <b:if cond='data:post.labels'>
+                                        <a class='label-btn' expr:href='data:blog.homepageUrl + &quot;search/label/&quot; + data:post.labels.first.name'>
+                                            <data:post.labels.first.name/>
+                                        </a>
+                                    </b:if>
+                                </div>
+                            </div>
+                        </b:loop>
+                    <!-- داخل قسم post-card في صفحة الموضوع الفردي -->
+                    <b:else/>
+                    <!-- صفحة الموضوع الفردي - عرض الموضوع الحالي فقط -->
+                    <b:loop values='data:posts' var='post'>
+                        <div class='post-card' expr:id='&quot;post-&quot; + data:post.id'>
+                            <div class='post-header'>
+                                <h2 class='post-title'><data:post.title/></h2>
+                            </div>
+                            
+                            <div class='post-content'>
+                                <b:if cond='data:post.firstImageUrl'>
+                                    <img class='post-image' expr:src='data:post.firstImageUrl' alt='Post Image' loading='lazy'/>
+                                </b:if>
+                                
+                                <div class='post-body'>
+                                    <data:post.body/>
+                                </div>
+                            </div>
+                        </div>
+                    </b:loop>
+                    </b:if>
+                </b:includable>
+            </b:widget>
         </b:section>
     </main>
+
+    <!-- Theme Selector -->
+    <div class="theme-selector">
+        <button class="theme-toggle-btn" id="themeToggle" title="Change Theme">
+            🎨
+        </button>
+        <div class="theme-palette" id="themePalette">
+            <button class="theme-color-option active" data-theme="orange" title="Orange Theme"></button>
+            <button class="theme-color-option" data-theme="blue" title="Blue Theme"></button>
+            <button class="theme-color-option" data-theme="green" title="Green Theme"></button>
+            <button class="theme-color-option" data-theme="purple" title="Purple Theme"></button>
+            <button class="theme-color-option" data-theme="pink" title="Pink Theme"></button>
+            <button class="theme-color-option" data-theme="teal" title="Teal Theme"></button>
+        </div>
+    </div>
 
     <button aria-label='Back to top' class='back-to-top' id='backToTop'>&#8593;</button>
 </body>
