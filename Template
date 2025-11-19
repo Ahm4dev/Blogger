@@ -5,90 +5,143 @@
     <meta charset='utf-8'/>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes' name='viewport'/>
     <title><data:blog.pageTitle/></title>
-    
-    <!-- وصف المدونة المحسن -->
+
+    <!-- ============================================
+         SEO Meta Description and Keywords
+         ============================================ -->
     <b:if cond='data:blog.pageType == "index"'>
-        <!-- الصفحة الرئيسية -->
-        <meta name='description' content='Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.'/>
+        <meta name='description' content='Discover clear, comprehensive summaries of International Financial Reporting Standards (IFRS) and International Standards on Auditing (ISA). Essential resource for accountants, auditors, and finance students worldwide.'/>
     <b:elseif cond='data:blog.pageType == "item"'/>
-        <!-- مقالات فردية - يستخدم وصف المقال نفسه -->
         <meta expr:content='data:blog.metaDescription' name='description'/>
     <b:else/>
-        <!-- صفحات أخرى (أرشيف، تصنيفات، إلخ) -->
         <meta expr:content='data:blog.pageTitle' name='description'/>
     </b:if>
+
+    <!-- Canonical URL -->
+    <link rel='canonical' expr:href='data:blog.canonicalUrl'/>
+
+    <!-- ============================================
+         Open Graph Tags for Social Media Sharing
+         ============================================ -->
+    <meta property='og:site_name' expr:content='data:blog.title'/>
+    <meta property='og:title' expr:content='data:blog.pageName'/>
+    <meta property='og:url' expr:content='data:blog.canonicalUrl'/>
+    <meta property='og:type' expr:content='data:blog.pageType == "item" ? "article" : "website"'/>
+    <meta property='og:locale' content='en_US'/>
     
-    <!-- Open Graph -->
-    <meta property="og:site_name" expr:content="data:blog.title"/>
-    <meta property="og:title" expr:content="data:blog.pageName"/>
+    <!-- Open Graph Description -->
     <b:if cond='data:blog.pageType == "index"'>
-        <meta property="og:description" content='Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.'/>
+        <meta property='og:description' content='Discover clear, comprehensive summaries of International Financial Reporting Standards (IFRS) and International Standards on Auditing (ISA). Essential resource for accountants, auditors, and finance students worldwide.'/>
     <b:else/>
-        <meta property="og:description" expr:content="data:blog.metaDescription"/>
+        <meta property='og:description' expr:content='data:blog.metaDescription ? data:blog.metaDescription : data:blog.pageName'/>
     </b:if>
-    <b:if cond='data:blog.postImageUrl'>
-        <meta property="og:image" expr:content="data:blog.postImageUrl"/>
-    <b:else/>
-        <meta property="og:image" expr:content="data:blog.blogspotFaviconUrl"/>
-    </b:if>
-    <meta property="og:type" expr:content='data:blog.pageType == "item" ? "article" : "website"'/>
-    <meta property="og:url" expr:content="data:blog.canonicalUrl"/>
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" expr:content="data:blog.pageName"/>
-    <b:if cond='data:blog.pageType == "index"'>
-        <meta name="twitter:description" content='Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.'/>
-    <b:else/>
-        <meta name="twitter:description" expr:content="data:blog.metaDescription"/>
-    </b:if>
+    <!-- Open Graph Image with Fallback -->
     <b:if cond='data:blog.postImageUrl'>
-        <meta name="twitter:image" expr:content="data:blog.postImageUrl"/>
+        <meta property='og:image' expr:content='data:blog.postImageUrl'/>
+        <meta property='og:image:secure_url' expr:content='data:blog.postImageUrl'/>
+        <meta property='og:image:width' content='1200'/>
+        <meta property='og:image:height' content='630'/>
+        <meta property='og:image:type' content='image/jpeg'/>
+        <meta property='og:image:alt' expr:content='data:blog.pageName'/>
     <b:else/>
-        <meta name="twitter:image" expr:content="data:blog.blogspotFaviconUrl"/>
+        <meta property='og:image' content='https://live.staticflickr.com/65535/54929390696_1f547017e9_b.jpg'/>
+        <meta property='og:image:secure_url' content='https://live.staticflickr.com/65535/54929390696_1f547017e9_b.jpg'/>
+        <meta property='og:image:width' content='1024'/>
+        <meta property='og:image:height' content='768'/>
+        <meta property='og:image:type' content='image/jpeg'/>
+        <meta property='og:image:alt' expr:content='data:blog.pageName'/>
     </b:if>
-    <meta name="twitter:url" expr:content="data:blog.canonicalUrl"/>
-    <meta name="twitter:site" expr:content="data:blog.title"/>
 
-    <!-- Schema.org -->
-    <script type="application/ld+json">
+    <!-- Article-specific Open Graph tags -->
+    <b:if cond='data:blog.pageType == "item"'>
+        <meta property='article:published_time' expr:content='data:blog.postTimestamp'/>
+        <meta property='article:modified_time' expr:content='data:blog.postTimestamp'/>
+        <meta property='article:author' expr:content='data:blog.title'/>
+    </b:if>
+
+    <!-- ============================================
+         Twitter Card Tags
+         ============================================ -->
+    <meta name='twitter:card' content='summary_large_image'/>
+    <meta name='twitter:title' expr:content='data:blog.pageName'/>
+    <meta name='twitter:description' expr:content='data:blog.metaDescription ? data:blog.metaDescription : data:blog.pageName'/>
+    <b:if cond='data:blog.postImageUrl'>
+        <meta name='twitter:image' expr:content='data:blog.postImageUrl'/>
+        <meta name='twitter:image:alt' expr:content='data:blog.pageName'/>
+    <b:else/>
+        <meta name='twitter:image' content='https://live.staticflickr.com/65535/54929390696_1f547017e9_b.jpg'/>
+        <meta name='twitter:image:alt' expr:content='data:blog.pageName'/>
+    </b:if>
+
+    <!-- ============================================
+         Schema.org Structured Data (JSON-LD)
+         ============================================ -->
+    <b:if cond='data:blog.pageType == "item"'>
+        <!-- BlogPosting Schema for Individual Posts -->
+        <script type='application/ld+json'>
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "<data:blog.canonicalUrl/>"
+            },
+            "headline": "<data:blog.pageName/>",
+            "description": "<data:blog.metaDescription/>",
+            "image": {
+                "@type": "ImageObject",
+                "url": "<b:if cond='data:blog.postImageUrl'><data:blog.postImageUrl/><b:else/>https://live.staticflickr.com/65535/54929390696_1f547017e9_b.jpg</b:if>",
+                "width": "<b:if cond='data:blog.postImageUrl'>1200<b:else/>1024</b:if>",
+                "height": "<b:if cond='data:blog.postImageUrl'>630<b:else/>768</b:if>"
+            },
+            "author": {
+                "@type": "Person",
+                "name": "<data:blog.title/>"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "<data:blog.title/>",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "<data:blog.blogspotFaviconUrl/>"
+                }
+            },
+            "datePublished": "<data:blog.postTimestamp/>",
+            "dateModified": "<data:blog.postTimestamp/>"
+        }
+        </script>
+    <b:else/>
+        <!-- Website Schema for Homepage/Archive Pages -->
+        <script type='application/ld+json'>
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "<data:blog.canonicalUrl/>",
+            "url": "<data:blog.canonicalUrl/>",
+            "name": "<data:blog.title/>",
+            "description": "Discover clear, comprehensive summaries of International Financial Reporting Standards (IFRS) and International Standards on Auditing (ISA). Essential resource for accountants, auditors, and finance students worldwide.",
+            "publisher": {
+                "@type": "Organization",
+                "name": "<data:blog.title/>",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "<data:blog.blogspotFaviconUrl/>"
+                }
+            }
+        }
+        </script>
+    </b:if>
+
+    <!-- Organization Schema -->
+    <script type='application/ld+json'>
     {
         "@context": "https://schema.org",
-        <b:if cond='data:blog.pageType == "item"'>
-        "@type": "BlogPosting",
-        <b:else/>
-        "@type": "Blog",
-        </b:if>
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "<data:blog.canonicalUrl/>"
-        },
-        "headline": "<data:blog.pageName/>",
-        <b:if cond='data:blog.pageType == "index"'>
-        "description": "Clear summaries of International Accounting (IFRS) &amp; Auditing (ISA) standards for professionals &amp; students. Simplify complex guidelines and stay updated with Audit Cafe.",
-        <b:else/>
-        "description": "<data:blog.metaDescription/>",
-        </b:if>
-        <b:if cond='data:blog.postImageUrl'>
-        "image": "<data:blog.postImageUrl/>",
-        </b:if>
-        "author": {
-            "@type": "Person",
-            "name": "<data:blog.title/>"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "<data:blog.title/>",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "<data:blog.blogspotFaviconUrl/>"
-            }
-        },
-        <b:if cond='data:blog.pageType == "item"'>
-        "datePublished": "<data:blog.postTimestamp/>",
-        "dateModified": "<data:blog.postTimestamp/>",
-        </b:if>
-        "url": "<data:blog.canonicalUrl/>"
+        "@type": "Organization",
+        "name": "<data:blog.title/>",
+        "url": "<data:blog.homepageUrl/>",
+        "logo": "<data:blog.blogspotFaviconUrl/>",
+        "sameAs": []
     }
     </script>
 
@@ -97,16 +150,16 @@
    CSS Variables (Custom Properties)
    ========================================================================== */
 :root {
-  /* نظام الألوان الافتراضي (Orange) */
-  --primary: #FF6D00;
-  --primary-light: #FF9E40;
-  --primary-dark: #E65100;
-  --secondary: #2962FF;
-  --secondary-light: #448AFF;
-  --secondary-dark: #0039CB;
-  --accent: #00C853;
-  --accent-light: #69F0AE;
-  --accent-dark: #00B248;
+  /* نظام الألوان الافتراضي (Teal) */
+  --primary: #009688;
+  --primary-light: #4DB6AC;
+  --primary-dark: #00796B;
+  --secondary: #FF9800;
+  --secondary-light: #FFB74D;
+  --secondary-dark: #F57C00;
+  --accent: #E040FB;
+  --accent-light: #EA80FC;
+  --accent-dark: #AA00FF;
   
   /* ألوان محايدة */
   --dark: #263238;
@@ -143,15 +196,39 @@
   /* متغيرات الحالة */
   --dark-mode-enabled: 0;
   
-  /* نظام الألوان الافتراضي (Orange) - إضافة RGB */
-  --primary-rgb: 255, 109, 0;
-  --primary-light-rgb: 255, 158, 64;
-  --primary-dark-rgb: 230, 81, 0;
+  /* نظام الألوان الافتراضي (Teal) - إضافة RGB */
+  --primary-rgb: 0, 150, 136;
+  --primary-light-rgb: 77, 182, 172;
+  --primary-dark-rgb: 0, 121, 107;
 }
 
 /* ==========================================================================
    أنظمة الألوان المختلفة - الوضع الفاتح
    ========================================================================== */
+
+/* Teal Theme */
+[data-theme="teal"] {
+  --primary: #009688;
+  --primary-light: #4DB6AC;
+  --primary-dark: #00796B;
+  --secondary: #FF9800;
+  --accent: #E040FB;
+  --primary-rgb: 0, 150, 136;
+  --primary-light-rgb: 77, 182, 172;
+  --primary-dark-rgb: 0, 121, 107;
+}
+
+/* Orange Theme */
+[data-theme="orange"] {
+  --primary: #FF6D00;
+  --primary-light: #FF9E40;
+  --primary-dark: #E65100;
+  --secondary: #2962FF;
+  --accent: #00C853;
+  --primary-rgb: 255, 109, 0;
+  --primary-light-rgb: 255, 158, 64;
+  --primary-dark-rgb: 230, 81, 0;
+}
 
 /* Blue Theme */
 [data-theme="blue"] {
@@ -201,18 +278,6 @@
   --primary-dark-rgb: 245, 0, 87;
 }
 
-/* Teal Theme */
-[data-theme="teal"] {
-  --primary: #009688;
-  --primary-light: #4DB6AC;
-  --primary-dark: #00796B;
-  --secondary: #FF9800;
-  --accent: #E040FB;
-  --primary-rgb: 0, 150, 136;
-  --primary-light-rgb: 77, 182, 172;
-  --primary-dark-rgb: 0, 121, 107;
-}
-
 /* ==========================================================================
    النظام الديناميكي للوضع الداكن
    ========================================================================== */
@@ -231,7 +296,18 @@
    أنظمة الألوان في الوضع الداكن
    ========================================================================== */
 
-/* Orange Theme - Dark (الافتراضي) */
+/* Teal Theme - Dark (الافتراضي) */
+.dark-mode[data-theme="teal"] {
+  --primary: #4DB6AC;
+  --primary-light: #80CBC4;
+  --primary-dark: #009688;
+  --accent: #EA80FC;
+  --primary-rgb: 77, 182, 172;
+  --primary-light-rgb: 128, 203, 196;
+  --primary-dark-rgb: 0, 150, 136;
+}
+
+/* Orange Theme - Dark */
 .dark-mode[data-theme="orange"] {
   --primary: #FF9E40;
   --primary-light: #FFB74D;
@@ -284,17 +360,6 @@
   --primary-rgb: 255, 121, 176;
   --primary-light-rgb: 255, 168, 210;
   --primary-dark-rgb: 255, 64, 129;
-}
-
-/* Teal Theme - Dark */
-.dark-mode[data-theme="teal"] {
-  --primary: #4DB6AC;
-  --primary-light: #80CBC4;
-  --primary-dark: #009688;
-  --accent: #EA80FC;
-  --primary-rgb: 77, 182, 172;
-  --primary-light-rgb: 128, 203, 196;
-  --primary-dark-rgb: 0, 150, 136;
 }
 
 /* ==========================================================================
@@ -445,6 +510,7 @@ main {
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-overflow-scrolling: touch;
+  overflow-x: hidden !important;
 }
 
 /* ==========================================================================
@@ -690,18 +756,6 @@ main {
   display: block;
 }
 
-.search-results-counter {
-  font-size: 0.85rem;
-  color: var(--text-light);
-  margin-top: 0.5rem;
-  text-align: center;
-  display: none;
-  transition: all var(--transition-speed) ease;
-}
-
-.search-results-counter.show { 
-  display: block;
-}
 
 /* ==========================================================================
    Sidebar Links
@@ -1142,22 +1196,37 @@ main {
 .theme-color-option[data-theme="pink"] { background: #FF4081; }
 .theme-color-option[data-theme="teal"] { background: #009688; }
 
+
+
+
+
+
 /* ==========================================================================
-   نظام ألوان ديناميكي للوضع الداكن - تطبيق الأنماط المحسنة
    ========================================================================== */
+/* ==========================================================================
+   Enhanced Dark Mode System - Optimized Architecture
+   ========================================================================== */
+
+/* CSS Custom Properties */
+:root {
+  --dm-transition: all 0.3s ease;
+  --dm-border-radius: 8px;
+  --dm-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --dm-line-height: 1.6;
+}
+
+/* ==========================================================================
+   Core Dark Mode Base
+   ========================================================================== */
+
 .dark-mode .post-body,
 .dark-mode .post-body * {
   background-color: transparent !important;
 }
 
-.dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]) {
-  color: #ffb74d !important;
-  text-decoration: underline;
-}
-
-.dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]):hover {
-  color: #ff9800 !important;
-  text-decoration: none;
+/* Typography System */
+.dark-mode .post-body *:not(h1, h2, h3, h4, h5, h6, strong, b, [class*="title"], [class*="heading"], [class*="header"], [class*="important"], [class*="primary"], pre, code, [class*="language"], [class*="hljs"], .color-preserved) {
+  color: var(--dm-text-primary) !important;
 }
 
 .dark-mode .post-body em,
@@ -1166,23 +1235,51 @@ main {
   font-style: italic;
 }
 
+.dark-mode .post-body h1,
+.dark-mode .post-body h2, 
+.dark-mode .post-body h3,
+.dark-mode .post-body h4,
+.dark-mode .post-body h5,
+.dark-mode .post-body h6 {
+  color: var(--primary-light) !important;
+  border-bottom: 1px solid var(--dm-border-primary);
+  padding-bottom: 0.5rem;
+}
+
+.dark-mode .post-body strong,
+.dark-mode .post-body b {
+  color: var(--accent-light) !important;
+}
+
+/* Links & Navigation */
+.dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]) {
+  color: #ffb74d !important;
+  text-decoration: underline;
+  transition: var(--dm-transition);
+}
+
+.dark-mode .post-body a:not(.btn):not(.button):not([class*="button"]):hover {
+  color: #ff9800 !important;
+  text-decoration: none;
+}
+
+/* Structural Elements */
 .dark-mode .post-body hr {
   border: none;
   border-top: 1px solid var(--dm-border-primary);
   margin: 2rem 0;
 }
 
-.dark-mode .post-preview::after {
-  background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, var(--card-bg) 100%);
-}
-
-.dark-mode .post-image { 
-  background-color: #2a2a2a; 
-}
-
+/* Media Elements */
+.dark-mode .post-image,
 .dark-mode .post-body img,
 .dark-mode .post-preview img { 
   background-color: #2a2a2a; 
+  transition: var(--dm-transition);
+}
+
+.dark-mode .post-preview::after {
+  background: linear-gradient(to bottom, rgba(30,30,30,0) 0%, var(--card-bg) 100%);
 }
 
 .dark-mode .post-body pre,
@@ -1190,25 +1287,24 @@ main {
   background-color: rgba(255,255,255,0.05); 
 }
 
-/* منع تقطيع الكلمات داخل خلايا الجدول */
-.post-body table th,
-.post-body table td {
-  white-space: nowrap;
-  word-break: keep-all;
-  overflow-wrap: normal;
-}
+/* ==========================================================================
+   Enhanced Tables System
+   ========================================================================== */
 
-/* الجداول - النسخة المحسنة */
 .dark-mode .post-body table {
   background-color: var(--dm-bg-secondary) !important;
   margin: 1.5rem 0 !important;
   width: 100% !important;
   border-collapse: collapse !important;
-  border-radius: 8px !important;
+  border-radius: var(--dm-border-radius) !important;
   overflow: hidden !important;
-  transition: all 0.3s ease !important;
+  transition: var(--dm-transition) !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+.dark-mode .post-body table:hover {
+  box-shadow: var(--dm-box-shadow) !important;
 }
 
 .dark-mode .mobile-table-container {
@@ -1217,37 +1313,37 @@ main {
   background: transparent !important;
 }
 
+/* Table Cell Base */
 .dark-mode .post-body th,
 .dark-mode .post-body td {
   border: 1px solid var(--dm-table-border) !important;
+  padding: 0.75rem !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  vertical-align: top !important;
 }
 
-.dark-mode .post-body table:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+.post-body table th,
+.post-body table td {
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
-.dark-mode .post-body tr {
-  border-bottom: 1px solid var(--dm-table-border) !important;
-  transition: background-color 0.2s ease !important;
+.dark-mode .post-body td {
+  color: var(--dm-text-primary) !important;
+  background-color: transparent !important;
 }
 
-.dark-mode .post-body tr:hover {
-  background-color: rgba(255, 255, 255, 0.03) !important;
+.dark-mode .post-body td:first-child {
+  font-weight: 500 !important;
 }
 
-.dark-mode .post-body tr:nth-child(even) {
-  background-color: var(--dm-table-zebra) !important;
-}
-
-.dark-mode .post-body tr:nth-child(even):hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
+/* Table Headers */
 .dark-mode .post-body th {
   background-color: var(--dm-table-header-bg) !important;
   color: var(--dm-text-primary) !important;
   padding: 1rem 0.75rem !important;
-  border: 1px solid var(--dm-table-border) !important;
   font-weight: 600 !important;
   text-align: left !important;
   font-size: 0.95rem !important;
@@ -1265,42 +1361,280 @@ main {
   background: linear-gradient(90deg, var(--primary), var(--primary-light)) !important;
 }
 
-.dark-mode .post-body td {
-  padding: 0.75rem !important;
-  border: 1px solid var(--dm-table-border) !important;
+/* Table Rows */
+.dark-mode .post-body tr {
+  border-bottom: 1px solid var(--dm-table-border) !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.dark-mode .post-body tr:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.dark-mode .post-body tr:nth-child(even) {
+  background-color: var(--dm-table-zebra) !important;
+}
+
+.dark-mode .post-body tr:nth-child(even):hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ==========================================================================
+   IFRS Components System - IAS 41 + All Original Classes
+   ========================================================================== */
+
+/* Base Card Architecture */
+.dark-mode .ifrs-card {
+  background-color: var(--dm-bg-secondary) !important;
   color: var(--dm-text-primary) !important;
-  background-color: transparent !important;
-  font-size: 0.9rem !important;
-  line-height: 1.5 !important;
-  vertical-align: top !important;
+  border: 1px solid var(--dm-border-primary) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  line-height: var(--dm-line-height);
 }
 
-.dark-mode .post-body td:first-child {
-  font-weight: 500 !important;
+.dark-mode .card-header {
+  background: linear-gradient(to right, #1a4f72, #2962FF) !important;
+  color: white !important;
+  border-bottom: 1px solid var(--dm-border-primary) !important;
 }
 
-/* الحل النهائي - استثناء العناوين والنصوص الهامة */
-.dark-mode .post-body *:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6):not(strong):not(b):not([class*="title"]):not([class*="heading"]):not([class*="header"]):not([class*="important"]):not([class*="primary"]):not(pre):not(code):not([class*="language"]):not([class*="hljs"]):not(.color-preserved) {
-  color: var(--dm-text-primary) !important;
+.dark-mode .effective-date {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-/* تعيين ألوان خاصة للعناوين والنصوص البولد باستخدام متغيرات النظام */
-.dark-mode .post-body h1,
-.dark-mode .post-body h2, 
-.dark-mode .post-body h3,
-.dark-mode .post-body h4,
-.dark-mode .post-body h5,
-.dark-mode .post-body h6 {
+.dark-mode .section-title {
   color: var(--primary-light) !important;
-  border-bottom: 1px solid var(--dm-border-primary);
-  padding-bottom: 0.5rem;
+  border-bottom-color: var(--dm-border-primary) !important;
 }
 
-.dark-mode .post-body strong,
-.dark-mode .post-body b {
+/* Box System - Common Styles */
+.dark-mode [class*="-box"] {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  color: var(--dm-text-primary) !important;
+  border-radius: 8px !important;
+}
+
+/* Box Type Variants - Blue Family */
+.dark-mode .key-box,
+.dark-mode .key-point,
+.dark-mode .query-box {
+  background-color: rgba(41, 98, 255, 0.12) !important;
+  border-left-color: #448AFF !important;
+}
+
+/* Green Family */
+.dark-mode .definition-box,
+.dark-mode .answer-box {
+  background-color: rgba(0, 200, 83, 0.12) !important;
+  border-left-color: #69F0AE !important;
+}
+
+/* Purple Family */
+.dark-mode .step-box,
+.dark-mode .control-box,
+.dark-mode .calculation-steps,
+.dark-mode .summary-box,
+.dark-mode .criteria-box,
+.dark-mode .measurement-box {
+  background-color: rgba(156, 39, 176, 0.12) !important;
+  border-left-color: #CE93D8 !important;
+}
+
+/* Orange Family */
+.dark-mode .sales-type-box,
+.dark-mode .warning-box,
+.dark-mode .nci-box,
+.dark-mode .comparison-box {
+  background-color: rgba(255, 152, 0, 0.12) !important;
+  border-left-color: #FFB74D !important;
+}
+
+/* Red Family */
+.dark-mode .important-box,
+.dark-mode .standard-box {
+  background-color: rgba(233, 30, 99, 0.12) !important;
+  border-left-color: #F48FB1 !important;
+}
+
+/* Teal Family */
+.dark-mode .flowchart-box {
+  background-color: rgba(0, 150, 136, 0.15) !important;
+  border-left-color: #4DB6AC !important;
+}
+
+/* Yellow Family */
+.dark-mode .formula-box {
+  background-color: rgba(255, 193, 7, 0.15) !important;
+  border-left-color: #FFD54F !important;
+}
+
+/* IAS 41 Specific Boxes */
+.dark-mode .category-box {
+  background-color: rgba(41, 98, 255, 0.08) !important;
+  border-left-color: #2962FF !important;
+}
+
+.dark-mode .example-box {
+  background-color: var(--dm-bg-tertiary) !important;
+  border: 1px solid var(--dm-border-primary) !important;
+}
+
+/* Text Emphasis System */
+.dark-mode .highlight {
+  background-color: rgba(var(--primary-rgb), 0.25) !important;
+  color: var(--dm-text-primary) !important;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.dark-mode .keyword,
+.dark-mode .query-title,
+.dark-mode .answer-title,
+.dark-mode .example-title {
+  color: var(--primary-light) !important;
+  font-weight: 600;
+}
+
+/* Content Typography */
+.dark-mode .ifrs-card p,
+.dark-mode .ifrs-card li,
+.dark-mode .ifrs-card ul,
+.dark-mode .ifrs-card ol,
+.dark-mode .content-text {
+  color: var(--dm-text-primary) !important;
+}
+
+.dark-mode .ifrs-card strong,
+.dark-mode .ifrs-card b {
+  color: var(--dm-text-primary) !important;
+  font-weight: 600 !important;
+}
+
+.dark-mode .ifrs-card em,
+.dark-mode .ifrs-card i {
+  color: var(--dm-text-primary) !important;
+  font-style: italic !important;
+}
+
+/* Lists Enhancement */
+.dark-mode .criteria-list li {
+  color: var(--dm-text-primary) !important;
+}
+
+.dark-mode .criteria-list li:before {
+  color: var(--primary-light) !important;
+}
+
+/* IFRS Tables */
+.dark-mode .ifrs-card table {
+  background-color: var(--dm-bg-tertiary) !important;
+  border-color: var(--dm-border-primary) !important;
+}
+
+.dark-mode .ifrs-card th {
+  background-color: rgba(var(--primary-rgb), 0.15) !important;
+  color: var(--primary-light) !important;
+  border-color: var(--dm-border-primary) !important;
+}
+
+.dark-mode .ifrs-card td {
+  background-color: var(--dm-bg-tertiary) !important;
+  color: var(--dm-text-primary) !important;
+  border-color: var(--dm-border-secondary) !important;
+}
+
+.dark-mode .ifrs-card tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark-mode .ifrs-card tr:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Additional Components */
+.dark-mode .subsection {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--dm-border-primary);
+}
+
+.dark-mode .footer {
+  background-color: var(--dm-bg-tertiary) !important;
+  color: var(--dm-text-secondary) !important;
+  border-top-color: var(--dm-border-primary) !important;
+}
+
+/* IFRS Links */
+.dark-mode .ifrs-card a {
+  color: var(--primary-light) !important;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.dark-mode .ifrs-card a:hover {
   color: var(--accent-light) !important;
+  text-decoration: none;
 }
 
+/* ==========================================================================
+   Transitions & Effects
+   ========================================================================== */
+
+.dark-mode .ifrs-card,
+.dark-mode .ifrs-card *:not(script):not(style):not(link) {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+}
+
+.dark-mode .ifrs-card img {
+  opacity: 0.9;
+  filter: brightness(0.9);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.dark-mode .ifrs-card img:hover {
+  opacity: 1;
+  filter: brightness(1);
+}
+
+.dark-mode .ifrs-card :focus {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Color System
+   ========================================================================== */
+
+.dark-mode .ifrs-card .primary-color { color: var(--primary) !important; }
+.dark-mode .ifrs-card .accent-color { color: var(--accent) !important; }
+.dark-mode .ifrs-card .success-color { color: #69F0AE !important; }
+.dark-mode .ifrs-card .warning-color { color: #FFB74D !important; }
+.dark-mode .ifrs-card .error-color { color: #EF9A9A !important; }
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .dark-mode .ifrs-card {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .dark-mode .card-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .dark-mode .card-content {
+    padding: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   ========================================================================== */
+  
 /* ==========================================================================
    Theme & Utility Classes
    ========================================================================== */
@@ -1901,1141 +2235,1565 @@ main {
   opacity: 1;
 }
 
+
 /* ==========================================================================
-   تحسينات الوضع الداكن الديناميكي
+   تنسيق العنصر المحدد بالكيبورد في القائمة الجانبية عند التمرير في نتائج البحث
    ========================================================================== */
-@media (prefers-reduced-motion: no-preference) {
-  .dark-mode .post-body a:not(.btn):not(.button) {
-    transition: color 0.2s ease;
-  }
-  
-  .dark-mode .post-body img {
-    transition: opacity 0.3s ease;
-  }
+/* تنسيق العنصر المحدد بالكيبورد */
+.sidebar-link.keyboard-selected {
+    background-color: rgba(var(--primary-rgb), 0.2) !important;
+    color: var(--primary) !important;
+    font-weight: 600;
+    border-left: 3px solid var(--primary);
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.2);
 }
 
-@media (prefers-contrast: high) {
-  .dark-mode {
-    --text: #ffffff;
-    --text-light: #cccccc;
-    --border-color-light: #666666;
-  }
+.sidebar-link.keyboard-selected::after {
+    transform: translateX(0);
+    background-color: var(--primary-light);
 }
 
-@media (prefers-contrast: low) {
-  .dark-mode {
-    --text: #cccccc;
-    --text-light: #999999;
-  }
+/* تحسين التباين للوضع الداكن */
+.dark-mode .sidebar-link.keyboard-selected {
+    background-color: rgba(var(--primary-rgb), 0.3) !important;
+    color: var(--primary-light) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ==========================================================================
+   تنسيقات اضافية للبحث
+   ========================================================================== */
+// إضافة CSS إضافي لتحسين التجربة
+    .search-input:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .global-search-active {
+        animation: pulse-glow 0.5s ease-in-out;
+        border-color: var(--primary) !important;
+    }
+    
+    @keyframes pulse-glow {
+        0% { 
+            box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
+            transform: scale(1);
+        }
+        50% { 
+            box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0.1);
+            transform: scale(1.02);
+        }
+        100% { 
+            box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+            transform: scale(1);
+        }
+    }
+    
+    /* تحسين مظهر القائمة عند الفتح بالكيبورد */
+    .sidebar.keyboard-opened {
+        animation: slide-in-keyboard 0.3s ease-out;
+    }
+    
+    @keyframes slide-in-keyboard {
+        from { 
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to { 
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+	
+	
+	// إضافة CSS لتحسين تجربة المستخدم
+    .search-input:focus {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1);
+    }
+    
+    .global-search-active {
+        animation: pulse-glow 0.5s ease-in-out;
+    }
+    
+    @keyframes pulse-glow {
+        0% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4); }
+        50% { box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0.1); }
+        100% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0); }
+    }
+	
+	/* ==========================================================================
+   Header Hover Behavior
+   ========================================================================== */
+nav:hover {
+    transform: translateY(0) !important;
+    transition: transform 0.3s ease !important;
+}
+
+nav.hover-protected {
+    transform: translateY(0) !important;
+    transition: transform 0.3s ease !important;
 }
 ]]></b:skin>
 
 <script>
 //<![CDATA[
-// متغير للتحكم في التحميل المزدوج
-let isInitialized = false;
+/**
+ * Blog Template - Optimized Script
+ * Version: 2.0
+ * Features: Theme System, Dark Mode, Infinite Scroll, Keyboard Navigation, Mobile Tables
+ */
 
-// نظام إدارة الثيمات
-function initThemeSystem() {
+// ============================================================================
+// Global State Management
+// ============================================================================
+const BlogState = {
+  initialized: false,
+  isSidebarOpen: false,
+  isHeaderVisible: true,
+  lastScrollY: 0,
+  headerHeight: 80,
+  isLoading: false,
+  hasMorePosts: true,
+  postsPerPage: 5,
+  postsLoaded: 0,
+  currentCategory: 'all',
+  currentKeyboardIndex: -1,
+  filteredLinks: []
+};
+
+// ============================================================================
+// Theme Management System
+// ============================================================================
+const ThemeManager = {
+  availableThemes: ['teal', 'orange', 'blue', 'green', 'purple', 'pink'],
+  
+  init() {
     const themeToggle = document.getElementById('themeToggle');
     const themePalette = document.getElementById('themePalette');
     const themeOptions = document.querySelectorAll('.theme-color-option');
     const html = document.documentElement;
     
-    // الثيمات المتاحة
-    const availableThemes = [
-        'orange', 'blue', 'green', 'purple', 
-        'pink', 'teal'
+    if (!themeToggle || !themePalette) return;
+    
+    const savedTheme = localStorage.getItem('blogTheme') || 'teal';
+    this.applyTheme(savedTheme);
+    
+    themeToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      themePalette.classList.toggle('open');
+    });
+    
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const selectedTheme = option.dataset.theme;
+        this.applyTheme(selectedTheme);
+        this.updateActiveTheme(selectedTheme);
+        themePalette.classList.remove('open');
+      });
+    });
+    
+    document.addEventListener('click', (e) => {
+      if (!themeToggle.contains(e.target) && !themePalette.contains(e.target)) {
+        themePalette.classList.remove('open');
+      }
+    });
+    
+    this.updateActiveTheme(savedTheme);
+  },
+  
+  applyTheme(themeName) {
+    if (!this.availableThemes.includes(themeName)) {
+      themeName = 'orange';
+    }
+    
+    document.documentElement.setAttribute('data-theme', themeName);
+    localStorage.setItem('blogTheme', themeName);
+    this.updateThemeMeta(themeName);
+  },
+  
+  updateActiveTheme(themeName) {
+    document.querySelectorAll('.theme-color-option').forEach(option => {
+      option.classList.toggle('active', option.dataset.theme === themeName);
+    });
+  },
+  
+  updateThemeMeta(themeName) {
+    const themeColors = {
+      teal: '#009688',
+      blue: '#2962FF',
+      green: '#00C853',
+      purple: '#7C4DFF',
+      pink: '#FF4081',
+      orange: '#FF6D00'
+    };
+	
+	  
+	   
+    let themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (!themeMeta) {
+      themeMeta = document.createElement('meta');
+      themeMeta.name = 'theme-color';
+      document.head.appendChild(themeMeta);
+    }
+    themeMeta.content = themeColors[themeName] || themeColors.orange;
+  }
+};
+
+// ============================================================================
+// Dark Mode Management - SAFE VERSION
+// ============================================================================
+const DarkModeManager = {
+  init() {
+    const modeToggle = document.getElementById('modeToggle');
+    if (!modeToggle) return;
+    
+    const savedDarkMode = localStorage.getItem('darkMode');
+    this.applyDarkMode(savedDarkMode === 'enabled');
+    
+    modeToggle.addEventListener('click', () => {
+      const isDark = !document.body.classList.contains('dark-mode');
+      this.applyDarkMode(isDark);
+    });
+  },
+  
+  applyDarkMode(isDark) {
+    const html = document.documentElement;
+    const body = document.body;
+    const modeToggle = document.getElementById('modeToggle');
+    
+    if (isDark) {
+      html.classList.add('dark-mode');
+      body.classList.add('dark-mode');
+      if (modeToggle) modeToggle.textContent = '☀️ Light Mode';
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      html.classList.remove('dark-mode');
+      body.classList.remove('dark-mode');
+      if (modeToggle) modeToggle.textContent = '🌙 Dark Mode';
+      localStorage.removeItem('darkMode');
+    }
+  }
+};
+
+// ============================================================================
+// Header Scroll Management
+// ============================================================================
+const HeaderManager = {
+  init() {
+    const header = document.querySelector('nav');
+    if (!header) return;
+    
+    BlogState.headerHeight = header.offsetHeight;
+    let ticking = false;
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          this.handleVisibility();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  },
+  
+// في HeaderManager.handleVisibility()
+handleVisibility() {
+  const header = document.querySelector('nav');
+  if (!header) return;
+  
+  // إذا كان الهيدر محميًا بواسطة الماوس، لا تخفيه
+  if (BlogState.isHeaderHovered || BlogState.isSidebarOpen) {
+    header.style.transform = 'translateY(0)';
+    BlogState.isHeaderVisible = true;
+    return;
+  }
+  
+  const currentScrollY = window.scrollY;
+  const scrollDirection = currentScrollY > BlogState.lastScrollY ? 'down' : 'up';
+  
+  if (scrollDirection === 'down' && currentScrollY > BlogState.headerHeight && BlogState.isHeaderVisible) {
+    header.style.transform = 'translateY(-100%)';
+    BlogState.isHeaderVisible = false;
+  } else if (scrollDirection === 'up' && !BlogState.isHeaderVisible) {
+    header.style.transform = 'translateY(0)';
+    BlogState.isHeaderVisible = true;
+  }
+  
+  if (currentScrollY <= BlogState.headerHeight && !BlogState.isHeaderVisible) {
+    header.style.transform = 'translateY(0)';
+    BlogState.isHeaderVisible = true;
+  }
+  
+  BlogState.lastScrollY = currentScrollY;
+}
+};
+
+// ============================================================================
+// Sidebar Management
+// ============================================================================
+const SidebarManager = {
+  init() {
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    
+    if (!menuToggle || !sidebar) return;
+    
+    menuToggle.addEventListener('click', () => this.toggle());
+    
+    document.addEventListener('click', (e) => {
+      if (sidebar.classList.contains('open') && 
+          !sidebar.contains(e.target) && 
+          e.target !== menuToggle) {
+        this.close();
+      }
+    });
+    
+    this.loadNavigation();
+    this.createLabels();
+  },
+  
+  toggle() {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+    const header = document.querySelector('nav');
+    
+    const isOpen = sidebar.classList.toggle('open');
+    menuToggle.classList.toggle('active');
+    menuToggle.setAttribute('aria-expanded', isOpen);
+    
+    BlogState.isSidebarOpen = isOpen;
+    
+    if (isOpen && !BlogState.isHeaderVisible && header) {
+      header.style.transform = 'translateY(0)';
+      BlogState.isHeaderVisible = true;
+    }
+    
+    if (isOpen && window.innerWidth > 768) {
+      setTimeout(() => {
+        const searchInput = document.getElementById('sidebarSearch');
+        if (searchInput) {
+          searchInput.focus();
+          const length = searchInput.value.length;
+          searchInput.setSelectionRange(length, length);
+        }
+      }, 300);
+    }
+  },
+  
+  open(pressedKey = '') {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+    const searchInput = document.getElementById('sidebarSearch');
+    const header = document.querySelector('nav');
+    
+    if (!sidebar || !searchInput) return;
+    
+    if (!sidebar.classList.contains('open')) {
+      sidebar.classList.add('open');
+      if (menuToggle) {
+        menuToggle.classList.add('active');
+        menuToggle.setAttribute('aria-expanded', 'true');
+      }
+      
+      BlogState.isSidebarOpen = true;
+      
+      if (header) {
+        header.style.transform = 'translateY(0)';
+        BlogState.isHeaderVisible = true;
+      }
+    }
+    
+    setTimeout(() => {
+      searchInput.focus();
+      searchInput.classList.add('global-search-active');
+      setTimeout(() => searchInput.classList.remove('global-search-active'), 500);
+      
+      if (pressedKey && pressedKey.length === 1) {
+        searchInput.value += pressedKey;
+        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      
+      KeyboardNav.reset();
+      KeyboardNav.updateFilteredLinks();
+    }, 150);
+  },
+  
+  close() {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+    const searchInput = document.getElementById('sidebarSearch');
+    
+    if (sidebar && sidebar.classList.contains('open')) {
+      sidebar.classList.remove('open');
+      if (menuToggle) {
+        menuToggle.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
+      
+      BlogState.isSidebarOpen = false;
+      
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      
+      KeyboardNav.reset();
+    }
+  },
+  
+  async loadNavigation() {
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (!sidebarContent) return;
+    
+    const loadingElement = document.createElement('div');
+    loadingElement.textContent = 'Loading posts...';
+    loadingElement.style.cssText = 'padding: 1rem; text-align: center;';
+    sidebarContent.innerHTML = '';
+    sidebarContent.appendChild(loadingElement);
+    
+    try {
+      const allPosts = await this.fetchPostsLazy();
+      this.processPosts({ feed: { entry: allPosts } });
+    } catch (error) {
+      console.error('Error loading sidebar posts:', error);
+      loadingElement.textContent = 'Error loading posts. Please refresh.';
+    }
+  },
+  
+  async fetchPostsLazy() {
+    let allPosts = [];
+    let startIndex = 1;
+    const maxResults = 25;
+    const maxPostsForSidebar = 1000;
+    let hasMore = true;
+    
+    while (hasMore && allPosts.length < maxPostsForSidebar) {
+      try {
+        const url = `/feeds/posts/default?alt=json&start-index=${startIndex}&max-results=${maxResults}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const data = await response.json();
+        const posts = data.feed.entry || [];
+        
+        if (posts.length === 0) {
+          hasMore = false;
+          break;
+        }
+        
+        allPosts = allPosts.concat(posts);
+        startIndex += maxResults;
+        
+        const loadingMsg = document.querySelector('.sidebar-content > div:first-child');
+        if (loadingMsg && loadingMsg.textContent.includes('Loading')) {
+          loadingMsg.textContent = `Loading posts... (${allPosts.length})`;
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 50));
+      } catch (error) {
+        if (startIndex === 1) throw error;
+        hasMore = false;
+      }
+    }
+    
+    return allPosts;
+  },
+  
+  processPosts(data) {
+    const posts = data.feed.entry || [];
+    const fragment = document.createDocumentFragment();
+    const section = document.createElement('div');
+    section.className = 'sidebar-section';
+    
+    posts.forEach(post => {
+      const postId = post.id.$t.split('-').pop();
+      const title = post.title.$t;
+      const postUrl = post.link.find(link => link.rel === 'alternate').href;
+      const tags = post.category ? post.category.map(cat => cat.term) : [];
+      
+      const link = document.createElement('a');
+      link.href = postUrl;
+      link.className = 'sidebar-link';
+      link.textContent = title;
+      link.dataset.target = 'post-' + postId;
+      link.dataset.tags = tags.join(',');
+      
+      section.appendChild(link);
+    });
+    
+    fragment.appendChild(section);
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (sidebarContent) {
+      sidebarContent.innerHTML = '';
+      sidebarContent.appendChild(fragment);
+    }
+    
+    ScrollSpy.init();
+    SmoothScroll.init();
+    SearchManager.init();
+  },
+  
+  async createLabels() {
+    const labelsContainer = document.getElementById('sidebarLabels');
+    if (!labelsContainer) return;
+    
+    labelsContainer.innerHTML = "<div style='padding:10px; text-align:center;'>Loading labels...</div>";
+    
+    try {
+      const categories = await CategoryManager.fetchAll();
+      labelsContainer.innerHTML = "";
+      
+      const allBtn = document.createElement("div");
+      allBtn.className = "sidebar-label-btn active";
+      allBtn.textContent = "All";
+      allBtn.dataset.category = "all";
+      labelsContainer.appendChild(allBtn);
+      
+      allBtn.addEventListener("click", () => {
+        document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
+        allBtn.classList.add("active");
+        document.querySelectorAll(".sidebar-link").forEach(link => link.classList.remove("hidden"));
+      });
+      
+      categories.forEach(category => {
+        const btn = document.createElement("div");
+        btn.className = "sidebar-label-btn";
+        btn.textContent = category;
+        btn.dataset.category = category;
+        
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          
+          document.querySelectorAll(".sidebar-link").forEach(link => {
+            const tags = link.dataset.tags ? link.dataset.tags.split(",") : [];
+            link.classList.toggle("hidden", !tags.includes(category));
+          });
+        });
+        
+        labelsContainer.appendChild(btn);
+      });
+    } catch (error) {
+      console.error('Error creating sidebar labels:', error);
+      labelsContainer.innerHTML = "<div style='padding:10px; text-align:center; color: #ff4444;'>Error loading labels</div>";
+    }
+  }
+};
+
+// ============================================================================
+// Search Management
+// ============================================================================
+const SearchManager = {
+  init() {
+    const searchInput = document.getElementById('sidebarSearch');
+    if (!searchInput) return;
+    
+    const links = Array.from(document.querySelectorAll('.sidebar-link'));
+    const postTags = {};
+    
+    links.forEach(link => {
+      const postId = link.dataset.target;
+      postTags[postId] = link.dataset.tags ? link.dataset.tags.split(',') : [];
+    });
+    
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      let resultsCount = 0;
+      
+      window.requestAnimationFrame(() => {
+        links.forEach(link => {
+          const text = link.textContent.toLowerCase();
+          const postId = link.dataset.target;
+          const tags = postTags[postId] || [];
+          
+          const isMatch = text.includes(searchTerm) || 
+                         tags.some(tag => tag.toLowerCase().includes(searchTerm));
+          
+          link.classList.toggle('hidden', !isMatch);
+          if (isMatch) resultsCount++;
+        });
+        
+        const noResults = document.getElementById('noResults');
+        if (noResults) {
+          noResults.classList.toggle('show', resultsCount === 0 && searchTerm !== '');
+        }
+        
+        KeyboardNav.updateFilteredLinks();
+      });
+    });
+  }
+};
+
+// ============================================================================
+// Keyboard Navigation
+// ============================================================================
+const KeyboardNav = {
+  init() {
+    const searchInput = document.getElementById('sidebarSearch');
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', () => {
+      this.reset();
+      this.updateFilteredLinks();
+    });
+    
+    searchInput.addEventListener('keydown', (e) => this.handleKeydown(e));
+    
+    document.addEventListener('click', (e) => {
+      if (e.target !== searchInput) this.reset();
+    });
+  },
+  
+  handleKeydown(e) {
+    const visibleLinks = this.getVisibleLinks();
+    
+    switch(e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        this.navigate(1, visibleLinks);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        this.navigate(-1, visibleLinks);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        this.activateSelected(visibleLinks);
+        break;
+      case 'Escape':
+        this.reset();
+        document.getElementById('sidebarSearch').blur();
+        break;
+    }
+  },
+  
+  navigate(direction, visibleLinks) {
+    if (visibleLinks.length === 0) return;
+    
+    if (BlogState.currentKeyboardIndex >= 0 && BlogState.currentKeyboardIndex < visibleLinks.length) {
+      visibleLinks[BlogState.currentKeyboardIndex].classList.remove('keyboard-selected');
+    }
+    
+    BlogState.currentKeyboardIndex += direction;
+    
+    if (BlogState.currentKeyboardIndex < 0) {
+      BlogState.currentKeyboardIndex = visibleLinks.length - 1;
+    } else if (BlogState.currentKeyboardIndex >= visibleLinks.length) {
+      BlogState.currentKeyboardIndex = 0;
+    }
+    
+    const selectedLink = visibleLinks[BlogState.currentKeyboardIndex];
+    selectedLink.classList.add('keyboard-selected');
+    this.scrollToSelected(selectedLink);
+  },
+  
+  activateSelected(visibleLinks) {
+    let linkToActivate;
+    
+    if (BlogState.currentKeyboardIndex >= 0 && BlogState.currentKeyboardIndex < visibleLinks.length) {
+      linkToActivate = visibleLinks[BlogState.currentKeyboardIndex];
+    } else if (visibleLinks.length > 0) {
+      linkToActivate = visibleLinks[0];
+      linkToActivate.classList.add('keyboard-selected');
+    } else {
+      return;
+    }
+    
+    if (linkToActivate.href) {
+      window.location.href = linkToActivate.href;
+    }
+  },
+  
+  getVisibleLinks() {
+    return Array.from(document.querySelectorAll('.sidebar-link:not(.hidden)'));
+  },
+  
+  updateFilteredLinks() {
+    BlogState.filteredLinks = this.getVisibleLinks();
+    this.reset();
+    
+    if (BlogState.filteredLinks.length > 0) {
+      BlogState.currentKeyboardIndex = 0;
+      BlogState.filteredLinks[0].classList.add('keyboard-selected');
+    }
+  },
+  
+  reset() {
+    BlogState.currentKeyboardIndex = -1;
+    document.querySelectorAll('.sidebar-link.keyboard-selected').forEach(link => {
+      link.classList.remove('keyboard-selected');
+    });
+  },
+  
+  scrollToSelected(selectedLink) {
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (!sidebarContent) return;
+    
+    const linkRect = selectedLink.getBoundingClientRect();
+    const sidebarRect = sidebarContent.getBoundingClientRect();
+    
+    const isAbove = linkRect.top < sidebarRect.top;
+    const isBelow = linkRect.bottom > sidebarRect.bottom;
+    
+    if (isAbove || isBelow) {
+      const elementOffset = selectedLink.offsetTop;
+      const middleOffset = elementOffset - (sidebarContent.offsetHeight / 2) + (selectedLink.offsetHeight / 2);
+      
+      sidebarContent.scrollTo({
+        top: middleOffset,
+        behavior: 'smooth'
+      });
+    }
+  }
+};
+
+// ============================================================================
+// Global Keyboard Shortcuts
+// ============================================================================
+const GlobalKeyboard = {
+  init() {
+    document.addEventListener('keydown', (e) => this.handleKeydown(e));
+  },
+  
+  handleKeydown(e) {
+    if (e.key === 'Escape') {
+      SidebarManager.close();
+      e.preventDefault();
+      return;
+    }
+    
+    if (e.ctrlKey || e.altKey || e.metaKey || 
+        e.key === 'Control' || e.key === 'Alt' || e.key === 'Meta' ||
+        e.target.tagName === 'INPUT' || 
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.isContentEditable) {
+      return;
+    }
+    
+    const allowedKeys = /^[a-zA-Z0-9\u0600-\u06FF\s]$/;
+    
+    if (!allowedKeys.test(e.key)) return;
+    
+    SidebarManager.open(e.key);
+    e.preventDefault();
+  }
+};
+
+// ============================================================================
+// Scroll Spy
+// ============================================================================
+const ScrollSpy = {
+  init() {
+    const links = document.querySelectorAll('.sidebar-link');
+    if (links.length === 0) return;
+    
+    const offset = 100;
+    let ticking = false;
+    let lastActiveLink = null;
+    
+    const onScroll = () => {
+      const scrollPosition = window.scrollY + offset;
+      let lastPassed = null;
+      
+      document.querySelectorAll('.post-card').forEach(post => {
+        const postTop = post.offsetTop;
+        if (postTop <= scrollPosition) {
+          lastPassed = post.id;
+        }
+      });
+      
+      if (!lastPassed) {
+        if (window.location.pathname === "/") {
+          const firstPost = document.querySelector('.post-card');
+          if (firstPost) lastPassed = firstPost.id;
+        } else {
+          const currentPostId = window.location.pathname.split('/').pop();
+          lastPassed = 'post-' + currentPostId;
+        }
+      }
+      
+      links.forEach(link => {
+        const isActive = link.dataset.target === lastPassed || 
+                        link.href === window.location.href || 
+                        link.href.endsWith(lastPassed.replace('post-', ''));
+        
+        link.classList.toggle('active', isActive);
+        
+        if (isActive && link !== lastActiveLink) {
+          lastActiveLink = link;
+          this.autoScrollSidebar(link);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          onScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    onScroll();
+  },
+  
+  autoScrollSidebar(activeLink) {
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (!sidebarContent) return;
+    
+    const linkRect = activeLink.getBoundingClientRect();
+    const sidebarRect = sidebarContent.getBoundingClientRect();
+    
+    const isAbove = linkRect.top < sidebarRect.top;
+    const isBelow = linkRect.bottom > sidebarRect.bottom;
+    
+    if (isAbove || isBelow) {
+      const elementOffset = activeLink.offsetTop;
+      const middleOffset = elementOffset - (sidebarContent.offsetHeight / 2) + (activeLink.offsetHeight / 2);
+      
+      sidebarContent.scrollTo({
+        top: middleOffset,
+        behavior: 'smooth'
+      });
+    }
+  }
+};
+
+// ============================================================================
+// Smooth Scrolling
+// ============================================================================
+const SmoothScroll = {
+  init() {
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        if (this.hash && document.querySelector(this.hash)) {
+          e.preventDefault();
+          
+          const targetElement = document.querySelector(this.hash);
+          if (targetElement) {
+            const offset = 80;
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = window.pageYOffset + elementPosition - offset;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+            
+            history.pushState(null, null, this.hash);
+            
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menuToggle');
+            if (sidebar && sidebar.classList.contains('open')) {
+              sidebar.classList.remove('open');
+              if (menuToggle) {
+                menuToggle.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
+              }
+              BlogState.isSidebarOpen = false;
+            }
+          }
+        }
+      });
+    });
+  }
+};
+
+// ============================================================================
+// Category Management
+// ============================================================================
+const CategoryManager = {
+  async fetchAll() {
+    try {
+      let allCategories = new Set();
+      let startIndex = 1;
+      const maxResults = 50;
+      let hasMore = true;
+      
+      while (hasMore) {
+        try {
+          const response = await fetch(
+            `/feeds/posts/summary?alt=json&start-index=${startIndex}&max-results=${maxResults}`
+          );
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          
+          const data = await response.json();
+          const posts = data.feed.entry || [];
+          
+          if (posts.length === 0) {
+            hasMore = false;
+            break;
+          }
+          
+          posts.forEach(post => {
+            if (post.category) {
+              post.category.forEach(cat => allCategories.add(cat.term));
+            }
+          });
+          
+          startIndex += maxResults;
+          await new Promise(resolve => setTimeout(resolve, 50));
+        } catch (error) {
+          hasMore = false;
+        }
+      }
+      
+      return Array.from(allCategories).sort();
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      return [];
+    }
+  },
+  
+  async createButtons(categories = null) {
+    let categoriesContainer = document.querySelector('.categories-container');
+    
+    if (!categoriesContainer) {
+      if (window.location.pathname !== "/" && !window.location.pathname.startsWith("/search/label/")) return;
+      
+      const categoriesFilter = document.createElement('div');
+      categoriesFilter.className = 'categories-filter';
+      categoriesFilter.id = 'categoriesFilter';
+      
+      categoriesContainer = document.createElement('div');
+      categoriesContainer.className = 'categories-container';
+      
+      categoriesFilter.appendChild(categoriesContainer);
+      
+      const mainContent = document.getElementById('mainContent');
+      if (mainContent) {
+        mainContent.insertBefore(categoriesFilter, mainContent.firstChild);
+      } else {
+        return;
+      }
+    }
+    
+    if (!categories) {
+      categories = await this.fetchAll();
+    }
+    
+    categoriesContainer.innerHTML = '';
+    
+    const allButton = document.createElement('div');
+    allButton.className = 'category-btn active';
+    allButton.textContent = 'All';
+    allButton.dataset.category = 'all';
+    categoriesContainer.appendChild(allButton);
+    
+    categories.forEach(category => {
+      const button = document.createElement('div');
+      button.className = 'category-btn';
+      button.textContent = category;
+      button.dataset.category = category;
+      categoriesContainer.appendChild(button);
+    });
+    
+    if (categories.length === 0) {
+      const categoriesFilter = document.getElementById('categoriesFilter');
+      if (categoriesFilter) categoriesFilter.style.display = 'none';
+    }
+    
+    this.setupFilters();
+    this.activateCurrent();
+  },
+  
+  setupFilters() {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    
+    categoryButtons.forEach(button => {
+      const newButton = button.cloneNode(true);
+      button.parentNode.replaceChild(newButton, button);
+    });
+    
+    const newCategoryButtons = document.querySelectorAll('.category-btn');
+    
+    newCategoryButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        if (BlogState.isLoading) return;
+        
+        newCategoryButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        const newCategory = this.dataset.category;
+        
+        if (window.location.pathname.startsWith("/search/label/")) {
+          if (newCategory !== 'all') {
+            const newUrl = `/search/label/${encodeURIComponent(newCategory)}`;
+            window.history.pushState({}, '', newUrl);
+          } else {
+            window.history.pushState({}, '', '/');
+          }
+        }
+        
+        PostLoader.loadCategory(newCategory, true);
+      });
+    });
+  },
+  
+  activateCurrent() {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    
+    if (window.location.pathname.startsWith("/search/label/")) {
+      const labelMatch = window.location.pathname.match(/\/search\/label\/([^/?]+)/);
+      if (labelMatch) {
+        const currentCategory = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
+        const matchingButton = Array.from(categoryButtons).find(btn => 
+          btn.dataset.category === currentCategory
+        );
+        
+        if (matchingButton) {
+          categoryButtons.forEach(btn => btn.classList.remove('active'));
+          matchingButton.classList.add('active');
+        }
+      }
+    } else if (window.location.pathname === "/") {
+      const allButton = document.querySelector('.category-btn[data-category="all"]');
+      if (allButton) {
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        allButton.classList.add('active');
+      }
+    }
+  }
+};
+
+// ============================================================================
+// Post Loader Management
+// ============================================================================
+const PostLoader = {
+  async loadCategory(category, reset = false) {
+    console.log('Loading category:', { category, reset, isLoading: BlogState.isLoading });
+    
+    if (BlogState.isLoading) {
+      console.log('Already loading, skipping...');
+      return;
+    }
+    
+    BlogState.isLoading = true;
+    BlogState.currentCategory = category;
+    
+    try {
+      if (reset) {
+        console.log('Resetting posts for category:', category);
+        const mainContent = document.getElementById('mainContent');
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'loading-posts visible';
+        loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading posts...</p>";
+        mainContent.appendChild(loadingIndicator);
+        BlogState.postsLoaded = 0;
+        BlogState.hasMorePosts = true;
+        
+        const existingPosts = mainContent.querySelectorAll('.post-card');
+        existingPosts.forEach(post => post.remove());
+      }
+      
+      const startIndex = BlogState.postsLoaded + 1;
+      console.log('Loading posts - startIndex:', startIndex, 'postsLoaded:', BlogState.postsLoaded);
+      
+      const categoryPath = category !== 'all' ? '/-/' + encodeURIComponent(category) : '';
+      const apiUrl = `/feeds/posts/default${categoryPath}?alt=json&start-index=${startIndex}&max-results=${BlogState.postsPerPage}`;
+      console.log('API URL:', apiUrl);
+      
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('API Response received, posts count:', data.feed?.entry?.length || 0);
+      
+      if (!data.feed || !data.feed.entry || data.feed.entry.length === 0) {
+        console.log('No more posts available');
+        BlogState.hasMorePosts = false;
+        
+        if (BlogState.postsLoaded === 0 && reset) {
+          this.showNoPostsMessage();
+        }
+      } else {
+        this.processPosts(data, reset);
+      }
+      
+    } catch (error) {
+      console.error('Error loading posts:', error);
+      if (!reset) {
+        this.showError('Error loading posts. Please try again.');
+      }
+    } finally {
+      BlogState.isLoading = false;
+      const loadingIndicator = document.querySelector('.loading-posts');
+      if (loadingIndicator) loadingIndicator.remove();
+      console.log('loadCategory finished, isLoading:', BlogState.isLoading);
+    }
+  },
+  
+  async fetchCategoriesAndPosts(category = 'all', reset = true) {
+    if (BlogState.isLoading) return;
+    
+    BlogState.isLoading = true;
+    BlogState.currentCategory = category;
+    
+    try {
+      const mainContent = document.getElementById('mainContent');
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.className = 'loading-posts visible';
+      loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading content...</p>";
+      mainContent.appendChild(loadingIndicator);
+      
+      const [categories, initialPosts] = await Promise.all([
+        CategoryManager.fetchAll(),
+        fetch(`/feeds/posts/default${category !== 'all' ? '/-/' + encodeURIComponent(category) : ''}?alt=json&start-index=1&max-results=5`)
+          .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return response.json();
+          })
+      ]);
+      
+      await CategoryManager.createButtons(categories);
+      
+      if (reset) {
+        BlogState.postsLoaded = 0;
+        BlogState.hasMorePosts = true;
+        const existingPosts = mainContent.querySelectorAll('.post-card');
+        existingPosts.forEach(post => post.remove());
+      }
+      
+      this.processPosts(initialPosts, reset);
+      loadingIndicator.remove();
+      
+    } catch (error) {
+      console.error('Error loading content:', error);
+      this.showError('Error loading content. Please refresh the page.');
+    } finally {
+      BlogState.isLoading = false;
+    }
+  },
+  
+  // دالة مساعدة للتحقق مما إذا كان المحتوى يحتوي على كود HTML
+  containsHTMLCode(content) {
+    if (!content) return false;
+    
+    // فقط إذا كان المحتوى يحتوي على كود برمجي واضح
+    const codePatterns = [
+      /<script\b[^>]*>[\s\S]*?<\/script>/gi,
+      /<style\b[^>]*>[\s\S]*?<\/style>/gi,
+      /<pre\b[^>]*>[\s\S]*?<\/pre>/gi,
+      /<code\b[^>]*>[\s\S]*?<\/code>/gi,
+      /&lt;(script|style|pre|code)[\s\S]*?&gt;/gi
     ];
     
-    // تحميل الثيم المحفوظ
-    const savedTheme = localStorage.getItem('blogTheme') || 'orange';
-    applyTheme(savedTheme);
+    return codePatterns.some(pattern => pattern.test(content));
+  },
+  
+  // دالة مساعدة لاستخراج نص عادي من HTML
+  extractPlainText(htmlContent) {
+    if (!htmlContent) return '';
     
-    // تبديل فتح/إغلاق لوحة الألوان
-    themeToggle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        themePalette.classList.toggle('open');
-    });
+    const tmp = document.createElement('div');
+    tmp.innerHTML = htmlContent;
     
-    // اختيار لون جديد
-    themeOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const selectedTheme = this.dataset.theme;
-            applyTheme(selectedTheme);
-            updateActiveTheme(selectedTheme);
-            themePalette.classList.remove('open');
-        });
-    });
+    // إزالة العناصر التي تحتوي على كود فقط
+    const codeElements = tmp.querySelectorAll('script, style, pre, code');
+    codeElements.forEach(el => el.remove());
     
-    // إغلاق لوحة الألوان عند النقر خارجها
-    document.addEventListener('click', function(e) {
-        if (!themeToggle.contains(e.target) && !themePalette.contains(e.target)) {
-            themePalette.classList.remove('open');
-        }
-    });
+    // الحصول على النص مع الحفاظ على المسافات
+    let text = tmp.textContent || tmp.innerText || '';
     
-    // تطبيق الثيم المحدد
-    function applyTheme(themeName) {
-        if (!availableThemes.includes(themeName)) {
-            themeName = 'orange';
-        }
-        
-        // إضافة class الجديد
-        html.setAttribute('data-theme', themeName);
-        
-        // حفظ في localStorage
-        localStorage.setItem('blogTheme', themeName);
-        
-        // تحديث وصف الصفحة للوصول
-        updateThemeMeta(themeName);
+    // تنظيف النص - إزالة المسافات الزائدة
+    text = text.replace(/\s+/g, ' ').trim();
+    
+    // إذا كان النص طويلاً، أخذ جزء منه للمعاينة
+    if (text.length > 130) {
+      text = text.substring(0, 130) + '...';
     }
     
-    // تحديث الزر النشط
-    function updateActiveTheme(themeName) {
-        themeOptions.forEach(option => {
-            option.classList.toggle('active', option.dataset.theme === themeName);
-        });
+    return text;
+  },
+  
+  processPosts(data, reset = false) {
+    const posts = data.feed.entry || [];
+    
+    if (posts.length === 0) {
+      BlogState.hasMorePosts = false;
+      BlogState.isLoading = false;
+      
+      const loadingIndicator = document.querySelector('.loading-posts');
+      if (loadingIndicator) loadingIndicator.remove();
+      
+      if (BlogState.postsLoaded === 0 && reset) {
+        this.showNoPostsMessage();
+      }
+      return;
     }
     
-    // تحديث meta tags للوصول
-    function updateThemeMeta(themeName) {
-        let themeColor = '#FF6D00';
-        
-        switch(themeName) {
-            case 'blue': themeColor = '#2962FF'; break;
-            case 'green': themeColor = '#00C853'; break;
-            case 'purple': themeColor = '#7C4DFF'; break;
-            case 'pink': themeColor = '#FF4081'; break;
-            case 'teal': themeColor = '#009688'; break;
-        }
-        
-        // تحديث meta tag theme-color
-        let themeMeta = document.querySelector('meta[name="theme-color"]');
-        if (!themeMeta) {
-            themeMeta = document.createElement('meta');
-            themeMeta.name = 'theme-color';
-            document.head.appendChild(themeMeta);
-        }
-        themeMeta.content = themeColor;
+    if (reset) {
+      const mainContent = document.getElementById('mainContent');
+      const existingPosts = mainContent.querySelectorAll('.post-card');
+      existingPosts.forEach(post => post.remove());
+      BlogState.postsLoaded = 0;
     }
     
-    // التهيئة الأولية
-    updateActiveTheme(savedTheme);
-}
+    const fragment = document.createDocumentFragment();
+    const mainContent = document.getElementById('mainContent');
+    
+    posts.forEach(post => {
+      try {
+        const postId = (post.id && post.id.$t) ? post.id.$t.split('-').pop() : ('p' + Date.now() + Math.random());
+        const title = (post.title && post.title.$t) ? post.title.$t : 'Untitled';
+        const linkObj = (post.link || []).find(l => l.rel === 'alternate') || null;
+        const postUrl = linkObj ? linkObj.href : '#';
+        const contentHtml = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
+        const published = post.published ? new Date(post.published.$t).toLocaleDateString() : '';
+        
+        const categories = post.category || [];
+        const firstCategory = categories.length > 0 ? categories[0].term : null;
+        const categoryUrl = firstCategory ? '/search/label/' + encodeURIComponent(firstCategory) : '#';
+        
+        const postCard = document.createElement('div');
+        postCard.className = 'post-card';
+        postCard.id = 'post-' + postId;
+        
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'post-header';
+        const h2 = document.createElement('h2');
+        h2.className = 'post-title';
+        const titleLink = document.createElement('a');
+        titleLink.className = 'post-title-link';
+        titleLink.href = postUrl;
+        titleLink.textContent = title;
+        h2.appendChild(titleLink);
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'post-date';
+        dateSpan.textContent = published;
+        headerDiv.appendChild(h2);
+        headerDiv.appendChild(dateSpan);
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'post-content';
+        
+        if (post.media$thumbnail && post.media$thumbnail.url) {
+          const img = document.createElement('img');
+          img.className = 'post-image';
+          img.src = post.media$thumbnail.url;
+          img.alt = title;
+          img.loading = 'lazy';
+          img.addEventListener('load', function() { img.classList.add('loaded'); });
+          contentDiv.appendChild(img);
+        }
+        
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'post-preview';
+        
+        // التحقق مما إذا كان المحتوى يحتوي على كود HTML
+        let previewText = '';
+        if (contentHtml && !this.containsHTMLCode(contentHtml)) {
+          // إذا كان المحتوى نصياً عادياً
+          const plainText = this.extractPlainText(contentHtml);
+          previewText = plainText;
+        } else {
+          // إذا كان المحتوى كود HTML، نعرض رسالة بديلة
+          previewText = 'Click "Read More" to view the full content...';
+        }
+        
+        previewDiv.textContent = previewText;
+        
+        contentDiv.appendChild(previewDiv);
+        
+        const footerDiv = document.createElement('div');
+        footerDiv.className = 'post-footer';
+        
+        if (firstCategory) {
+          const labelBtn = document.createElement('a');
+          labelBtn.className = 'label-btn';
+          labelBtn.href = categoryUrl;
+          labelBtn.textContent = firstCategory;
+          labelBtn.title = 'View all posts in ' + firstCategory;
+          footerDiv.appendChild(labelBtn);
+        }
+        
+        const readMoreA = document.createElement('a');
+        readMoreA.className = 'read-more-btn';
+        readMoreA.href = postUrl || '#';
+        readMoreA.textContent = 'Read More';
+        footerDiv.appendChild(readMoreA);
+        
+        postCard.appendChild(headerDiv);
+        postCard.appendChild(contentDiv);
+        postCard.appendChild(footerDiv);
+        
+        fragment.appendChild(postCard);
+      } catch (err) {
+        console.error('Error building post element', err, post);
+      }
+    });
+    
+    mainContent.appendChild(fragment);
+    BlogState.postsLoaded += posts.length;
+    
+    const loadingIndicator = document.querySelector('.loading-posts');
+    if (loadingIndicator) loadingIndicator.remove();
+    
+    setTimeout(() => TableManager.init(), 50);
+    
+    ScrollSpy.init();
+    
+    BlogState.isLoading = false;
+    if (posts.length < BlogState.postsPerPage) {
+      BlogState.hasMorePosts = false;
+    }
+  },
+  
+  showNoPostsMessage() {
+    const mainContent = document.getElementById('mainContent');
+    const noPostsMessage = document.createElement('div');
+    noPostsMessage.className = 'loading-posts';
+    noPostsMessage.innerHTML = '<p>No posts found in this category.</p>';
+    mainContent.appendChild(noPostsMessage);
+  },
+  
+  showError(message) {
+    const mainContent = document.getElementById('mainContent');
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'loading-posts visible';
+    errorDiv.innerHTML = `<p style="color: #ff4444;">${message}</p>`;
+    mainContent.appendChild(errorDiv);
+    
+    setTimeout(() => errorDiv.remove(), 5000);
+  }
+};
 
-// دالة بسيطة لمعالجة الجداول للجوال
-function initMobileTables() {
+
+// ============================================================================
+// Infinite Scroll Management
+// ============================================================================
+const InfiniteScroll = {
+  init() {
+    let ticking = false;
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          this.check();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  },
+  
+  check() {
+    if (BlogState.isLoading || !BlogState.hasMorePosts) return;
+    
+    const isHomePage = window.location.pathname === "/";
+    const isLabelPage = window.location.pathname.startsWith("/search/label/");
+    
+    if (!isHomePage && !isLabelPage) return;
+    
+    const scrollPosition = window.pageYOffset;
+    const documentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    
+    if (scrollPosition + windowHeight >= documentHeight - 500) {
+      PostLoader.loadCategory(BlogState.currentCategory, false);
+    }
+  }
+};
+
+// ============================================================================
+// Mobile Table Management
+// ============================================================================
+const TableManager = {
+  init() {
     console.log('Initializing mobile table responsive system...');
     
     const tables = document.querySelectorAll('.post-body table');
     let tablesProcessed = 0;
     
     tables.forEach((table, index) => {
-        // تخطي الجداول التي تمت معالجتها مسبقًا
-        if (table.closest('.mobile-table-container')) {
-            return;
-        }
-        
-        // إنشاء الحاوية للجدول
-        const container = document.createElement('div');
-        container.className = 'mobile-table-container';
-        container.setAttribute('data-table-index', index);
-        
-        // استبدال الجدول بالحاوية
-        table.parentNode.insertBefore(container, table);
-        container.appendChild(table);
-        
-        tablesProcessed++;
+      if (table.closest('.mobile-table-container')) return;
+      
+      const container = document.createElement('div');
+      container.className = 'mobile-table-container';
+      container.setAttribute('data-table-index', index);
+      
+      table.parentNode.insertBefore(container, table);
+      container.appendChild(table);
+      
+      tablesProcessed++;
     });
     
     console.log(`Processed ${tablesProcessed} tables for mobile responsiveness`);
-}
+  }
+};
 
-document.addEventListener('DOMContentLoaded', function() {
-    // منع التهيئة المزدوجة
-    if (isInitialized) return;
-    isInitialized = true;
-    
-
-    // DOM Elements
-    const menuToggle = document.getElementById('menuToggle');
-    const modeToggle = document.getElementById('modeToggle');
-    const sidebar = document.getElementById('sidebar');
+// ============================================================================
+// Back to Top Button
+// ============================================================================
+const BackToTop = {
+  init() {
     const backToTop = document.getElementById('backToTop');
-    const sidebarSearch = document.getElementById('sidebarSearch');
-    const noResults = document.getElementById('noResults');
-    const sidebarContent = document.getElementById('sidebarContent');
-    const mainContent = document.getElementById('mainContent');
-    const resultsCounter = document.getElementById('searchResultsCounter');
+    if (!backToTop) return;
     
-    // تهيئة نظام الثيمات
-    initThemeSystem();
-    
-    // متغيرات التمرير اللانهائي
-    let isLoading = false;
-    let hasMorePosts = true;
-    const postsPerPage = 5;
-    let postsLoaded = 0;
-    let currentCategory = 'all';
-
-    // متغيرات للتحكم في ظهور واختفاء الهيدر
-    let lastScrollY = window.scrollY;
-    let isHeaderVisible = true;
-    let isSidebarOpen = false;
-    const header = document.querySelector('nav');
-    const headerHeight = header.offsetHeight;
-    
-    // تهيئة تحويل الهيدر
-    header.style.transform = 'translateY(0)';
-    isHeaderVisible = true;
-    lastScrollY = window.scrollY;
-
-    // وظيفة التحكم في ظهور واختفاء الهيدر مع تأثير سلس
-    function handleHeaderVisibility() {
-        if (isSidebarOpen) {
-            header.style.transform = 'translateY(0)';
-            isHeaderVisible = true;
-            return;
-        }
-        
-        const currentScrollY = window.scrollY;
-        const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
-        
-        if (scrollDirection === 'down' && currentScrollY > headerHeight && isHeaderVisible) {
-            header.style.transform = 'translateY(-100%)';
-            isHeaderVisible = false;
-        } 
-        else if (scrollDirection === 'up' && !isHeaderVisible) {
-            header.style.transform = 'translateY(0)';
-            isHeaderVisible = true;
-        }
-        
-        if (currentScrollY <= headerHeight && !isHeaderVisible) {
-            header.style.transform = 'translateY(0)';
-            isHeaderVisible = true;
-        }
-        
-        lastScrollY = currentScrollY;
-    }
-
-    // تهيئة وظيفة التحكم في الهيدر
-    function initHeaderScroll() {
-        let ticking = false;
-        
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                window.requestAnimationFrame(function() {
-                    handleHeaderVisibility();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
-    }
-
-    // وظيفة التمرير اللانهائي - للصفحة الرئيسية وصفحات التصنيفات
-    function checkInfiniteScroll() {
-        if (isLoading || !hasMorePosts) return;
-        
-        const isHomePage = window.location.pathname === "/";
-        const isLabelPage = window.location.pathname.startsWith("/search/label/");
-        
-        if (!isHomePage && !isLabelPage) return;
-        
-        const scrollPosition = window.pageYOffset;
-        const documentHeight = document.documentElement.scrollHeight;
-        const windowHeight = window.innerHeight;
-        
-        if (scrollPosition + windowHeight >= documentHeight - 500) {
-            loadCategoryPosts(currentCategory, false);
-        }
-    }
-
-    // دالة محسنة لتحميل المشاركات
-    async function loadCategoryPosts(category, reset = false) {
-        if (isLoading) return;
-        
-        isLoading = true;
-        currentCategory = category;
-        
-        try {
-            if (reset) {
-                const loadingIndicator = document.createElement('div');
-                loadingIndicator.className = 'loading-posts visible';
-                loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading posts...</p>";
-                mainContent.appendChild(loadingIndicator);
-                postsLoaded = 0;
-                hasMorePosts = true;
-            }
-            
-            const startIndex = postsLoaded + 1;
-            const apiUrl = `/feeds/posts/default${category !== 'all' ? '/-/' + encodeURIComponent(category) : ''}?alt=json&start-index=${startIndex}&max-results=${postsPerPage}`;
-            
-            
-            const response = await fetch(apiUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            processMorePosts(data, reset);
-            
-        } catch (error) {
-            console.error('Error loading posts:', error);
-            showErrorMessage('Error loading posts. Please try again.');
-        } finally {
-            isLoading = false;
-            const loadingIndicator = document.querySelector('.loading-posts');
-            if (loadingIndicator) loadingIndicator.remove();
-        }
-    }
-
-    // دالة محسنة لجلب التصنيفات والمشاركات معاً
-    async function fetchCategoriesAndPosts(category = 'all', reset = true) {
-        if (isLoading) return;
-        
-        isLoading = true;
-        currentCategory = category;
-        
-        try {
-            const loadingIndicator = document.createElement('div');
-            loadingIndicator.className = 'loading-posts visible';
-            loadingIndicator.innerHTML = "<div class='spinner'></div><p>Loading content...</p>";
-            mainContent.appendChild(loadingIndicator);
-            
-            const [categories, postsData] = await Promise.all([
-                fetchAllCategories(),
-                fetch(`/feeds/posts/default${category !== 'all' ? '/-/' + encodeURIComponent(category) : ''}?alt=json&start-index=1&max-results=${postsPerPage}`)
-                    .then(response => {
-                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                        return response.json();
-                    })
-            ]);
-            
-            await createCategoryButtons(categories);
-            
-            if (reset) {
-                postsLoaded = 0;
-                hasMorePosts = true;
-                const existingPosts = mainContent.querySelectorAll('.post-card');
-                existingPosts.forEach(post => post.remove());
-            }
-            
-            processMorePosts(postsData, reset);
-            
-            loadingIndicator.remove();
-            
-        } catch (error) {
-            console.error('Error loading content:', error);
-            showErrorMessage('Error loading content. Please refresh the page.');
-        } finally {
-            isLoading = false;
-        }
-    }
-
-    // دالة لعرض رسائل الخطأ
-    function showErrorMessage(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'loading-posts visible';
-        errorDiv.innerHTML = `<p style="color: #ff4444;">${message}</p>`;
-        mainContent.appendChild(errorDiv);
-        
-        setTimeout(() => {
-            errorDiv.remove();
-        }, 5000);
-    }
-
-    // دالة للمساعدة في تصحيح الأخطاء
-    function debugCategoryButtons() {
-        console.log('Category buttons debug:');
-        const buttons = document.querySelectorAll('.category-btn');
-        console.log('Found buttons:', buttons.length);
-        
-        buttons.forEach((btn, index) => {
-            console.log(`Button ${index}:`, {
-                text: btn.textContent,
-                category: btn.dataset.category,
-                active: btn.classList.contains('active')
-            });
-        });
-    }
-
-    // تهيئة التمرير اللانهائي
-    function initInfiniteScroll() {
-        let ticking = false;
-        
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                window.requestAnimationFrame(function() {
-                    checkInfiniteScroll();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
-    }
-
-    // Dark Mode Toggle
-    function applyDarkMode(isDark) {
-        const { classList: htmlClassList } = document.documentElement;
-        const { classList: bodyClassList } = document.body;
-        
-        if (isDark) {
-            htmlClassList.add('dark-mode');
-            bodyClassList.add('dark-mode');
-            modeToggle.textContent = '☀️ Light Mode';
-            localStorage.setItem('darkMode', 'enabled');
-        } else {
-            htmlClassList.remove('dark-mode');
-            bodyClassList.remove('dark-mode');
-            modeToggle.textContent = '🌙 Dark Mode';
-            localStorage.removeItem('darkMode');
-        }
-    }
-
-    // Initialize dark mode from localStorage
-    const savedDarkMode = localStorage.getItem('darkMode');
-    applyDarkMode(savedDarkMode === 'enabled');
-
-    // Toggle dark mode
-    modeToggle.addEventListener('click', function() {
-        const isDark = !document.body.classList.contains('dark-mode');
-        applyDarkMode(isDark);
+    backToTop.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     });
     
-    // Sidebar Toggle
-    menuToggle.addEventListener('click', function() {
-        const isOpen = sidebar.classList.toggle('open');
-        menuToggle.classList.toggle('active');
-        menuToggle.setAttribute('aria-expanded', isOpen);
-        isSidebarOpen = isOpen;
-        
-        if (isOpen && !isHeaderVisible) {
-            header.style.transform = 'translateY(0)';
-            isHeaderVisible = true;
-        }
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('visible', window.scrollY > 300);
     });
+  }
+};
 
-    // Close sidebar when clicking outside
-    document.addEventListener('click', function(e) {
-        if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle) {
-            sidebar.classList.remove('open');
-            menuToggle.classList.remove('active');
-            menuToggle.setAttribute('aria-expanded', 'false');
-            isSidebarOpen = false;
-        }
-    });
-
-    // Create sidebar navigation from all blog posts
-    function createSidebarNavigation() {
-        if (!sidebarContent) return;
-        
-        const loadingElement = document.createElement('div');
-        loadingElement.textContent = 'Loading posts...';
-        loadingElement.style.padding = '1rem';
-        loadingElement.style.textAlign = 'center';
-        sidebarContent.innerHTML = '';
-        sidebarContent.appendChild(loadingElement);
-        
-        fetch('/feeds/posts/default?alt=json&max-results=500')
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return response.json();
-            })
-            .then(data => processPosts(data))
-            .catch(error => {
-                console.error('Error loading posts:', error);
-                loadingElement.textContent = 'Error loading posts. Please refresh the page.';
-            });
-    }
-
-    // إنشاء أزرار التصنيفات في الشريط الجانبي
-    async function createSidebarLabels() {
-        const labelsContainer = document.getElementById('sidebarLabels');
-        if (!labelsContainer) return;
-
-        labelsContainer.innerHTML = "<div style='padding:10px; text-align:center;'>Loading labels...</div>";
-
-        try {
-            const categories = await fetchAllCategories();
-            labelsContainer.innerHTML = "";
-
-            // زر "الكل"
-            const allBtn = document.createElement("div");
-            allBtn.className = "sidebar-label-btn active";
-            allBtn.textContent = "All";
-            allBtn.dataset.category = "all";
-            labelsContainer.appendChild(allBtn);
-
-            allBtn.addEventListener("click", () => {
-                document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
-                allBtn.classList.add("active");
-                document.querySelectorAll(".sidebar-link").forEach(link => {
-                    link.classList.remove("hidden");
-                });
-            });
-
-            // باقي التصنيفات
-            categories.forEach(category => {
-                const btn = document.createElement("div");
-                btn.className = "sidebar-label-btn";
-                btn.textContent = category;
-                btn.dataset.category = category;
-
-                btn.addEventListener("click", () => {
-                    document.querySelectorAll(".sidebar-label-btn").forEach(b => b.classList.remove("active"));
-                    btn.classList.add("active");
-
-                    document.querySelectorAll(".sidebar-link").forEach(link => {
-                        const tags = link.dataset.tags ? link.dataset.tags.split(",") : [];
-                        if (tags.includes(category)) {
-                            link.classList.remove("hidden");
-                        } else {
-                            link.classList.add("hidden");
-                        }
-                    });
-                });
-
-                labelsContainer.appendChild(btn);
-            });
-        } catch (error) {
-            console.error('Error creating sidebar labels:', error);
-            labelsContainer.innerHTML = "<div style='padding:10px; text-align:center; color: #ff4444;'>Error loading labels</div>";
-        }
-    }
-
-    // Process posts data from API with tags support
-    function processPosts(data) {
-        const posts = data.feed.entry || [];
-        const fragment = document.createDocumentFragment();
-        const section = document.createElement('div');
-        section.className = 'sidebar-section';
-        
-        posts.forEach(function(post) {
-            const postId = post.id.$t.split('-').pop();
-            const title = post.title.$t;
-            const postUrl = post.link.find(link => link.rel === 'alternate').href;
-            
-            const tags = post.category ? 
-                post.category.map(cat => cat.term) : 
-                [];
-            
-            const link = document.createElement('a');
-            link.href = postUrl;
-            link.className = 'sidebar-link';
-            link.textContent = title;
-            link.dataset.target = 'post-' + postId;
-            link.dataset.tags = tags.join(',');
-            
-            section.appendChild(link);
-        });
-        
-        fragment.appendChild(section);
-        sidebarContent.innerHTML = '';
-        sidebarContent.appendChild(fragment);
-        
-        setupScrollSpy();
-        setupSmoothScrolling();
-        setupSearchFunctionality();
-    }
-
-    // Search functionality with tags support and results counter
-    function setupSearchFunctionality() {
-        const searchInput = document.getElementById('sidebarSearch');
-        if (!searchInput) return;
-        
-        const links = Array.from(document.querySelectorAll('.sidebar-link'));
-        const postTags = {};
-        
-        links.forEach(function(link) {
-            const postId = link.dataset.target;
-            postTags[postId] = link.dataset.tags ? link.dataset.tags.split(',') : [];
-        });
-        
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            let resultsCount = 0;
-            
-            window.requestAnimationFrame(function() {
-                links.forEach(function(link) {
-                    const text = link.textContent.toLowerCase();
-                    const postId = link.dataset.target;
-                    const tags = postTags[postId] || [];
-                    
-                    const isTitleMatch = text.includes(searchTerm);
-                    const isTagMatch = tags.some(tag => 
-                        tag.toLowerCase().includes(searchTerm)
-                    );
-                    
-                    const isMatch = isTitleMatch || isTagMatch;
-                    
-                    if (isMatch) {
-                        link.classList.remove('hidden');
-                        resultsCount++;
-                    } else {
-                        link.classList.add('hidden');
-                    }
-                });
-                
-                if (searchTerm !== '') {
-                    resultsCounter.textContent = resultsCount + ' result(s) found';
-                    resultsCounter.classList.add('show');
-                } else {
-                    resultsCounter.classList.remove('show');
-                }
-                
-                noResults.classList.toggle('show', resultsCount === 0 && searchTerm !== '');
-            });
-        });
-    }
-
-    // Scroll spy for active post highlighting with auto-scroll in sidebar
-    function setupScrollSpy() {
-        const links = document.querySelectorAll('.sidebar-link');
-        if (links.length === 0) return;
-        
-        const offset = 100;
-        let ticking = false;
-        let lastActiveLink = null;
-        
-        function onScroll() {
-            const scrollPosition = window.scrollY + offset;
-            let lastPassed = null;
-            
-            document.querySelectorAll('.post-card').forEach(function(post) {
-                const postTop = post.offsetTop;
-                if (postTop <= scrollPosition) {
-                    lastPassed = post.id;
-                }
-            });
-            
-            if (!lastPassed) {
-                if (window.location.pathname === "/") {
-                    const firstPost = document.querySelector('.post-card');
-                    if (firstPost) {
-                        lastPassed = firstPost.id;
-                    }
-                } else {
-                    const currentPostId = window.location.pathname.split('/').pop();
-                    lastPassed = 'post-' + currentPostId;
-                }
-            }
-            
-            links.forEach(function(link) {
-                const isActive = link.dataset.target === lastPassed || 
-                               link.href === window.location.href || 
-                               link.href.endsWith(lastPassed.replace('post-', ''));
-                
-                link.classList.toggle('active', isActive);
-                
-                if (isActive && link !== lastActiveLink) {
-                    lastActiveLink = link;
-                    autoScrollSidebar(link);
-                }
-            });
-        }
-        
-        function autoScrollSidebar(activeLink) {
-            const sidebarContent = document.getElementById('sidebarContent');
-            if (!sidebarContent) return;
-            
-            const linkRect = activeLink.getBoundingClientRect();
-            const sidebarRect = sidebarContent.getBoundingClientRect();
-            
-            const isAbove = linkRect.top < sidebarRect.top;
-            const isBelow = linkRect.bottom > sidebarRect.bottom;
-            
-            if (isAbove || isBelow) {
-                const scrollTop = sidebarContent.scrollTop;
-                const elementOffset = activeLink.offsetTop;
-                const middleOffset = elementOffset - (sidebarContent.offsetHeight / 2) + (activeLink.offsetHeight / 2);
-                
-                sidebarContent.scrollTo({
-                    top: middleOffset,
-                    behavior: 'smooth'
-                });
-            }
-        }
-        
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                window.requestAnimationFrame(function() {
-                    onScroll();
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
-        
-        onScroll();
-    }
-
-    // Smooth scrolling to posts
-    function setupSmoothScrolling() {
-        let isProgrammaticScroll = false;
-        
-        document.querySelectorAll('.sidebar-link').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                if (this.hash && document.querySelector(this.hash)) {
-                    e.preventDefault();
-                    
-                    isProgrammaticScroll = true;
-                    
-                    const targetElement = document.querySelector(this.hash);
-                    
-                    if (targetElement) {
-                        const offset = 80;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = window.pageYOffset + elementPosition - offset;
-                        
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                        
-                        history.pushState(null, null, this.hash);
-                        
-                        if (sidebar.classList.contains('open')) {
-                            sidebar.classList.remove('open');
-                            menuToggle.classList.remove('active');
-                            menuToggle.setAttribute('aria-expanded', 'false');
-                            isSidebarOpen = false;
-                        }
-                        
-                        setTimeout(() => {
-                            isProgrammaticScroll = false;
-                        }, 1000);
-                    }
-                }
-            });
-        });
-    }
-
-    // Back to Top Button
-    backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    // Show/hide back to top button
-    window.addEventListener('scroll', function() {
-        backToTop.classList.toggle('visible', window.scrollY > 300);
-    });
-
-    // Handle hash links on page load
+// ============================================================================
+// Hash Link Handler
+// ============================================================================
+const HashHandler = {
+  init() {
     if (window.location.hash) {
-        const targetElement = document.querySelector(window.location.hash);
-        if (targetElement) {
-            setTimeout(function() {
-                const offset = 80;
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = window.pageYOffset + elementPosition - offset;
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }, 100);
-        }
-    }
-
-    // دالة لجمع جميع التصنيفات من المدونة
-    async function fetchAllCategories() {
-        try {
-            const response = await fetch('/feeds/posts/summary?alt=json&max-results=500');
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            
-            const data = await response.json();
-            const categories = new Set();
-            
-            if (data.feed.entry) {
-                data.feed.entry.forEach(post => {
-                    if (post.category) {
-                        post.category.forEach(cat => categories.add(cat.term));
-                    }
-                });
-            }
-            
-            return Array.from(categories).sort();
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-            
-            try {
-                const categoryLinks = document.querySelectorAll('a[href*="/search/label/"]');
-                const categories = new Set();
-                
-                categoryLinks.forEach(link => {
-                    const href = link.getAttribute('href');
-                    const match = href.match(/\/search\/label\/([^?]+)/);
-                    if (match && match[1]) {
-                        const categoryName = decodeURIComponent(match[1].replace(/\+/g, ' '));
-                        categories.add(categoryName);
-                    }
-                });
-                
-                return Array.from(categories).sort();
-            } catch (fallbackError) {
-                console.error('Fallback method also failed:', fallbackError);
-                return [];
-            }
-        }
-    }
-
-    // دالة محسنة لإنشاء أزرار التصنيفات
-    async function createCategoryButtons(categories = null) {
-        let categoriesContainer = document.querySelector('.categories-container');
-        
-        if (!categoriesContainer) {
-            if (window.location.pathname !== "/" && !window.location.pathname.startsWith("/search/label/")) return;
-            
-            const categoriesFilter = document.createElement('div');
-            categoriesFilter.className = 'categories-filter';
-            categoriesFilter.id = 'categoriesFilter';
-            
-            categoriesContainer = document.createElement('div');
-            categoriesContainer.className = 'categories-container';
-            
-            categoriesFilter.appendChild(categoriesContainer);
-            
-            const mainContent = document.getElementById('mainContent');
-            if (mainContent) {
-                mainContent.insertBefore(categoriesFilter, mainContent.firstChild);
-            } else {
-                return;
-            }
-        }
-        
-        if (!categories) {
-            categories = await fetchAllCategories();
-        }
-        
-        categoriesContainer.innerHTML = '';
-        
-        // زر "الكل"
-        const allButton = document.createElement('div');
-        allButton.className = 'category-btn active';
-        allButton.textContent = 'All';
-        allButton.dataset.category = 'all';
-        categoriesContainer.appendChild(allButton);
-        
-        // أزرار التصنيفات
-        categories.forEach(category => {
-            const button = document.createElement('div');
-            button.className = 'category-btn';
-            button.textContent = category;
-            button.dataset.category = category;
-            categoriesContainer.appendChild(button);
-        });
-        
-        if (categories.length === 0) {
-            const categoriesFilter = document.getElementById('categoriesFilter');
-            if (categoriesFilter) {
-                categoriesFilter.style.display = 'none';
-            }
-        }
-        
-        setupCategoryFilters();
-        activateCurrentCategory();
-    }
-
-    // دالة جديدة لتفعيل التصنيف الحالي من URL
-    function activateCurrentCategory() {
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        
-        if (window.location.pathname.startsWith("/search/label/")) {
-            const labelMatch = window.location.pathname.match(/\/search\/label\/([^/?]+)/);
-            if (labelMatch) {
-                const currentCategory = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
-                const matchingButton = Array.from(categoryButtons).find(btn => 
-                    btn.dataset.category === currentCategory
-                );
-                
-                if (matchingButton) {
-                    categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    matchingButton.classList.add('active');
-                    console.log('Activated category:', currentCategory);
-                }
-            }
-        } else if (window.location.pathname === "/") {
-            const allButton = document.querySelector('.category-btn[data-category="all"]');
-            if (allButton) {
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                allButton.classList.add('active');
-            }
-        }
-    }
-
-    // دالة محسنة لإعداد نظام التصفية
-    function setupCategoryFilters() {
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        
-        categoryButtons.forEach(button => {
-            // إزالة أي event listeners سابقة
-            const newButton = button.cloneNode(true);
-            button.parentNode.replaceChild(newButton, button);
-        });
-        
-        const newCategoryButtons = document.querySelectorAll('.category-btn');
-        
-        newCategoryButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                if (isLoading) return;
-                
-                newCategoryButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                const newCategory = this.dataset.category;
-                console.log('Category button clicked:', newCategory);
-                
-                if (window.location.pathname.startsWith("/search/label/")) {
-                    if (newCategory !== 'all') {
-                        const newUrl = `/search/label/${encodeURIComponent(newCategory)}`;
-                        window.history.pushState({}, '', newUrl);
-                    } else {
-                        window.history.pushState({}, '', '/');
-                    }
-                }
-                
-                loadCategoryPosts(newCategory, true);
-            });
-        });
-    }
-
-    // دالة لعرض رسالة عندما لا توجد مشاركات
-    function showNoPostsMessage() {
-        const noPostsMessage = document.createElement('div');
-        noPostsMessage.className = 'loading-posts';
-        noPostsMessage.innerHTML = '<p>No posts found in this category.</p>';
-        mainContent.appendChild(noPostsMessage);
-    }
-
-    // دالة محسنة لمعالجة المشاركات الإضافية
-    function processMorePosts(data, reset = false) {
-        const posts = data.feed.entry || [];
-
-        if (posts.length === 0) {
-            hasMorePosts = false;
-            isLoading = false;
-            
-            const loadingIndicator = document.querySelector('.loading-posts');
-            if (loadingIndicator) {
-                loadingIndicator.remove();
-            }
-            
-            if (postsLoaded === 0 && reset) {
-                showNoPostsMessage();
-            }
-            
-            return;
-        }
-
-        if (reset) {
-            const existingPosts = mainContent.querySelectorAll('.post-card');
-            existingPosts.forEach(post => post.remove());
-            postsLoaded = 0;
-        }
-
-        const fragment = document.createDocumentFragment();
-
-        posts.forEach(function(post) {
-            try {
-                const postId = (post.id && post.id.$t) ? post.id.$t.split('-').pop() : ('p' + Date.now() + Math.random());
-                const title = (post.title && post.title.$t) ? post.title.$t : 'Untitled';
-                const linkObj = (post.link || []).find(l => l.rel === 'alternate') || null;
-                const postUrl = linkObj ? linkObj.href : '#';
-                const contentHtml = post.content ? post.content.$t : (post.summary ? post.summary.$t : '');
-                const published = post.published ? new Date(post.published.$t).toLocaleDateString() : '';
-                
-                const categories = post.category || [];
-                const firstCategory = categories.length > 0 ? categories[0].term : null;
-                const categoryUrl = firstCategory ? '/search/label/' + encodeURIComponent(firstCategory) : '#';
-
-                const postCard = document.createElement('div');
-                postCard.className = 'post-card';
-                postCard.id = 'post-' + postId;
-
-                const headerDiv = document.createElement('div');
-                headerDiv.className = 'post-header';
-                const h2 = document.createElement('h2');
-                h2.className = 'post-title';
-                const titleLink = document.createElement('a');
-                titleLink.className = 'post-title-link';
-                titleLink.href = postUrl;
-                titleLink.textContent = title;
-                h2.appendChild(titleLink);
-                const dateSpan = document.createElement('span');
-                dateSpan.className = 'post-date';
-                dateSpan.textContent = published;
-                headerDiv.appendChild(h2);
-                headerDiv.appendChild(dateSpan);
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'post-content';
-
-                if (post.media$thumbnail && post.media$thumbnail.url) {
-                    const img = document.createElement('img');
-                    img.className = 'post-image';
-                    img.src = post.media$thumbnail.url;
-                    img.alt = title;
-                    img.loading = 'lazy';
-                    img.addEventListener('load', function() { img.classList.add('loaded'); });
-                    contentDiv.appendChild(img);
-                }
-
-                const previewDiv = document.createElement('div');
-                previewDiv.className = 'post-preview';
-
-                const tmp = document.createElement('div');
-                tmp.innerHTML = contentHtml || '';
-                let previewText = (tmp.textContent || tmp.innerText || '').trim();
-                if (previewText.length > 100) previewText = previewText.substring(0, 100) + '...';
-                previewDiv.textContent = previewText;
-
-                contentDiv.appendChild(previewDiv);
-
-                const footerDiv = document.createElement('div');
-                footerDiv.className = 'post-footer';
-
-                if (firstCategory) {
-                    const labelBtn = document.createElement('a');
-                    labelBtn.className = 'label-btn';
-                    labelBtn.href = categoryUrl;
-                    labelBtn.textContent = firstCategory;
-                    labelBtn.title = 'View all posts in ' + firstCategory;
-                    footerDiv.appendChild(labelBtn);
-                }
-
-                const readMoreA = document.createElement('a');
-                readMoreA.className = 'read-more-btn';
-                readMoreA.href = postUrl || '#';
-                readMoreA.textContent = 'Read More';
-                footerDiv.appendChild(readMoreA);
-
-                postCard.appendChild(headerDiv);
-                postCard.appendChild(contentDiv);
-                postCard.appendChild(footerDiv);
-
-                fragment.appendChild(postCard);
-            } catch (err) {
-                console.error('Error building post element', err, post);
-            }
-        });
-
-        mainContent.appendChild(fragment);
-        postsLoaded += posts.length;
-
-        const loadingIndicator = document.querySelector('.loading-posts');
-        if (loadingIndicator) loadingIndicator.remove();
-
-        // معالجة الجداول للجوال بعد تحميل المحتوى
-        setTimeout(initMobileTables, 50);
-
-        setupScrollSpy();
-
-        isLoading = false;
-        if (posts.length < postsPerPage) {
-            hasMorePosts = false;
-        }
-        
-    }
-
-    // Initialize everything
-    createSidebarNavigation();
-    initHeaderScroll();
-    
-    // التهيئة المحسنة للصفحة الرئيسية وصفحات التصنيفات
-    if (window.location.pathname === "/" || window.location.pathname.startsWith("/search/label/")) {
-        let targetCategory = 'all';
-        if (window.location.pathname.startsWith("/search/label/")) {
-            const labelMatch = window.location.pathname.match(/\/search\/label\/([^/?]+)/);
-            if (labelMatch) {
-                targetCategory = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
-            }
-        }
-        
-        console.log('Initializing with category:', targetCategory);
-        
-        fetchCategoriesAndPosts(targetCategory, true).then(() => {
-            console.log('Content loaded successfully');
-        }).catch(error => {
-            console.error('Error loading content:', error);
-        });
-    }
-    
-    // التمرير اللانهائي للصفحة الرئيسية وصفحات التصنيفات
-    initInfiniteScroll();
-    
-    // Force reflow for mobile devices
-    if ('ontouchstart' in window) {
-        document.body.style.minHeight = window.innerHeight + 'px';
-        window.addEventListener('resize', function() {
-            document.body.style.minHeight = window.innerHeight + 'px';
-        });
-    }
-    
-    // استمع لتغييرات الصفحة
-    window.addEventListener('popstate', function() {
+      const targetElement = document.querySelector(window.location.hash);
+      if (targetElement) {
         setTimeout(() => {
-            activateCurrentCategory();
-            
-            const activeButton = document.querySelector('.category-btn.active');
-            if (activeButton && mainContent.querySelectorAll('.post-card').length === 0) {
-                loadCategoryPosts(activeButton.dataset.category, true);
-            }
+          const offset = 80;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = window.pageYOffset + elementPosition - offset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
         }, 100);
-    });
-    
-    // إنشاء أزرار التصنيفات في الشريط الجانبي
-    createSidebarLabels();
-    
-    // معالجة الجداول بعد تحميل الصفحة بالكامل
-    window.addEventListener('load', initMobileTables);
-});
+      }
+    }
+  }
+};
 
-
-
-
-// حل بديل للبحث بالزر Enter - ضعه في نهاية الـ script
-function initEnterKeySearch() {
-    const searchInput = document.getElementById('sidebarSearch');
-    if (!searchInput) return;
-    
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            console.log('Enter pressed - Searching...');
-            
-            // الانتظار قليلاً لتحديث النتائج
-            setTimeout(() => {
-                const visibleLinks = document.querySelectorAll('.sidebar-link:not(.hidden)');
-                console.log('Found visible links:', visibleLinks.length);
-                
-                if (visibleLinks.length > 0) {
-                    // فتح أول رابط مرئي
-                    const firstLink = visibleLinks[0];
-                    console.log('Opening:', firstLink.href);
-                    window.location.href = firstLink.href;
-                } else {
-                    console.log('No visible links found');
-                }
-            }, 100);
+// ============================================================================
+// Page State Handler
+// ============================================================================
+const PageStateHandler = {
+  init() {
+    window.addEventListener('popstate', () => {
+      setTimeout(() => {
+        CategoryManager.activateCurrent();
+        
+        const activeButton = document.querySelector('.category-btn.active');
+        const mainContent = document.getElementById('mainContent');
+        if (activeButton && mainContent.querySelectorAll('.post-card').length === 0) {
+          PostLoader.loadCategory(activeButton.dataset.category, true);
         }
+      }, 100);
     });
-}
+  }
+};
 
-// استدعاء الدالة بعد تحميل DOM
+// ============================================================================
+// Mobile Force Reflow
+// ============================================================================
+const MobileReflow = {
+  init() {
+    if ('ontouchstart' in window) {
+      document.body.style.minHeight = window.innerHeight + 'px';
+      window.addEventListener('resize', () => {
+        document.body.style.minHeight = window.innerHeight + 'px';
+      });
+    }
+  }
+};
+
+// ============================================================================
+// Main Initialization
+// ============================================================================
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initEnterKeySearch, 2000);
+  // Prevent double initialization
+  if (BlogState.initialized) return;
+  BlogState.initialized = true;
+  
+  console.log('Initializing Blog Template...');
+  
+  // Initialize global state
+  BlogState.lastScrollY = window.scrollY;
+  
+  // Initialize all modules
+  ThemeManager.init();
+  DarkModeManager.init();
+  HeaderManager.init();
+  SidebarManager.init();
+  KeyboardNav.init();
+  GlobalKeyboard.init();
+  BackToTop.init();
+  HashHandler.init();
+  PageStateHandler.init();
+  MobileReflow.init();
+  
+  // Initialize content loading for home and label pages
+  if (window.location.pathname === "/" || window.location.pathname.startsWith("/search/label/")) {
+    let targetCategory = 'all';
+    if (window.location.pathname.startsWith("/search/label/")) {
+      const labelMatch = window.location.pathname.match(/\/search\/label\/([^/?]+)/);
+      if (labelMatch) {
+        targetCategory = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
+      }
+    }
+    
+    PostLoader.fetchCategoriesAndPosts(targetCategory, true).then(() => {
+      console.log('Content loaded successfully');
+    }).catch(error => {
+      console.error('Error loading content:', error);
+    });
+  }
+  
+  // Initialize infinite scroll
+  InfiniteScroll.init();
+  
+  console.log('Blog Template initialized successfully');
 });
 
-// استدعاء إضافي بعد تحميل المحتوى الديناميكي
-window.addEventListener('load', function() {
-    setTimeout(initEnterKeySearch, 1000);
+// Initialize mobile tables on window load
+window.addEventListener('load', () => {
+  TableManager.init();
 });
+
+// ============================================================================
+// Header Hover Management
+// ============================================================================
+const HeaderHoverManager = {
+  init() {
+    const header = document.querySelector('nav');
+    if (!header) return;
+    
+    let hoverTimeout;
+    
+    header.addEventListener('mouseenter', () => {
+      clearTimeout(hoverTimeout);
+      header.classList.add('hover-protected');
+      BlogState.isHeaderHovered = true;
+    });
+    
+    header.addEventListener('mouseleave', () => {
+      hoverTimeout = setTimeout(() => {
+        header.classList.remove('hover-protected');
+        BlogState.isHeaderHovered = false;
+        
+        // إعادة التحقق من حالة التمرير بعد مغادرة الماوس
+        if (window.scrollY > BlogState.headerHeight && !BlogState.isSidebarOpen) {
+          header.style.transform = 'translateY(-100%)';
+          BlogState.isHeaderVisible = false;
+        }
+      }, 300); // تأخير 300 مللي ثانية قبل إخفاء الهيدر
+    });
+  }
+};
 //]]>
 </script>
 </head>
@@ -3063,7 +3821,6 @@ window.addEventListener('load', function() {
             
             <div class='search-container'>
                 <input aria-label='Search posts' class='search-input' id='sidebarSearch' placeholder='Search posts or tags...' type='text' autocomplete="off"/>
-                <div class="search-results-counter" id="searchResultsCounter"></div>
                 <div class="sidebar-labels" id="sidebarLabels"></div>
             </div>
         </div>
@@ -3164,12 +3921,12 @@ window.addEventListener('load', function() {
             🎨
         </button>
         <div class="theme-palette" id="themePalette">
-            <button class="theme-color-option active" data-theme="orange" title="Orange Theme"></button>
+            <button class="theme-color-option active" data-theme="teal" title="teal Theme"></button>
+            <button class="theme-color-option" data-theme="orange" title="Orange Theme"></button>
             <button class="theme-color-option" data-theme="blue" title="Blue Theme"></button>
             <button class="theme-color-option" data-theme="green" title="Green Theme"></button>
             <button class="theme-color-option" data-theme="purple" title="Purple Theme"></button>
             <button class="theme-color-option" data-theme="pink" title="Pink Theme"></button>
-            <button class="theme-color-option" data-theme="teal" title="Teal Theme"></button>
         </div>
     </div>
 
