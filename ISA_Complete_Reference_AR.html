@@ -15,23 +15,7 @@
   --bad:#a4262c; --bad-bg:#fdecec; --info:#0d5f7a; --info-bg:#e6f4f8;
   --ex:#4b3a8f; --ex-bg:#f0edfb; --exam:#7a2e6b; --exam-bg:#fbeef7;
   --sum-bg:#0f4c81; --sum-text:#ffffff; --shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);
-  --radius:12px; --sidebar:300px;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0f141c; --surface:#171e29; --surface-2:#1e2735; --text:#e6eaf1; --muted:#9aa5b8;
-    --line:#2b3547; --primary:#6fb1ec; --primary-2:#8cc2f2; --accent:#e0b35a;
-    --ok:#6fd3a0; --ok-bg:#15291f; --warn:#f0bb5c; --warn-bg:#2d2412; --bad:#f08a8f; --bad-bg:#2e1718;
-    --info:#6cc8e3; --info-bg:#122630; --ex:#b8a8f5; --ex-bg:#211c38; --exam:#eba3d9; --exam-bg:#2c1729;
-    --sum-bg:#1b3a5c; --sum-text:#eef4fb; --shadow:0 1px 3px rgba(0,0,0,.4);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0f141c; --surface:#171e29; --surface-2:#1e2735; --text:#e6eaf1; --muted:#9aa5b8;
-  --line:#2b3547; --primary:#6fb1ec; --primary-2:#8cc2f2; --accent:#e0b35a;
-  --ok:#6fd3a0; --ok-bg:#15291f; --warn:#f0bb5c; --warn-bg:#2d2412; --bad:#f08a8f; --bad-bg:#2e1718;
-  --info:#6cc8e3; --info-bg:#122630; --ex:#b8a8f5; --ex-bg:#211c38; --exam:#eba3d9; --exam-bg:#2c1729;
-  --sum-bg:#1b3a5c; --sum-text:#eef4fb; --shadow:0 1px 3px rgba(0,0,0,.4);
+  --radius:12px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -39,23 +23,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo","Noto N
 a{color:var(--primary)}
 .en{direction:ltr;unicode-bidi:isolate;font-family:"Segoe UI",Arial,sans-serif;font-size:.92em;color:var(--muted)}
 b.en,strong.en{color:inherit}
-.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 16px;box-shadow:var(--shadow)}
-.topbar h1{font-size:17px;margin:0;font-weight:800;color:var(--primary);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn{border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:8px;padding:6px 12px;font-family:inherit;font-size:14px;cursor:pointer}
-.btn:hover{border-color:var(--primary)}
-.menu-btn{display:none}
-.progress-wrap{font-size:13px;color:var(--muted);white-space:nowrap}
-.progress-bar{height:4px;background:var(--line);position:absolute;bottom:0;right:0;left:0}
-.progress-bar span{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
-.layout{display:flex;align-items:flex-start}
-aside{position:sticky;top:57px;width:var(--sidebar);height:calc(100vh - 57px);overflow-y:auto;background:var(--surface);border-left:1px solid var(--line);padding:14px 12px 40px;flex-shrink:0}
-aside input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--text);font-family:inherit;font-size:14px;margin-bottom:10px}
-.nav-group{margin:14px 0 4px;font-size:12.5px;font-weight:800;color:var(--accent);padding:0 6px}
-aside a.nav-item{display:flex;gap:8px;align-items:baseline;padding:5px 8px;border-radius:7px;text-decoration:none;color:var(--text);font-size:13.5px;line-height:1.6}
-aside a.nav-item:hover,aside a.nav-item.active{background:var(--surface-2);color:var(--primary)}
-aside a.nav-item .n{font-family:Arial,sans-serif;direction:ltr;font-weight:700;font-size:12px;color:var(--primary);min-width:62px;text-align:left}
-aside a.nav-item.done .n::after{content:" ✓";color:var(--ok)}
-main{flex:1;min-width:0;padding:24px 28px 80px;max-width:1100px;margin:0 auto}
+main{max-width:1100px;margin:0 auto;padding:24px 28px 80px}
 .hero{background:linear-gradient(135deg,#0f4c81,#1b6fb5);color:#fff;border-radius:16px;padding:32px 28px;margin-bottom:24px}
 .hero h2{margin:0 0 8px;font-size:28px;font-weight:800}
 .hero p{margin:4px 0;opacity:.95}
@@ -75,7 +43,6 @@ section.std{background:var(--surface);border:1px solid var(--line);border-radius
 .tag.new{border-color:var(--accent);color:var(--accent)}
 .std-actions{display:flex;gap:6px}
 .std-actions button{font-size:12.5px;padding:3px 10px}
-.done-btn.is-done{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
 .std-body{padding:6px 22px 20px}
 section.std.collapsed .std-body{display:none}
 .std-body h3{font-size:17px;color:var(--primary);margin:22px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:8px}
@@ -106,41 +73,15 @@ th{background:var(--surface-2);color:var(--primary);font-weight:700}
 .flow i{font-style:normal;color:var(--accent);font-weight:800}
 .kbd{font-family:Arial,sans-serif;direction:ltr;display:inline-block;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:0 6px;font-size:.88em}
 .hide{display:none!important}
-#toTop{position:fixed;left:18px;bottom:18px;z-index:60;border-radius:50%;width:44px;height:44px;font-size:18px;display:none}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 @media (max-width:980px){
-  aside{position:fixed;right:0;top:57px;z-index:40;transform:translateX(105%);transition:transform .25s;box-shadow:-4px 0 20px rgba(0,0,0,.2)}
-  aside.open{transform:none}
-  .menu-btn{display:inline-block}
   main{padding:16px 16px 70px}
   .grid2{grid-template-columns:1fr}
-  .progress-wrap{display:none}
-}
-@media print{
-  .topbar,aside,#toTop,.std-actions{display:none!important}
-  section.std.collapsed .std-body{display:block}
-  section.std{break-inside:auto;box-shadow:none}
-  main{max-width:none;padding:0}
-  body{background:#fff}
 }
 </style>
 </head>
 <body>
-<header class="topbar">
-  <button class="btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
-  <h1>المرجع الشامل لمعايير المراجعة الدولية <span class="en">ISA</span></h1>
-  <span class="progress-wrap" id="progressText">0 / 0 تمت مذاكرته</span>
-  <button class="btn" id="collapseAll">طي الكل</button>
-  <button class="btn" id="expandAll">فتح الكل</button>
-  <button class="btn" id="themeBtn" aria-label="الوضع الليلي">الوضع الليلي</button>
-  <button class="btn" onclick="window.print()">طباعة</button>
-  <div class="progress-bar"><span id="progressBar"></span></div>
-</header>
-<div class="layout">
-<aside id="sidebar">
-  <input type="search" id="searchBox" placeholder="ابحث برقم المعيار أو كلمة (مثال: 320 أو الأهمية النسبية)">
-  <nav id="nav"></nav>
-</aside>
+
 <main id="main">
 
 <div class="hero">
@@ -155,8 +96,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <div class="panel">
   <h2>كيف تستخدم هذا المرجع؟</h2>
   <ul>
-    <li><b>القائمة الجانبية</b>: تنقّل مباشرة لأي معيار، واستخدم خانة البحث للتصفية برقم المعيار أو بكلمة (يبحث في كامل النص).</li>
-    <li><b>زر «تمت المذاكرة»</b> في رأس كل معيار: يسجّل تقدّمك ويظهر علامة ✓ في القائمة وشريط التقدم أعلى الصفحة (يُحفظ في متصفحك إن أمكن).</li>
     <li><b>النقر على رأس المعيار</b> يطويه أو يفتحه، ويمكن طي/فتح الكل من الأعلى، والطباعة تفتح كل المعايير تلقائيًا.</li>
     <li>ترميز الصناديق: <span class="tag" style="color:var(--ex)">مثال عملي</span> <span class="tag" style="color:var(--warn)">استثناءات وتنبيهات</span> <span class="tag" style="color:var(--info)">علاقات بمعايير أخرى</span> <span class="tag" style="color:var(--exam)">نصائح الامتحان</span> <span class="tag" style="color:var(--ok)">ممارسة مهنية</span> وفي النهاية <b>الخلاصة السريعة</b> بالخلفية الداكنة.</li>
   </ul>
@@ -200,7 +139,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isqm-1" data-num="ISQM 1" data-ar="إدارة الجودة على مستوى المكتب">
 <div class="std-head">
   <span class="badge">ISQM 1</span><h2>إدارة الجودة في المكاتب التي تنفّذ عمليات مراجعة أو فحص أو تأكيد أو خدمات ذات علاقة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Quality Management for Firms that Perform Audits or Reviews of Financial Statements, or Other Assurance or Related Services Engagements</p>
   <div class="tags"><span class="tag">سارٍ منذ 15 ديسمبر 2022</span><span class="tag new">حلّ محل ISQC 1</span></div>
 </div>
@@ -247,7 +185,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isqm-2" data-num="ISQM 2" data-ar="فحص جودة الارتباط">
 <div class="std-head">
   <span class="badge">ISQM 2</span><h2>فحص جودة الارتباط</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Engagement Quality Reviews</p>
   <div class="tags"><span class="tag">سارٍ منذ 15 ديسمبر 2022</span></div>
 </div>
@@ -281,7 +218,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-200" data-num="ISA 200" data-ar="الأهداف العامة للمراجع">
 <div class="std-head">
   <span class="badge">ISA 200</span><h2>الأهداف العامة للمراجع المستقل وتنفيذ المراجعة وفقًا لمعايير المراجعة الدولية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Overall Objectives of the Independent Auditor and the Conduct of an Audit in Accordance with International Standards on Auditing</p>
   <div class="tags"><span class="tag">المعيار الأم</span></div>
 </div>
@@ -365,7 +301,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-210" data-num="ISA 210" data-ar="الاتفاق على شروط الارتباط">
 <div class="std-head">
   <span class="badge">ISA 210</span><h2>الاتفاق على شروط ارتباطات المراجعة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Agreeing the Terms of Audit Engagements</p>
 </div>
 <div class="std-body">
@@ -436,7 +371,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-220" data-num="ISA 220" data-ar="إدارة الجودة لمراجعة القوائم المالية">
 <div class="std-head">
   <span class="badge">ISA 220</span><h2>إدارة الجودة لمراجعة القوائم المالية (على مستوى الارتباط)</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 220 (Revised) — Quality Management for an Audit of Financial Statements</p>
   <div class="tags"><span class="tag">المعدل — سارٍ منذ 15 ديسمبر 2022</span></div>
 </div>
@@ -508,7 +442,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-230" data-num="ISA 230" data-ar="توثيق أعمال المراجعة">
 <div class="std-head">
   <span class="badge">ISA 230</span><h2>توثيق أعمال المراجعة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Audit Documentation</p>
 </div>
 <div class="std-body">
@@ -584,7 +517,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-240" data-num="ISA 240" data-ar="مسؤوليات المراجع المتعلقة بالغش">
 <div class="std-head">
   <span class="badge">ISA 240</span><h2>مسؤوليات المراجع المتعلقة بالغش عند مراجعة القوائم المالية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">The Auditor's Responsibilities Relating to Fraud in an Audit of Financial Statements</p>
   <div class="tags"><span class="tag">من أهم معايير الامتحانات</span><span class="tag new">ISA 240 (Revised) يسري للفترات التي تبدأ في/بعد 15/12/2026</span></div>
 </div>
@@ -718,7 +650,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-250" data-num="ISA 250" data-ar="مراعاة القوانين واللوائح">
 <div class="std-head">
   <span class="badge">ISA 250</span><h2>مراعاة القوانين واللوائح عند مراجعة القوائم المالية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 250 (Revised) — Consideration of Laws and Regulations in an Audit of Financial Statements</p>
   <div class="tags"><span class="tag">مرتبط بإطار NOCLAR في ميثاق IESBA</span></div>
 </div>
@@ -793,7 +724,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-260" data-num="ISA 260" data-ar="التواصل مع المكلفين بالحوكمة">
 <div class="std-head">
   <span class="badge">ISA 260</span><h2>التواصل مع المكلفين بالحوكمة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 260 (Revised) — Communication with Those Charged with Governance</p>
 </div>
 <div class="std-body">
@@ -862,7 +792,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-265" data-num="ISA 265" data-ar="إبلاغ أوجه القصور في الرقابة الداخلية">
 <div class="std-head">
   <span class="badge">ISA 265</span><h2>إبلاغ أوجه القصور في الرقابة الداخلية إلى المكلفين بالحوكمة والإدارة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Communicating Deficiencies in Internal Control to Those Charged with Governance and Management</p>
 </div>
 <div class="std-body">
@@ -942,7 +871,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-300" data-num="ISA 300" data-ar="التخطيط لمراجعة القوائم المالية">
 <div class="std-head">
   <span class="badge">ISA 300</span><h2>التخطيط لمراجعة القوائم المالية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Planning an Audit of Financial Statements</p>
 </div>
 <div class="std-body">
@@ -1013,7 +941,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-315" data-num="ISA 315" data-ar="تحديد وتقييم مخاطر التحريف الجوهري">
 <div class="std-head">
   <span class="badge">ISA 315</span><h2>تحديد وتقييم مخاطر التحريف الجوهري</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 315 (Revised 2019) — Identifying and Assessing the Risks of Material Misstatement</p>
   <div class="tags"><span class="tag">سارٍ منذ 15 ديسمبر 2021</span><span class="tag">قلب المنهج القائم على المخاطر</span></div>
 </div>
@@ -1158,7 +1085,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-320" data-num="ISA 320" data-ar="الأهمية النسبية في التخطيط والتنفيذ">
 <div class="std-head">
   <span class="badge">ISA 320</span><h2>الأهمية النسبية في تخطيط وتنفيذ المراجعة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Materiality in Planning and Performing an Audit</p>
 </div>
 <div class="std-body">
@@ -1236,7 +1162,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-330" data-num="ISA 330" data-ar="استجابات المراجع للمخاطر المقيّمة">
 <div class="std-head">
   <span class="badge">ISA 330</span><h2>استجابات المراجع للمخاطر المقيّمة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">The Auditor's Responses to Assessed Risks</p>
   <div class="tags"><span class="tag new">مسودة عرض لتعديله صدرت أغسطس 2026</span></div>
 </div>
@@ -1338,7 +1263,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-402" data-num="ISA 402" data-ar="اعتبارات المراجعة للمنشآت التي تستخدم منشآت خدمية">
 <div class="std-head">
   <span class="badge">ISA 402</span><h2>اعتبارات المراجعة المتعلقة بالمنشأة التي تستخدم منشأة خدمية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Audit Considerations Relating to an Entity Using a Service Organization</p>
 </div>
 <div class="std-body">
@@ -1401,7 +1325,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 </ul>
 </div>
 <div class="box info"><span class="lbl">العلاقة بالمعايير الأخرى</span>
-<p>ISA 315 (فهم نظام المعلومات بما فيه الخدمات الخارجية)، ISA 330 (اختبارات الرقابة)، ISA 505 (مصادقات مع المنشأة الخدمية)، ISA 600/620 (استخدام عمل آخرين)، ISA 705، ومعيار <span class="en">ISAE 3402</span> الذي يصدر وفقه مراجع الخدمة تقريره.</p>
+<p>ISA 315 (فهم نظام المعلومات بما فيه الخدمات الخارجية)، ISA 330 (اختبارات الرقابة)، ISA 505 (مصادقات مع المنشأة الخدمية)، ISA 600/620 (استخدام عمل آخرين)، ISA 705، ومعيار <span class="en">ISAE 3402</span> الذي يصدر وفق مراجع الخدمة تقريره.</p>
 </div>
 <div class="summary"><h4>الخلاصة السريعة</h4><ul>
 <li>المنشأة الخدمية جزء من نظام معلومات المنشأة ← يجب فهمها وتقييم المخاطر.</li>
@@ -1415,7 +1339,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-450" data-num="ISA 450" data-ar="تقييم التحريفات المحددة أثناء المراجعة">
 <div class="std-head">
   <span class="badge">ISA 450</span><h2>تقييم التحريفات المحددة أثناء المراجعة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Evaluation of Misstatements Identified during the Audit</p>
 </div>
 <div class="std-body">
@@ -1516,7 +1439,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-500" data-num="ISA 500" data-ar="أدلة المراجعة">
 <div class="std-head">
   <span class="badge">ISA 500</span><h2>أدلة المراجعة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Audit Evidence</p>
   <div class="tags"><span class="tag new">مسودة عرض ISA 500 (Revised) صدرت أغسطس 2026 — التعليقات حتى 15/12/2026</span></div>
 </div>
@@ -1607,7 +1529,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-501" data-num="ISA 501" data-ar="اعتبارات محددة لبنود مختارة">
 <div class="std-head">
   <span class="badge">ISA 501</span><h2>أدلة المراجعة — اعتبارات محددة لبنود مختارة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Audit Evidence — Specific Considerations for Selected Items</p>
   <div class="tags"><span class="tag">المخزون • التقاضي والمطالبات • معلومات القطاعات</span><span class="tag new">مشروع تعديل الجزء الخاص بالمخزون (2026)</span></div>
 </div>
@@ -1682,7 +1603,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-505" data-num="ISA 505" data-ar="المصادقات الخارجية">
 <div class="std-head">
   <span class="badge">ISA 505</span><h2>المصادقات الخارجية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">External Confirmations</p>
   <div class="tags"><span class="tag new">مشروع تعديل قيد الإعداد (2026)</span></div>
 </div>
@@ -1765,7 +1685,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-510" data-num="ISA 510" data-ar="الارتباطات الأولية — الأرصدة الافتتاحية">
 <div class="std-head">
   <span class="badge">ISA 510</span><h2>ارتباطات المراجعة الأولية — الأرصدة الافتتاحية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Initial Audit Engagements — Opening Balances</p>
 </div>
 <div class="std-body">
@@ -1837,7 +1756,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-520" data-num="ISA 520" data-ar="الإجراءات التحليلية">
 <div class="std-head">
   <span class="badge">ISA 520</span><h2>الإجراءات التحليلية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Analytical Procedures</p>
   <div class="tags"><span class="tag new">مسودة عرض ISA 520 (Revised) صدرت أغسطس 2026</span></div>
 </div>
@@ -1902,7 +1820,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-530" data-num="ISA 530" data-ar="عينات المراجعة">
 <div class="std-head">
   <span class="badge">ISA 530</span><h2>عينات المراجعة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Audit Sampling</p>
 </div>
 <div class="std-body">
@@ -2013,7 +1930,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-540" data-num="ISA 540" data-ar="مراجعة التقديرات المحاسبية والإفصاحات المتعلقة بها">
 <div class="std-head">
   <span class="badge">ISA 540</span><h2>مراجعة التقديرات المحاسبية والإفصاحات المتعلقة بها</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 540 (Revised) — Auditing Accounting Estimates and Related Disclosures</p>
   <div class="tags"><span class="tag">سارٍ منذ 15 ديسمبر 2019</span></div>
 </div>
@@ -2124,7 +2040,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-550" data-num="ISA 550" data-ar="الأطراف ذات العلاقة">
 <div class="std-head">
   <span class="badge">ISA 550</span><h2>الأطراف ذات العلاقة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Related Parties</p>
 </div>
 <div class="std-body">
@@ -2208,7 +2123,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-560" data-num="ISA 560" data-ar="الأحداث اللاحقة">
 <div class="std-head">
   <span class="badge">ISA 560</span><h2>الأحداث اللاحقة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Subsequent Events</p>
 </div>
 <div class="std-body">
@@ -2304,7 +2218,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-570" data-num="ISA 570" data-ar="الاستمرارية">
 <div class="std-head">
   <span class="badge">ISA 570</span><h2>الاستمرارية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Going Concern — ISA 570 (Revised) &amp; ISA 570 (Revised 2024)</p>
   <div class="tags"><span class="tag">من أهم معايير الامتحانات</span><span class="tag new">ISA 570 (Revised 2024) يسري للفترات التي تبدأ في/بعد 15/12/2026</span></div>
 </div>
@@ -2442,7 +2355,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-580" data-num="ISA 580" data-ar="الإفادات المكتوبة">
 <div class="std-head">
   <span class="badge">ISA 580</span><h2>الإفادات المكتوبة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Written Representations</p>
 </div>
 <div class="std-body">
@@ -2533,7 +2445,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-600" data-num="ISA 600" data-ar="مراجعة القوائم المالية للمجموعة">
 <div class="std-head">
   <span class="badge">ISA 600</span><h2>اعتبارات خاصة — مراجعة القوائم المالية للمجموعة (بما في ذلك عمل مراجعي المكونات)</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 600 (Revised) — Special Considerations—Audits of Group Financial Statements (Including the Work of Component Auditors)</p>
   <div class="tags"><span class="tag">المعدل — سارٍ منذ 15 ديسمبر 2023</span></div>
 </div>
@@ -2637,7 +2548,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-610" data-num="ISA 610" data-ar="استخدام عمل المراجعين الداخليين">
 <div class="std-head">
   <span class="badge">ISA 610</span><h2>استخدام عمل المراجعين الداخليين</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 610 (Revised 2013) — Using the Work of Internal Auditors</p>
 </div>
 <div class="std-body">
@@ -2736,7 +2646,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-620" data-num="ISA 620" data-ar="استخدام عمل خبير المراجع">
 <div class="std-head">
   <span class="badge">ISA 620</span><h2>استخدام عمل خبير المراجع</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Using the Work of an Auditor's Expert</p>
 </div>
 <div class="std-body">
@@ -2826,7 +2735,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-700" data-num="ISA 700" data-ar="تكوين الرأي والتقرير على القوائم المالية">
 <div class="std-head">
   <span class="badge">ISA 700</span><h2>تكوين الرأي والتقرير على القوائم المالية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 700 (Revised) — Forming an Opinion and Reporting on Financial Statements</p>
   <div class="tags"><span class="tag new">تعديلات محدودة النطاق للمنشآت المتداولة علنًا تسري 15/12/2026</span></div>
 </div>
@@ -2912,7 +2820,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-701" data-num="ISA 701" data-ar="أمور المراجعة الرئيسية">
 <div class="std-head">
   <span class="badge">ISA 701</span><h2>الإبلاغ عن أمور المراجعة الرئيسية في تقرير المراجع المستقل</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Communicating Key Audit Matters in the Independent Auditor's Report</p>
 </div>
 <div class="std-body">
@@ -2983,7 +2890,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-705" data-num="ISA 705" data-ar="التعديلات على الرأي">
 <div class="std-head">
   <span class="badge">ISA 705</span><h2>التعديلات على الرأي في تقرير المراجع المستقل</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 705 (Revised) — Modifications to the Opinion in the Independent Auditor's Report</p>
   <div class="tags"><span class="tag">من أهم معايير الامتحانات</span></div>
 </div>
@@ -3097,12 +3003,11 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-706" data-num="ISA 706" data-ar="فقرات لفت الانتباه والأمور الأخرى">
 <div class="std-head">
   <span class="badge">ISA 706</span><h2>فقرات لفت الانتباه وفقرات الأمور الأخرى في تقرير المراجع المستقل</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 706 (Revised) — Emphasis of Matter Paragraphs and Other Matter Paragraphs in the Independent Auditor's Report</p>
 </div>
 <div class="std-body">
 <h3>الهدف</h3>
-<p>عندما يرى المراجع ضرورة لفت انتباه المستخدمين إلى أمر، يكون ذلك عبر اتصال إضافي واضح في التقرير بـ: (أ) أمر معروض أو مفصح عنه في القوائم بشكل مناسب وله أهمية تجعله <b>أساسيًا لفهم</b> المستخدمين للقوائم، أو (ب) أي أمر آخر ذي صلة بفهم المستخدمين <b>للمراجعة أو مسؤوليات المراجع أو تقريره</b>.</p>
+<p>عندما يرى المراجع ضرورة لفت انتباه المستخدمين إلى أمر، يكون ذلك عبر اتصال إضافي واضح في التقرير بـ: (أ) أمر معروض أو مفصح عنه في القوائم بشكل مناسب وله أهمية تجعله <b>أساسيًا لفهم</b> المستخدمين للقوائم، أو (ب) أي أمر آخر ذو صلة بفهم المستخدمين <b>للمراجعة أو مسؤوليات المراجع أو تقريره</b>.</p>
 <h3>التعريفات والمقارنة</h3>
 <div class="table-wrap"><table>
 <tr><th></th><th>فقرة لفت الانتباه <span class="en">Emphasis of Matter (EOM)</span></th><th>فقرة أمور أخرى <span class="en">Other Matter (OM)</span></th></tr>
@@ -3178,7 +3083,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-710" data-num="ISA 710" data-ar="المعلومات المقارنة">
 <div class="std-head">
   <span class="badge">ISA 710</span><h2>المعلومات المقارنة — الأرقام المقابلة والقوائم المالية المقارنة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">Comparative Information—Corresponding Figures and Comparative Financial Statements</p>
 </div>
 <div class="std-body">
@@ -3243,7 +3147,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-720" data-num="ISA 720" data-ar="المعلومات الأخرى">
 <div class="std-head">
   <span class="badge">ISA 720</span><h2>مسؤوليات المراجع المتعلقة بالمعلومات الأخرى</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 720 (Revised) — The Auditor's Responsibilities Relating to Other Information</p>
 </div>
 <div class="std-body">
@@ -3345,7 +3248,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-800" data-num="ISA 800" data-ar="القوائم المعدة وفق أطر الغرض الخاص">
 <div class="std-head">
   <span class="badge">ISA 800</span><h2>اعتبارات خاصة — مراجعة القوائم المالية المعدة وفقًا لأطر ذات غرض خاص</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 800 (Revised) — Special Considerations—Audits of Financial Statements Prepared in Accordance with Special Purpose Frameworks</p>
 </div>
 <div class="std-body">
@@ -3406,7 +3308,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-805" data-num="ISA 805" data-ar="مراجعة قائمة مالية واحدة أو عنصر محدد">
 <div class="std-head">
   <span class="badge">ISA 805</span><h2>اعتبارات خاصة — مراجعة قائمة مالية واحدة وعناصر أو حسابات أو بنود محددة من قائمة مالية</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 805 (Revised) — Special Considerations—Audits of Single Financial Statements and Specific Elements, Accounts or Items of a Financial Statement</p>
 </div>
 <div class="std-body">
@@ -3455,7 +3356,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 <section class="std" id="isa-810" data-num="ISA 810" data-ar="التقرير على القوائم المالية الملخصة">
 <div class="std-head">
   <span class="badge">ISA 810</span><h2>ارتباطات التقرير على القوائم المالية الملخصة</h2>
-  <div class="std-actions"><button class="btn done-btn">تمت المذاكرة</button></div>
   <p class="en en-title">ISA 810 (Revised) — Engagements to Report on Summary Financial Statements</p>
 </div>
 <div class="std-body">
@@ -3711,140 +3611,14 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
 </footer>
 
 </main>
-</div>
-<button class="btn" id="toTop" aria-label="العودة للأعلى">↑</button>
 
 <script>
-(function(){
-  var main = document.getElementById('main');
-  var nav = document.getElementById('nav');
-  var stds = Array.prototype.slice.call(document.querySelectorAll('section.std'));
-  var STORE_KEY = 'isa-ref-done-v1';
-  var done = {};
-  try { done = JSON.parse(localStorage.getItem(STORE_KEY) || '{}') || {}; } catch(e) { done = {}; }
-  function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(done)); } catch(e) {} }
-
-  // Build navigation from document order
-  var nodes = main.querySelectorAll('.group-title, section.std, .panel[data-navitem]');
-  var navLinks = {};
-  Array.prototype.forEach.call(nodes, function(el){
-    if (el.classList.contains('group-title')) {
-      var g = document.createElement('div');
-      g.className = 'nav-group';
-      g.textContent = el.getAttribute('data-nav') || el.textContent;
-      nav.appendChild(g);
-    } else {
-      var a = document.createElement('a');
-      a.className = 'nav-item';
-      a.href = '#' + el.id;
-      if (el.matches('section.std')) {
-        var n = document.createElement('span'); n.className = 'n'; n.textContent = el.getAttribute('data-num');
-        var t = document.createElement('span'); t.textContent = el.getAttribute('data-ar');
-        a.appendChild(n); a.appendChild(t);
-      } else {
-        var t2 = document.createElement('span'); t2.textContent = el.getAttribute('data-navitem');
-        a.appendChild(t2);
-      }
-      a.addEventListener('click', function(){
-        if (el.classList.contains('collapsed')) el.classList.remove('collapsed');
-        document.getElementById('sidebar').classList.remove('open');
-      });
-      nav.appendChild(a);
-      navLinks[el.id] = a;
-    }
-  });
-
-  // Done buttons + progress
-  function refreshProgress(){
-    var count = 0;
-    stds.forEach(function(s){
-      var isDone = !!done[s.id];
-      if (isDone) count++;
-      var b = s.querySelector('.done-btn');
-      if (b) { b.classList.toggle('is-done', isDone); b.textContent = isDone ? '✓ تمت المذاكرة' : 'تمت المذاكرة'; }
-      if (navLinks[s.id]) navLinks[s.id].classList.toggle('done', isDone);
-    });
-    document.getElementById('progressText').textContent = count + ' / ' + stds.length + ' تمت مذاكرته';
-    document.getElementById('progressBar').style.width = (stds.length ? (count / stds.length * 100) : 0) + '%';
-  }
-  stds.forEach(function(s){
-    var b = s.querySelector('.done-btn');
-    if (b) b.addEventListener('click', function(ev){
-      ev.stopPropagation();
-      if (done[s.id]) delete done[s.id]; else done[s.id] = true;
-      save(); refreshProgress();
-    });
-    var head = s.querySelector('.std-head');
-    head.addEventListener('click', function(ev){
-      if (ev.target.closest('button')) return;
-      s.classList.toggle('collapsed');
-    });
-  });
-  refreshProgress();
-
-  document.getElementById('collapseAll').addEventListener('click', function(){ stds.forEach(function(s){ s.classList.add('collapsed'); }); });
-  document.getElementById('expandAll').addEventListener('click', function(){ stds.forEach(function(s){ s.classList.remove('collapsed'); }); });
-
-  // Theme toggle
-  var root = document.documentElement;
-  try { var th = localStorage.getItem('isa-ref-theme'); if (th) root.setAttribute('data-theme', th); } catch(e) {}
-  document.getElementById('themeBtn').addEventListener('click', function(){
-    var cur = root.getAttribute('data-theme');
-    if (!cur) cur = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    var next = cur === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('isa-ref-theme', next); } catch(e) {}
-  });
-
-  // Mobile menu
-  document.getElementById('menuBtn').addEventListener('click', function(){ document.getElementById('sidebar').classList.toggle('open'); });
-
-  // Search
-  var box = document.getElementById('searchBox');
-  var groups = main.querySelectorAll('.group-title');
-  box.addEventListener('input', function(){
-    var q = box.value.trim().toLowerCase();
-    var targets = main.querySelectorAll('section.std, .panel[data-navitem]');
-    Array.prototype.forEach.call(targets, function(el){
-      var match = !q || el.textContent.toLowerCase().indexOf(q) !== -1;
-      el.classList.toggle('hide', !match);
-      if (navLinks[el.id]) navLinks[el.id].classList.toggle('hide', !match);
-      if (match && q && el.classList.contains('collapsed')) el.classList.remove('collapsed');
-    });
-    Array.prototype.forEach.call(groups, function(g){ g.classList.toggle('hide', !!q); });
-    Array.prototype.forEach.call(nav.querySelectorAll('.nav-group'), function(g){ g.classList.toggle('hide', !!q); });
-  });
-
-  // Active link on scroll + to top
-  var toTop = document.getElementById('toTop');
-  toTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
-  var watch = main.querySelectorAll('section.std, .panel[data-navitem]');
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if (en.isIntersecting && navLinks[en.target.id]) {
-          Object.keys(navLinks).forEach(function(k){ navLinks[k].classList.remove('active'); });
-          navLinks[en.target.id].classList.add('active');
-          var a = navLinks[en.target.id], sb = document.getElementById('sidebar');
-          if (a.offsetTop < sb.scrollTop || a.offsetTop > sb.scrollTop + sb.clientHeight - 40) sb.scrollTop = a.offsetTop - 100;
-        }
-      });
-    }, {rootMargin: '-80px 0px -70% 0px'});
-    Array.prototype.forEach.call(watch, function(el){ io.observe(el); });
-  }
-  window.addEventListener('scroll', function(){ toTop.style.display = window.scrollY > 600 ? 'block' : 'none'; });
-
-  // Print: expand all
-  window.addEventListener('beforeprint', function(){ stds.forEach(function(s){ s.classList.remove('collapsed'); }); });
-
-/* BlogFrame height reporter v2 - يعمل مع أي صفحة بدون الاعتماد على معرّفات أو أسماء */
+// Height reporting script for Blogger iframe
 (function () {
   if (window.__bfHeight || window.parent === window) return;
   window.__bfHeight = true;
   var last = 0, timer = null;
-
   function num(v) { return parseFloat(v) || 0; }
-
   function contentHeight() {
     var body = document.body, doc = document.documentElement;
     if (!body) return 0;
@@ -3863,20 +3637,17 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
     var bs = getComputedStyle(body);
     return bottom + num(bs.paddingBottom) + num(bs.borderBottomWidth) + num(bs.marginBottom);
   }
-
   function send() {
     var h = Math.ceil(contentHeight());
     if (!h || Math.abs(h - last) < 2) return;
     last = h;
     parent.postMessage({ type: 'iframe-height', height: h }, '*');
   }
-
   function schedule(force) {
     if (force === true) last = 0;
     clearTimeout(timer);
     timer = setTimeout(send, 40);
   }
-
   window.addEventListener('load', function () { schedule(true); });
   window.addEventListener('resize', function () { schedule(); });
   window.addEventListener('message', function (e) {
@@ -3893,7 +3664,6 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}
   }
   setInterval(send, 1000);
   schedule(true);
-  
 })();
 </script>
 </body>
