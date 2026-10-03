@@ -1,7 +1,0 @@
-<script>
-  function sendH(){
-    parent.postMessage({type:'iframe-height', height:document.documentElement.scrollHeight}, '*');
-  }
-  addEventListener('load', sendH);
-  new ResizeObserver(sendH).observe(document.body);
-</script>
