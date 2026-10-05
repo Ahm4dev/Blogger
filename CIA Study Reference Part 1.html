@@ -30,7 +30,7 @@ code,.mono{font-family:var(--f-mono);font-size:.86em}
 
 /* ---------- tabs ---------- */
 .tabsbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:45;background:var(--bg);border-bottom:1px solid var(--line);padding:10px clamp(16px,4vw,48px) 8px}
-.tabsbar-in{max-width:900px;margin:0 auto;display:grid;gap:8px;min-width:0}
+.tabsbar-in{max-width:100%;margin:0 auto;display:grid;gap:8px;min-width:0}
 .tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
 .subtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px;border-top:1px dashed var(--line);padding-top:8px}
 .subtabs[hidden]{display:none}
@@ -46,8 +46,8 @@ code,.mono{font-family:var(--f-mono);font-size:.86em}
 .tab[aria-selected="true"] small{color:inherit;opacity:.75}
 .tab-hide{display:none!important}
 /* ---------- layout ---------- */
-main{min-width:0;padding-block:28px 80px;padding-inline:clamp(16px,4vw,48px)}
-.wrap{max-width:900px;margin:0 auto;display:grid;gap:28px}
+main{min-width:0;padding-block:28px 80px;padding-inline:clamp(12px,2vw,32px)}
+.wrap{max-width:100%;margin:0 auto;display:grid;gap:28px}
 
 /* ---------- hero ---------- */
 .hero{display:grid;gap:22px;padding:30px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);position:relative;overflow:hidden}
