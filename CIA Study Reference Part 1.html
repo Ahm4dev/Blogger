@@ -19,7 +19,7 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:70px}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16.5px;line-height:1.6;margin:0}
 a{color:var(--accent)}
@@ -29,7 +29,16 @@ p{margin:0}
 code,.mono{font-family:var(--f-mono);font-size:.86em}
 
 /* ---------- tabs ---------- */
-.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:45;display:flex;gap:8px;overflow-x:auto;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--line);scrollbar-width:thin}
+.tabsbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:45;background:var(--bg);border-bottom:1px solid var(--line);padding:10px clamp(16px,4vw,48px) 8px}
+.tabsbar-in{max-width:900px;margin:0 auto;display:grid;gap:8px;min-width:0}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.subtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px;border-top:1px dashed var(--line);padding-top:8px}
+.subtabs[hidden]{display:none}
+.subtab{flex:none;display:inline-flex;gap:6px;align-items:baseline;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:4px 10px;font:inherit;font-size:.8rem;cursor:pointer;white-space:nowrap;text-decoration:none;max-width:260px}
+.subtab b{font-family:var(--f-mono);font-size:.72rem;color:var(--sc,var(--accent))}
+.subtab span{overflow:hidden;text-overflow:ellipsis}
+.subtab:hover{background:var(--surface-2)}
+.subtab.active{background:var(--surface-2);border-color:var(--sc,var(--accent));font-weight:700}
 .tab{flex:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;white-space:nowrap}
 .tab i{width:10px;height:10px;border-radius:50%;background:var(--tc,var(--accent));display:inline-block}
 .tab small{color:var(--muted);font-weight:600}
@@ -214,7 +223,7 @@ footer.site{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 1
 
 </style>
 
-<nav class="tabs" id="tabs" aria-label="Sections"></nav>
+<nav class="tabsbar" aria-label="Sections"><div class="tabsbar-in"><div class="tabs" id="tabs"></div><div class="subtabs" id="subtabs" hidden></div></div></nav>
 
 <div id="top">
 <main>
@@ -2326,10 +2335,6 @@ footer.site{text-align:center;color:var(--muted);font-size:.85rem;padding:30px 1
 </div>
 </main>
 </div>
-<footer class="site">CIA Study Reference · Part 1 · Based on The IIA's Global Internal Audit Standards (2024) and the 2025 CIA exam syllabus. For study use; always confirm details with The IIA's official publications.</footer>
-
-
-
 <script>
 /* ===== Real-world examples per topic. Case facts come from the linked pages. "work" items are illustrative, not real firms. ===== */
 const W="https://en.wikipedia.org/wiki/";
@@ -2579,17 +2584,8 @@ const FLASH = {
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
-  /* mastered topics */
-  const done=new Set(store.get("cia-done",[]));
   const topics=$$(".topic");
-  topics.forEach(t=>{
-    t.open=true; /* all topics open */
-    const foot=$(".tfoot",t); if(!foot) return;
-    const b=document.createElement("button"); b.className="done-btn"; b.type="button";
-    const paint=()=>{const on=done.has(t.id); b.setAttribute("aria-pressed",on); b.textContent=on?"✓ Mastered":"Mark as mastered";};
-    b.addEventListener("click",()=>{done.has(t.id)?done.delete(t.id):done.add(t.id); store.set("cia-done",[...done]); paint();});
-    paint(); foot.appendChild(b);
-  });
+  topics.forEach(t=>{t.open=true;}); /* all topics open */
 
   /* tabs: one section at a time, bar at the top of the page */
   const groups=[{key:"overview",label:"Overview",els:$$("#intro,#exam-structure,.part-head")}];
@@ -2602,7 +2598,19 @@ const FLASH = {
     current=key; store.set("cia-tab",key);
     groups.forEach(g=>g.els.forEach(e=>e.classList.toggle("tab-hide",g.key!==key)));
     $$(".tab",tabs).forEach(b=>b.setAttribute("aria-selected",b.dataset.key===key));
+    buildSub(key);
   }
+  const sub=$("#subtabs");
+  function buildSub(key){
+    sub.textContent=""; const g=groups.find(x=>x.key===key); const ts=g&&g.dom?$$(".topic",g.dom):[];
+    sub.hidden=!ts.length; if(!ts.length) return;
+    sub.style.setProperty("--sc",getComputedStyle(g.dom).getPropertyValue("--dc"));
+    ts.forEach(t=>{const a=document.createElement("a"); a.className="subtab"; a.href="#"+t.id; a.dataset.topic=t.id;
+      const n=document.createElement("b"); n.textContent=$(".tnum",t).textContent; const l=document.createElement("span"); l.textContent=$("h3",t).textContent; a.append(n,l); a.title=l.textContent;
+      a.addEventListener("click",e=>{e.preventDefault(); t.open=true; t.scrollIntoView({behavior:"smooth",block:"start"});}); sub.appendChild(a);});
+  }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting) return; $$(".subtab",sub).forEach(a=>{const on=a.dataset.topic===e.target.id; a.classList.toggle("active",on); if(on){const l=a.offsetLeft-sub.offsetLeft; if(l<sub.scrollLeft||l+a.offsetWidth>sub.scrollLeft+sub.clientWidth) sub.scrollLeft=Math.max(0,l-20);}});}),{rootMargin:"-25% 0px -65% 0px"});
+  topics.forEach(t=>io.observe(t));
   function tabFor(el){const d=el.closest(".domain"); return d?d.id:"overview";}
 
   /* quizzes */
